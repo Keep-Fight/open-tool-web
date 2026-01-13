@@ -5,7 +5,7 @@
       aria-label="切换主题"
   >
     <svg
-        class="h-5 w-5 text-gray-700 dark:text-gray-200"
+        class="h-5 w-5 text-black-700 dark:text-gray-200"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"
