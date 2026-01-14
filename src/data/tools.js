@@ -24,6 +24,12 @@ const toolsJson = [
                 title: 'Mybatis Log转SQL',
                 description: '支持各种常见类型（String, Integer, Timestamp, Boolean 等）',
                 iconName: 'sql-formatter',
+            },
+            {
+                id: 'color-picker',
+                title: '颜色选择器',
+                description: '可选择自己想要的颜色和透明度',
+                iconName: 'color-picker',
             }
         ]
     },
@@ -47,7 +53,8 @@ const toolsComponent = {
     'base-converter': defineAsyncComponent(() => import('../components/tools/BaseConverter.vue')),
     'json-formatter': defineAsyncComponent(() => import('../components/tools/JsonFormatter.vue')),
     'sql-formatter': defineAsyncComponent(()=>import('../components/tools/SqlFormatter.vue')),
-    'id-generation': defineAsyncComponent(()=>import("../components/tools/IdGenerator.vue"))
+    'id-generation': defineAsyncComponent(()=>import("../components/tools/IdGenerator.vue")),
+    'color-picker' : defineAsyncComponent( ()=>import("../components/tools/ColorPicker.vue"))
 }
 
 export {toolsJson, toolsComponent};
