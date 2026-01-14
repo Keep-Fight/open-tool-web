@@ -4,7 +4,7 @@
       <h1
           class="text-4xl font-black mb-4 transition-colors dark:text-white text-gray-900"
       >
-        开放工具箱
+        发现免费、好用的在线工具
       </h1>
       <input
           v-model="search"

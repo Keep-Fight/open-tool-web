@@ -9,4 +9,15 @@ export default defineConfig({
         tailwindcss(),
         svgLoader()
     ],
+    build: {
+        outDir: 'dist',
+        assetsDir: 'assets',
+        minify: 'esbuild',
+        sourcemap: false,
+    },
+    base: '/',
+    server: {
+        port: 3000,
+        open: true
+    }
 })
