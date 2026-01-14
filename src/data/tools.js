@@ -28,7 +28,7 @@ const toolsJson = [
             {
                 id: 'color-picker',
                 title: '颜色选择器',
-                description: '可选择自己想要的颜色和透明度',
+                description: '可进行颜色选择，支持文本和背景的颜色对比功能',
                 iconName: 'color-picker',
             }
         ]
