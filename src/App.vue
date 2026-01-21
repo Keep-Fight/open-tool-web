@@ -1,22 +1,25 @@
 <template>
-  <div
-      class="min-h-screen flex flex-col transition-colors duration-200 dark:bg-slate-900 dark:text-gray-100 bg-gray-50 text-gray-800"
-  >
-    <ToolHeader />
-    <main class="flex-grow">
-      <router-view v-slot="{ Component }">
-        <transition name="page" mode="out-in">
-          <component :is="Component" />
-        </transition>
-      </router-view>
-    </main>
-    <ToolFooter />
-  </div>
+<!--  <div-->
+<!--      class="min-h-screen flex flex-col transition-colors duration-200 dark:bg-slate-900 dark:text-gray-100 bg-gray-50 text-gray-800"-->
+<!--  >-->
+<!--    <ToolHeader />-->
+<!--    <main class="flex-grow">-->
+<!--      <router-view v-slot="{ Component }">-->
+<!--        <transition name="page" mode="out-in">-->
+<!--          <component :is="Component" />-->
+<!--        </transition>-->
+<!--      </router-view>-->
+<!--    </main>-->
+<!--    <ToolFooter />-->
+<!--  </div>-->
+  <MdView />
 </template>
 
 <script setup>
 import ToolHeader from './layout/ToolHeader.vue'
 import ToolFooter from './layout/ToolFooter.vue'
+
+import MdView from './views/MdView.vue'
 </script>
 
 <style>
