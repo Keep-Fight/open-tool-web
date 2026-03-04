@@ -2,7 +2,7 @@
   <div class="flex h-screen bg-white">
     <aside class="w-72 h-full border-r border-gray-100 flex flex-col shrink-0 overflow-y-auto bg-[#f9fafb]">
       <div class="p-8 pb-4">
-        <h1 class="text-xl font-bold text-slate-800 tracking-tight">Java Notes</h1>
+        <h1 class="text-xl font-bold text-slate-800 tracking-tight">学习文档</h1>
       </div>
 
       <nav class="flex-1 px-4 py-4">

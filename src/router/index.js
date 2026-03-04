@@ -14,6 +14,11 @@ const router = createRouter({
             name: 'tool-detail',
             component: () => import('../views/ToolView.vue'),
             props: true
+        },
+        {
+            path: '/md',
+            name: 'markdown-view',
+            component: () => import('../views/MdView.vue'),
         }
     ]
 })
