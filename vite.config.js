@@ -15,7 +15,7 @@ export default defineConfig({
         open: true,
         proxy: {
             '/api': {
-                target: 'http://localhost:8080', // Spring Boot 后端
+                target: 'https://opentoolbox.cn',
                 changeOrigin: true,
                 rewrite: (path) => path.replace(/^\/api/, '/api') // 保留 /api
             }

@@ -25,29 +25,32 @@ md.use(container, 'tip', {
 
 // 3. 异步代码高亮处理
 let highlighter;
-
-async function initHighlighter() {
-    if (!highlighter) {
-        highlighter = await createHighlighter({
-            themes: ['github-light'],
-            langs: ['java', 'javascript', 'typescript', 'scss', 'css', 'json', 'yaml', 'sql', 'xml', 'html', 'bash', 'python']
-        });
-    }
-}
-
+const SUPPORTED_LANGS = ['java', 'javascript', 'typescript', 'scss', 'css', 'json', 'yaml', 'sql', 'xml', 'html', 'bash', 'python'];
 export async function renderMarkdown(content) {
-    // 确保 highlighter 只创建一次（单例模式）
     if (!highlighter) {
         highlighter = await createHighlighter({
             themes: ['github-light'],
-            langs: ['java', 'javascript', 'typescript', 'scss', 'css', 'json', 'yaml', 'sql', 'xml', 'html', 'bash', 'python']
+            langs: SUPPORTED_LANGS,
+            theme: 'github-light'
         });
     }
 
-    // 自定义代码块渲染逻辑
+    // 自定义代码块渲染逻辑：未找到对应语言时使用通用text
     md.options.highlight = (code, lang) => {
-        return highlighter.codeToHtml(code, {
-            lang: lang || 'text',
+        // 1. 校验语言是否支持（空值/不支持均替换为text）
+        const targetLang = lang && SUPPORTED_LANGS.includes(lang.toLowerCase())
+            ? lang.toLowerCase()
+            : 'text';
+
+        // 2. 可选：给未识别语言的代码块添加注释提示（增强体验）
+        let codeToRender = code;
+        if (targetLang === 'text' && lang) {
+            codeToRender = `${code}`;
+        }
+
+        // 3. 渲染代码块（通用text格式无语法高亮，仅纯文本）
+        return highlighter.codeToHtml(codeToRender, {
+            lang: targetLang,
             theme: 'github-light'
         });
     };

@@ -1,19 +1,27 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import App from "../App.vue";
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
-            name: 'home',
-            component: HomeView
-        },
-        {
-            path: '/tool/:id',
-            name: 'tool-detail',
-            component: () => import('../views/ToolView.vue'),
-            props: true
+            name: '',
+            redirect: '/home',
+            component: () => import('../layout/Layout.vue'),
+            children: [
+                {
+                    path: 'home',
+                    name: 'Home',
+                    component: () => import('../views/HomeView.vue'),
+                },
+                {
+                    path: 'tool/:id',
+                    name: 'tool-detail',
+                    component: () => import('../views/ToolView.vue'),
+                    props: true
+                },
+            ]
         },
         {
             path: '/md',
