@@ -103,8 +103,9 @@ const parseTocFromMd = (mdContent) => {
 
   // 匹配非代码块内的Markdown标题（h1-h6）
   const headingRegex = /^(#{1,6})\s+(.*?)$/gm;
-  let match;
 
+  let match;
+  let index = 0;
   while ((match = headingRegex.exec(mdWithoutCodeBlocks)) !== null) {
     const level = match[1].length; // 标题层级（1-6）
     const rawText = match[2].trim(); // 原始标题文本（含加粗等标记）
@@ -113,8 +114,8 @@ const parseTocFromMd = (mdContent) => {
     const cleanText = cleanMarkdownSyntax(rawText);
 
     // 生成唯一锚点ID（兼容特殊字符）
-    const slug = slugify(cleanText, {lower: true, strict: true});
-    const anchorId = `md-toc-${slug}-${level}`;
+    const slug = slugify(cleanText, { lower: true, strict: true }) || "heading";
+    const anchorId = `md-toc-${slug}-${level}-${index++}`;
 
     // 存入目录列表
     tocList.value.push({
@@ -123,6 +124,8 @@ const parseTocFromMd = (mdContent) => {
       level
     });
   }
+
+  console.log("tocList", tocList.value)
 
   // 替换渲染后的HTML标题，添加锚点ID（同步清理标记）
   renderedHtml.value = renderedHtml.value.replace(
