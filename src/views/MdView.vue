@@ -81,6 +81,7 @@ const cleanMarkdownSyntax = (text) => {
       .replace(/\*\*([^*]+)\*\*/g, '$1') // 移除加粗标记 **内容** → 内容
       .replace(/\*([^*]+)\*/g, '$1')     // 可选：移除斜体标记 *内容* → 内容
       .replace(/\_([^_]+)\_/g, '$1')     // 可选：移除下划线斜体 _内容_ → 内容
+      .replace(/\`([^`]+)\`/g, '$1')
       .trim();
 };
 
@@ -97,9 +98,7 @@ const parseTocFromMd = (mdContent) => {
   // 正则匹配并移除所有代码块（```xxx``` 或 `xxx`）
   const mdWithoutCodeBlocks = mdContent
       // 移除多行代码块（```开头，```结尾，支持跨行）
-      .replace(/```[\s\S]*?```/g, '')
-      // 移除单行代码块（`xxx`）
-      .replace(/`[^`]*`/g, '');
+      .replace(/```[\s\S]*?```/g, '');
 
   // 匹配非代码块内的Markdown标题（h1-h6）
   const headingRegex = /^(#{1,6})\s+(.*?)$/gm;
@@ -114,8 +113,8 @@ const parseTocFromMd = (mdContent) => {
     const cleanText = cleanMarkdownSyntax(rawText);
 
     // 生成唯一锚点ID（兼容特殊字符）
-    const slug = slugify(cleanText, { lower: true, strict: true }) || "heading";
-    const anchorId = `md-toc-${slug}-${level}-${index++}`;
+    const slug = encodeURI(cleanText);
+    const anchorId = `md-toc-${slug}-${level}`;
 
     // 存入目录列表
     tocList.value.push({
@@ -135,7 +134,7 @@ const parseTocFromMd = (mdContent) => {
         let cleanText = text.replace(/<[^>]*>/g, '').trim();
         cleanText = cleanMarkdownSyntax(cleanText);
 
-        const slug = slugify(cleanText, {lower: true, strict: true});
+        const slug = encodeURI(cleanText);
         const anchorId = `md-toc-${slug}-${level}`;
         return `<h${level} id="${anchorId}"${attrs || ''}>${text}</h${level}>`;
       }
@@ -166,9 +165,15 @@ const handleFileSelect = async (path) => {
 // 点击目录跳转到对应锚点
 const scrollToAnchor = (anchorId) => {
   const target = document.getElementById(anchorId);
+  console.log("anchorId",anchorId)
+  console.log("mdContentRef",mdContentRef.value)
+  console.log("target",target)
+
   if (target && mdContentRef.value) {
     // 滚动到目标位置（偏移20px避免顶部遮挡）
     mdContentRef.value.scrollTop = target.offsetTop - 20;
+
+
     // 高亮当前目录
     activeTocId.value = anchorId;
   }

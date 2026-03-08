@@ -56,3 +56,23 @@ body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helve
     @apply border-r-4 border-emerald-500 bg-emerald-50 text-emerald-600 font-semibold;
 }
 /************************ 深度定制 Markdown 样式 **************************************/
+
+
+/* 添加到你的全局样式文件中 */
+pre code {
+    counter-reset: linenumber;
+}
+
+pre code span.line {
+    counter-increment: linenumber;
+}
+
+pre code span.line::before {
+    content: counter(linenumber);
+    display: inline-block;
+    width: 2em;
+    margin-right: 2em;
+    text-align: right;
+    font-weight: bold;
+    color: #4E4E4E;
+}

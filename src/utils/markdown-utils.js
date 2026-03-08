@@ -51,7 +51,8 @@ export async function renderMarkdown(content) {
         // 3. 渲染代码块（通用text格式无语法高亮，仅纯文本）
         return highlighter.codeToHtml(codeToRender, {
             lang: targetLang,
-            theme: 'github-light'
+            theme: 'github-light',
+            lineNumbers: true // 添加行号
         });
     };
 
