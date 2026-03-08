@@ -29,9 +29,9 @@ const SUPPORTED_LANGS = ['java', 'javascript', 'typescript', 'scss', 'css', 'jso
 export async function renderMarkdown(content) {
     if (!highlighter) {
         highlighter = await createHighlighter({
-            themes: ['github-light'],
+            themes: ['github-dark'],
             langs: SUPPORTED_LANGS,
-            theme: 'github-light'
+            theme: 'github-dark'
         });
     }
 
@@ -51,7 +51,7 @@ export async function renderMarkdown(content) {
         // 3. 渲染代码块（通用text格式无语法高亮，仅纯文本）
         return highlighter.codeToHtml(codeToRender, {
             lang: targetLang,
-            theme: 'github-light',
+            theme: 'github-dark',
             lineNumbers: true // 添加行号
         });
     };

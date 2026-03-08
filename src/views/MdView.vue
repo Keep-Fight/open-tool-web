@@ -44,7 +44,7 @@
             :key="item.id"
             :class="{
             'text-emerald-600 font-medium': activeTocId === item.id,
-            'text-slate-600 hover:text-emerald-500 cursor-pointer': true
+            'text-black hover:text-emerald-500 cursor-pointer': true
           }"
             :style="{ 'padding-left': `${(item.level - 1) * 12}px` }"
             @click="scrollToAnchor(item.id)"
@@ -60,7 +60,6 @@
 import {ref, onMounted, watch} from 'vue';
 import {renderMarkdown} from '../utils/markdown-utils.js';
 import MdFileTree from "../components/MdFileTree.vue";
-import slugify from 'slugify';
 
 const treeData = ref([]);
 const currentPath = ref('');
