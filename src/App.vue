@@ -1,25 +1,22 @@
 <template>
-  <div class="min-h-screen flex flex-col transition-colors duration-200 dark:bg-slate-900 dark:text-gray-100 bg-gray-50 text-gray-800">
-    <main class="flex-grow">
-      <router-view v-slot="{ Component }">
-        <transition name="page" mode="out-in">
-          <component :is="Component"/>
-        </transition>
-      </router-view>
+  <div class="min-h-screen">
+    <NavBar :is-dark="isDark" @toggle-theme="toggleTheme" />
+    <main class="pt-16">
+      <HeroSection />
+      <CategoriesGrid />
+      <FeaturesSection />
     </main>
+    <SiteFooter />
   </div>
 </template>
 
 <script setup>
+import NavBar from './components/NavBar.vue'
+import HeroSection from './components/HeroSection.vue'
+import CategoriesGrid from './components/CategoriesGrid.vue'
+import FeaturesSection from './components/FeaturesSection.vue'
+import SiteFooter from './components/SiteFooter.vue'
+import { useTheme } from './composables/useTheme'
+
+const { isDark, toggleTheme } = useTheme()
 </script>
-
-<style>
-/* 重置过渡动画，避免样式卡顿 */
-.page-enter-active, .page-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.page-enter-from, .page-leave-to {
-  opacity: 0;
-}
-</style>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Open Toolbox - Documentation</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-dim": "#cbdbf5",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "primary-container": "#0066ff",
+                        "background": "#f8f9ff",
+                        "surface": "#f8f9ff",
+                        "surface-container": "#e5eeff",
+                        "on-secondary-fixed": "#001849",
+                        "tertiary-fixed": "#ffdbd0",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-high": "#dce9ff",
+                        "on-background": "#0b1c30",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#284386",
+                        "surface-tint": "#0054d6",
+                        "surface-container-highest": "#d3e4fe",
+                        "outline": "#727687",
+                        "secondary-fixed": "#dae1ff",
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-surface": "#0b1c30",
+                        "on-surface-variant": "#424656",
+                        "on-primary-container": "#f8f7ff",
+                        "error": "#ba1a1a",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "secondary-fixed-dim": "#b3c5ff",
+                        "on-tertiary-fixed": "#390c00",
+                        "inverse-primary": "#b3c5ff",
+                        "secondary": "#425ca0",
+                        "tertiary": "#a33200",
+                        "on-secondary-container": "#294487",
+                        "on-tertiary-container": "#fff6f4",
+                        "on-secondary": "#ffffff",
+                        "inverse-surface": "#213145",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-fixed": "#001849",
+                        "primary": "#0050cb",
+                        "outline-variant": "#c2c6d8",
+                        "secondary-container": "#9bb4fe",
+                        "primary-fixed": "#dae1ff",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-fixed-variant": "#832600",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#eff4ff",
+                        "on-primary-fixed-variant": "#003fa4",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-variant": "#d3e4fe",
+                        "tertiary-container": "#cc4204"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.5rem", "lg": "0.75rem", "xl": "1rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .markdown-body h1 { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 2.5rem; letter-spacing: -0.025em; margin-bottom: 1.5rem; color: #0b1c30; }
+        .markdown-body h2 { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 1.75rem; margin-top: 2.5rem; margin-bottom: 1rem; color: #0b1c30; border-bottom: 0px; }
+        .markdown-body p { font-family: 'Inter', sans-serif; line-height: 1.75; margin-bottom: 1.25rem; color: #424656; }
+        .markdown-body code { background: #eff4ff; padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-size: 0.875em; color: #0050cb; }
+        .markdown-body pre { background: #0b1c30; padding: 1.5rem; border-radius: 0.75rem; overflow-x: auto; margin-bottom: 1.5rem; }
+        .markdown-body pre code { background: transparent; color: #eaf1ff; padding: 0; }
+        .markdown-body blockquote { border-left: 4px solid #0066ff; padding-left: 1.5rem; font-style: italic; color: #424656; background: #eff4ff; padding-top: 1rem; padding-bottom: 1rem; border-radius: 0 0.5rem 0.5rem 0; margin-bottom: 1.5rem; }
+        .markdown-body table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+        .markdown-body th { background: #eff4ff; text-align: left; padding: 0.75rem 1rem; font-family: 'Manrope'; font-weight: 600; color: #0b1c30; }
+        .markdown-body td { padding: 0.75rem 1rem; border-bottom: 1px solid #dce9ff; color: #424656; }
+        
+        .nav-item-nested { padding-left: 2.25rem; }
+        .nav-item-nested-2 { padding-left: 3.5rem; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary-container/30">
+<!-- Top Navigation Bar -->
+<nav class="bg-surface/80 backdrop-blur-xl docked full-width top-0 sticky z-50 shadow-[0_12px_40px_rgba(0,0,0,0.05)] flex justify-between items-center w-full px-8 h-16">
+<div class="flex items-center gap-8">
+<div class="text-xl font-bold tracking-tight text-on-surface font-headline">Open Toolbox</div>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-headline" href="#">Docs</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-headline" href="#">Editor</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-headline" href="#">API</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-headline" href="#">Plugins</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-surface-container-low border-none rounded-full pl-10 pr-4 py-1.5 text-sm w-64 focus:ring-2 focus:ring-primary transition-all" placeholder="Search documentation..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-all">settings</button>
+<button class="material-symbols-outlined text-on-surface-variant hover:bg-surface-container-high p-2 rounded-full transition-all">account_circle</button>
+</div>
+</nav>
+<div class="flex min-h-screen">
+<!-- Left Sidebar: Hierarchical File Directory -->
+<aside class="hidden lg:flex flex-col h-[calc(100vh-4rem)] w-72 sticky top-16 bg-surface-container-low py-8 overflow-y-auto px-4 border-r border-outline-variant/10">
+<div class="mb-8">
+<h3 class="px-2 font-manrope uppercase tracking-[0.05em] text-xs font-bold text-on-surface-variant mb-4">Documentation</h3>
+<nav class="space-y-0.5">
+<!-- Root Item: Introduction -->
+<div>
+<a class="flex items-center gap-2 border-l-4 border-primary bg-surface-container-high text-primary px-3 py-2 transition-colors rounded-r-md" href="#">
+<span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
+<span class="material-symbols-outlined text-[20px]">info</span>
+<span class="text-sm font-semibold">Introduction</span>
+</a>
+<div class="mt-0.5">
+<a class="nav-item-nested flex items-center gap-2 text-on-surface-variant px-3 py-2 hover:bg-surface-container-highest transition-colors rounded-md group" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant/60 group-hover:text-primary">description</span>
+<span class="text-sm font-medium">Core Concepts</span>
+</a>
+<a class="nav-item-nested flex items-center gap-2 text-on-surface-variant px-3 py-2 hover:bg-surface-container-highest transition-colors rounded-md group" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant/60 group-hover:text-primary">description</span>
+<span class="text-sm font-medium">Architecture Overview</span>
+</a>
+</div>
+</div>
+<!-- Root Item: Guides -->
+<div>
+<a class="flex items-center gap-2 text-on-surface-variant px-3 py-2 hover:bg-surface-container-highest transition-colors rounded-md" href="#">
+<span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
+<span class="material-symbols-outlined text-[20px]">rocket_launch</span>
+<span class="text-sm font-medium">Getting Started</span>
+</a>
+<div class="mt-0.5">
+<a class="nav-item-nested flex items-center gap-2 text-on-surface-variant px-3 py-2 hover:bg-surface-container-highest transition-colors rounded-md group" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant/60 group-hover:text-primary">description</span>
+<span class="text-sm font-medium">Installation</span>
+</a>
+<a class="nav-item-nested flex items-center gap-2 text-on-surface-variant px-3 py-2 hover:bg-surface-container-highest transition-colors rounded-md group" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant/60 group-hover:text-primary">description</span>
+<span class="text-sm font-medium">Quick Start</span>
+</a>
+</div>
+</div>
+<!-- Root Item: Core Architecture (Folder) -->
+<div>
+<a class="flex items-center gap-2 text-on-surface-variant px-3 py-2 hover:bg-surface-container-highest transition-colors rounded-md" href="#">
+<span class="material-symbols-outlined text-[18px]">keyboard_arrow_down</span>
+<span class="material-symbols-outlined text-[20px]">folder</span>
+<span class="text-sm font-medium">Core Architecture</span>
+</a>
+<div class="mt-0.5">
+<a class="nav-item-nested flex items-center gap-2 text-on-surface-variant px-3 py-2 hover:bg-surface-container-highest transition-colors rounded-md group" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant/60 group-hover:text-primary">account_tree</span>
+<span class="text-sm font-medium">System Design</span>
+</a>
+<!-- Nested Folder -->
+<div>
+<a class="nav-item-nested flex items-center gap-2 text-on-surface-variant px-3 py-2 hover:bg-surface-container-highest transition-colors rounded-md" href="#">
+<span class="material-symbols-outlined text-[18px]">keyboard_arrow_right</span>
+<span class="material-symbols-outlined text-[20px]">folder</span>
+<span class="text-sm font-medium">File Systems</span>
+</a>
+</div>
+<a class="nav-item-nested flex items-center gap-2 text-on-surface-variant px-3 py-2 hover:bg-surface-container-highest transition-colors rounded-md group" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant/60 group-hover:text-primary">cloud_done</span>
+<span class="text-sm font-medium">Deployment</span>
+</a>
+</div>
+</div>
+<!-- Root Item: API Reference (Collapsed) -->
+<a class="flex items-center gap-2 text-on-surface-variant px-3 py-2 hover:bg-surface-container-highest transition-colors rounded-md" href="#">
+<span class="material-symbols-outlined text-[18px]">keyboard_arrow_right</span>
+<span class="material-symbols-outlined text-[20px]">api</span>
+<span class="text-sm font-medium">API Reference</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto space-y-1">
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">code</span>
+<span class="text-sm">GitHub</span>
+</a>
+<a class="flex items-center gap-3 text-on-surface-variant px-4 py-2 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">help_outline</span>
+<span class="text-sm">Help</span>
+</a>
+</div>
+</aside>
+<!-- Center Content: Markdown Viewer -->
+<main class="flex-1 bg-surface-container-lowest min-w-0">
+<div class="max-w-4xl mx-auto px-8 md:px-12 py-16 markdown-body">
+<div class="mb-12">
+<div class="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-[0.1em] mb-4">
+<span class="material-symbols-outlined text-sm">auto_awesome</span>
+                    Technical Guide
+                </div>
+<h1>Getting Started with Open Toolbox</h1>
+<p class="text-lg text-on-surface-variant leading-relaxed">Learn how to configure your digital workspace using the Open Toolbox architectural primitives. This guide covers the initial setup, dependency management, and your first tool deployment.</p>
+</div>
+<div class="p-8 bg-surface-container-low rounded-xl mb-12 flex items-center gap-6">
+<div class="w-16 h-16 bg-primary-container rounded-lg flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined text-3xl">terminal</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-on-surface">Prerequisites</h4>
+<p class="text-sm text-on-surface-variant mb-0">Ensure you have Node.js v18+ and a Git-compatible shell environment installed before proceeding.</p>
+</div>
+</div>
+<h2>Installation</h2>
+<p>To begin, install the CLI globally using your preferred package manager. We recommend <code>pnpm</code> for faster resolution and reduced disk usage.</p>
+<pre><code>$ pnpm install -g @open-toolbox/cli
+$ otbx init my-project
+$ cd my-project &amp;&amp; otbx start</code></pre>
+<h2>Configuration Parameters</h2>
+<p>The <code>otbx.config.json</code> file serves as the source of truth for your toolbox instance. Define your modules and hooks here.</p>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>root_dir</code></td>
+<td>String</td>
+<td><code>./tools</code></td>
+<td>Base directory for all custom tool binaries.</td>
+</tr>
+<tr>
+<td><code>strict_mode</code></td>
+<td>Boolean</td>
+<td><code>true</code></td>
+<td>Enforces architectural validation on build.</td>
+</tr>
+<tr>
+<td><code>port</code></td>
+<td>Number</td>
+<td><code>8080</code></td>
+<td>Local development server listener port.</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+                Open Toolbox utilizes a "Lock-Step" deployment mechanism. This ensures that no individual component is updated without verification from the global registry.
+            </blockquote>
+<h2>Advanced Architecture</h2>
+<p>When scaling to enterprise environments, the architectural depth of the toolbox allows for isolated execution environments. This is particularly useful for teams managing heterogeneous stacks.</p>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
+<div class="bg-surface p-6 rounded-xl border border-outline-variant/10">
+<h4 class="font-headline font-bold mb-2">Layered Auth</h4>
+<p class="text-xs">Integrated OAuth2 and OpenID Connect protocols with zero-config setup.</p>
+</div>
+<div class="bg-surface p-6 rounded-xl border border-outline-variant/10">
+<h4 class="font-headline font-bold mb-2">Atomic State</h4>
+<p class="text-xs">Propagate updates across the toolkit with microsecond latency using shared buffers.</p>
+</div>
+</div>
+<div class="mt-20 pt-12 border-t border-outline-variant/10 flex justify-between">
+<div class="group cursor-pointer">
+<div class="text-xs text-on-surface-variant mb-1 uppercase tracking-widest">Previous</div>
+<div class="font-bold text-primary group-hover:-translate-x-1 transition-transform flex items-center gap-2">
+<span class="material-symbols-outlined">arrow_back</span>
+                        Philosophy
+                    </div>
+</div>
+<div class="text-right group cursor-pointer">
+<div class="text-xs text-on-surface-variant mb-1 uppercase tracking-widest">Next</div>
+<div class="font-bold text-primary group-hover:translate-x-1 transition-transform flex items-center gap-2">
+                        CLI Reference
+                        <span class="material-symbols-outlined">arrow_forward</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Right Sidebar: Table of Contents -->
+<aside class="hidden xl:block w-64 sticky top-16 h-[calc(100vh-4rem)] py-16 px-8 border-l border-outline-variant/10">
+<h4 class="font-headline text-xs font-extrabold uppercase tracking-widest text-on-surface mb-6">On This Page</h4>
+<nav class="space-y-4">
+<a class="block text-sm font-bold text-primary border-l-2 border-primary pl-4" href="#">Introduction</a>
+<a class="block text-sm text-on-surface-variant hover:text-on-surface pl-4 border-l-2 border-transparent transition-colors" href="#">Installation</a>
+<a class="block text-sm text-on-surface-variant hover:text-on-surface pl-4 border-l-2 border-transparent transition-colors" href="#">Configuration</a>
+<a class="block text-sm text-on-surface-variant hover:text-on-surface pl-4 border-l-2 border-transparent transition-colors" href="#">Advanced Architecture</a>
+<a class="block text-sm text-on-surface-variant hover:text-on-surface pl-4 border-l-2 border-transparent transition-colors" href="#">Performance Tuning</a>
+</nav>
+<div class="mt-12 p-6 bg-primary-container/5 rounded-xl">
+<p class="text-[10px] font-bold text-primary uppercase tracking-widest mb-2">New Feature</p>
+<h5 class="text-xs font-bold text-on-surface mb-2">Visual Editor Beta</h5>
+<p class="text-[10px] text-on-surface-variant leading-relaxed">Try our new drag-and-drop tool architect in the editor tab.</p>
+<button class="mt-3 text-[10px] font-bold text-primary flex items-center gap-1">
+                Try now <span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</button>
+</div>
+</aside>
+</div>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest flex justify-between items-center w-full px-12 py-8 mt-auto border-t border-outline-variant/10">
+<div class="font-manrope body-sm text-on-surface-variant text-sm">
+        © 2024 Open Toolbox. Built for Architects.
+    </div>
+<div class="flex gap-8">
+<a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Terms of Service</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Security</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-sm" href="#">Status</a>
+</div>
+</footer>
+</body></html>
