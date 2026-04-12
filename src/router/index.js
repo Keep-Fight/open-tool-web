@@ -7,26 +7,30 @@ const router = createRouter({
         {
             path: '/',
             name: '',
-            redirect: '/home',
-            component: () => import('../layout/Layout.vue'),
+            redirect : '/home',
+            component: () => import('../components/layout/Layout.vue'),
             children: [
                 {
                     path: 'home',
                     name: 'Home',
-                    component: () => import('../views/HomeView.vue'),
+                    component: () => import('../views/HomeView/index.vue'),
                 },
                 {
-                    path: 'tool/:id',
-                    name: 'tool-detail',
-                    component: () => import('../views/ToolView.vue'),
-                    props: true
+                    path: 'tools',
+                    name: 'Tools',
+                    component: () => import('../views/ToolsView/index.vue'),
+                },
+                {
+                    path: 'notes',
+                    name: 'Notes',
+                    component: () => import('../views/NotesView/index.vue'),
+                },
+                {
+                    path: 'files',
+                    name: 'files',
+                    component: () => import('../views/FilesView/index.vue'),
                 },
             ]
-        },
-        {
-            path: '/md',
-            name: 'markdown-view',
-            component: () => import('../views/MdView.vue'),
         }
     ]
 })

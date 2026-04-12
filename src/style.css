@@ -23,6 +23,11 @@
 }
 
 @layer base {
+    html, body {
+        margin: 0;
+        padding: 0;
+    }
+
     /* 白天模式色值 */
     :root {
         --app-primary: #0066ff;
@@ -75,8 +80,8 @@
     }
 }
 
-@layer utilities {
-    .card-glow:hover {
+@utility card-glow {
+    &:hover {
         box-shadow: 0 0 20px rgba(0, 102, 255, 0.15);
     }
 }
