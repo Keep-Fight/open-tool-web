@@ -1,11 +1,13 @@
 <script setup>
-import { ref, onMounted, defineEmits, onUnmounted } from 'vue'
+import { ref, onMounted, defineEmits, onUnmounted, computed } from 'vue'
 import mdApi from '../../../api/mdApi'
 import NotesSidebarItem from './NotesSidebarItem.vue'
 
 const menuGroups = ref([])
+const searchQuery = ref('')
 const emit = defineEmits(['path-change'])
 
+// 格式化文件目录
 const formatTreeToMenu = (tree) => {
   return tree.map(node => {
     if (node.directory) {
@@ -30,6 +32,7 @@ const formatTreeToMenu = (tree) => {
   })
 }
 
+// 加载目录
 const loadTree = async () => {
   try {
     const treeData = await mdApi.getTree()
@@ -39,9 +42,38 @@ const loadTree = async () => {
   }
 }
 
-onMounted(() => loadTree())
+// 搜索过滤逻辑 (递归搜索)
+const filteredMenuGroups = computed(() => {
+  const query = searchQuery.value.trim().toLowerCase()
+  if (!query) return menuGroups.value
 
-// 状态管理
+  const filterNodes = (nodes) => {
+    return nodes.reduce((acc, node) => {
+      const matchTitle = node.title.toLowerCase().includes(query)
+      let filteredChildren = []
+
+      if (node.children) {
+        filteredChildren = filterNodes(node.children)
+      }
+
+      // 如果当前节点匹配，或者它的子节点有匹配的，就保留这个节点
+      if (matchTitle || filteredChildren.length > 0) {
+        acc.push({
+          ...node,
+          // 搜索时自动展开匹配到的目录
+          isOpen: query ? true : node.isOpen,
+          children: node.children ? filteredChildren : undefined
+        })
+      }
+      return acc
+    }, [])
+  }
+
+  return filterNodes(menuGroups.value)
+})
+
+
+// 状态管理，处理目录折叠
 const sidebarWidth = ref(288)
 const isCollapsed = ref(false)
 const isResizing = ref(false)
@@ -75,6 +107,9 @@ const stopResizing = () => {
   document.body.style.cursor = 'default'
 }
 
+
+
+onMounted(() => loadTree())
 onUnmounted(() => stopResizing())
 </script>
 
@@ -87,14 +122,35 @@ onUnmounted(() => stopResizing())
          :style="{ width: sidebarWidth + 'px' }">
 
       <div class="py-8 px-4 flex-grow overflow-y-auto">
-        <div class="flex items-center mb-8 px-3">
+        <div class="flex items-center mb-6 px-3">
           <h3 class="font-headline uppercase tracking-widest text-[10px] font-black text-slate-400 dark:text-zinc-500">
             文件目录
           </h3>
         </div>
 
+        <div class="px-3 mb-6">
+          <div class="relative group">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-slate-400 group-focus-within:text-primary transition-colors">
+              search
+            </span>
+            <input
+                v-model="searchQuery"
+                type="text"
+                placeholder="快速搜索..."
+                class="w-full bg-slate-200/50 dark:bg-[#1c1c1f] text-[13px] border border-transparent focus:border-primary/30 focus:bg-white dark:focus:bg-[#27272a] py-2 pl-9 pr-4 rounded-xl transition-all outline-none text-[#424656] dark:text-[#f1f1f1] placeholder:text-slate-400 dark:placeholder:text-zinc-600"
+            />
+          </div>
+        </div>
+
         <nav class="flex flex-col">
-          <NotesSidebarItem v-for="item in menuGroups" :key="item.title" :item="item" />
+          <NotesSidebarItem
+              v-for="item in filteredMenuGroups"
+              :key="item.path + item.title"
+              :item="item"
+          />
+          <div v-if="filteredMenuGroups.length === 0" class="text-center py-10">
+            <p class="text-xs text-slate-400">未发现相关文件</p>
+          </div>
         </nav>
       </div>
     </div>
@@ -107,8 +163,7 @@ onUnmounted(() => stopResizing())
 
     <button
         @click="toggleCollapse"
-        class="absolute top-1/2 -right-3 transform -translate-y-1/2 w-6 h-12 bg-white dark:bg-[#1c1c1f] border border-slate-200 dark:border-[#27272a] rounded-full flex items-center justify-center shadow-sm z-[60] hover:text-primary transition-all group"
-        title="Toggle Sidebar"
+        class="absolute top-1/2 -right-3 transform -translate-y-1/2 w-6 h-12 bg-white dark:bg-[#1c1c1f] border border-slate-200 dark:border-[#27272a] rounded-full flex items-center justify-center shadow-md z-[60] hover:text-primary transition-all group"
     >
       <span class="material-symbols-outlined text-[18px] transition-transform duration-300"
             :class="isCollapsed ? 'rotate-180' : 'rotate-0'">
@@ -121,13 +176,22 @@ onUnmounted(() => stopResizing())
 <style scoped>
 aside {
   user-select: none;
-  /* 允许按钮溢出容器显示 */
   overflow: visible !important;
 }
 
-/* 即使宽度为0，也要保证按钮所在位置可点击 */
-aside:empty {
-  min-width: 0;
+/* 隐藏滚动条但保留滚动功能（可选） */
+.overflow-y-auto::-webkit-scrollbar {
+  width: 4px;
+}
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 10px;
+}
+aside:hover .overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(0,0,0,0.1);
+}
+.dark aside:hover .overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.05);
 }
 
 .material-symbols-outlined {
