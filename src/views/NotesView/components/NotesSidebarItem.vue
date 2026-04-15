@@ -10,6 +10,7 @@ const props = defineProps({
   }
 })
 
+// 点击切换展开状态
 const toggleOpen = () => {
   if (props.item.children) {
     props.item.isOpen = !props.item.isOpen
@@ -34,7 +35,6 @@ const toggleOpen = () => {
       ]"
     >
 
-
       <span class="material-symbols-outlined text-[18px] flex-shrink-0 mr-2"
             :class="depth === 0 ? 'text-primary' : 'opacity-60'">
         {{ item.icon }}
@@ -53,7 +53,7 @@ const toggleOpen = () => {
 
     <div v-if="item.children && item.isOpen"
          class="ml-2.5 border-l border-slate-200/60 dark:border-[#27272a] pl-1">
-      <SidebarItem
+      <NotesSidebarItem
           v-for="child in item.children"
           :key="child.title"
           :item="child"
