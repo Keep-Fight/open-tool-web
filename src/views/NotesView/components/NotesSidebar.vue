@@ -1,11 +1,26 @@
 <script setup>
-import { ref, onMounted, defineEmits, onUnmounted, computed } from 'vue'
-import mdApi from '../../../api/mdApi'
+import {ref, onMounted, defineEmits, onUnmounted, computed, provide} from 'vue'
+import mdApi from '@/api/mdApi.js'
 import NotesSidebarItem from './NotesSidebarItem.vue'
 
 const menuGroups = ref([])
 const searchQuery = ref('')
+
+const activePath = ref('')
 const emit = defineEmits(['path-change'])
+
+
+// 处理点击选择逻辑
+const handleSelect = (path) => {
+  activePath.value = path
+  // 向 index.vue 发送事件
+  emit('path-change', path)
+}
+
+// 将 activePath 和选择函数提供给所有子组件
+provide('activePath', activePath)
+provide('selectPath', handleSelect)
+
 
 // 格式化文件目录
 const formatTreeToMenu = (tree) => {
@@ -108,7 +123,6 @@ const stopResizing = () => {
 }
 
 
-
 onMounted(() => loadTree())
 onUnmounted(() => stopResizing())
 </script>
@@ -118,8 +132,9 @@ onUnmounted(() => stopResizing())
       class="relative hidden lg:flex flex-col h-screen sticky top-0 border-r border-slate-200/60 dark:border-[#27272a] bg-[#f8f9ff] dark:bg-[#121214] transition-[width] duration-300 ease-in-out z-40"
       :style="{ width: isCollapsed ? '0px' : sidebarWidth + 'px' }"
   >
-    <div :class="['flex flex-col h-full overflow-hidden transition-opacity duration-300', isCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100']"
-         :style="{ width: sidebarWidth + 'px' }">
+    <div
+        :class="['flex flex-col h-full overflow-hidden transition-opacity duration-300', isCollapsed ? 'opacity-0 pointer-events-none' : 'opacity-100']"
+        :style="{ width: sidebarWidth + 'px' }">
 
       <div class="py-8 px-4 flex-grow overflow-y-auto">
         <div class="flex items-center mb-6 px-3">
@@ -130,7 +145,8 @@ onUnmounted(() => stopResizing())
 
         <div class="px-3 mb-6">
           <div class="relative group">
-            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-slate-400 group-focus-within:text-primary transition-colors">
+            <span
+                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-slate-400 group-focus-within:text-primary transition-colors">
               search
             </span>
             <input
@@ -183,15 +199,18 @@ aside {
 .overflow-y-auto::-webkit-scrollbar {
   width: 4px;
 }
+
 .overflow-y-auto::-webkit-scrollbar-thumb {
   background: transparent;
   border-radius: 10px;
 }
+
 aside:hover .overflow-y-auto::-webkit-scrollbar-thumb {
-  background: rgba(0,0,0,0.1);
+  background: rgba(0, 0, 0, 0.1);
 }
+
 .dark aside:hover .overflow-y-auto::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .material-symbols-outlined {

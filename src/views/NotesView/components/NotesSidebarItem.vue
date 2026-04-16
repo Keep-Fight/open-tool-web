@@ -1,19 +1,25 @@
 <script setup>
+import { inject, computed } from 'vue' // 引入 inject
+
 const props = defineProps({
-  item: {
-    type: Object,
-    required: true
-  },
-  depth: {
-    type: Number,
-    default: 0
-  }
+  item: { type: Object, required: true },
+  depth: { type: Number, default: 0 }
 })
 
-// 点击切换展开状态
-const toggleOpen = () => {
+// 注入父级提供的状态
+const activePath = inject('activePath')
+const selectPath = inject('selectPath')
+
+// 判断当前项是否被选中
+const isActive = computed(() => activePath.value === props.item.path)
+
+const handleClick = () => {
   if (props.item.children) {
+    // 如果是目录，点击仅切换展开/收起
     props.item.isOpen = !props.item.isOpen
+  } else {
+    // 如果是文件，执行选择逻辑
+    selectPath(props.item.path)
   }
 }
 </script>
@@ -22,14 +28,13 @@ const toggleOpen = () => {
   <div class="w-full">
     <component
         :is="item.children ? 'button' : 'a'"
-        :href="item.children ? undefined : '#'"
-        @click="toggleOpen"
+        @click="handleClick"
         :class="[
         'w-full flex items-center px-2 py-1.5 transition-all rounded-r-lg border-l-2 mb-0.5',
-        // 字体区分：一级 sm，子级则更小一点
         depth === 0 ? 'text-sm font-bold' : 'text-[13px] font-medium',
-        // 状态颜色
-        item.active
+
+        // 修改逻辑：使用 isActive 判断高亮
+        isActive
           ? 'bg-primary/10 text-primary border-primary'
           : 'text-[#424656] dark:text-[#a1a1aa] border-transparent hover:text-primary dark:hover:text-[#f1f1f1] hover:bg-slate-200/50 dark:hover:bg-[#1c1c1f]'
       ]"
@@ -62,10 +67,3 @@ const toggleOpen = () => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.material-symbols-outlined {
-  /* 调整图标渲染精细度 */
-  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
-}
-</style>
