@@ -2,6 +2,7 @@ import {defineConfig} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
 import svgLoader from 'vite-svg-loader'
+import path from 'path'
 
 export default defineConfig({
     plugins: [
@@ -21,11 +22,16 @@ export default defineConfig({
             }
         }
     },
-
     build: {
         outDir: 'dist',
         assetsDir: 'assets',
         minify: 'esbuild',
         sourcemap: false,
+    },
+    resolve: {
+        alias: {
+            // 配置 @ 指向 src 目录
+            '@': path.resolve(__dirname, 'src')
+        }
     }
 })
