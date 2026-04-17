@@ -14,7 +14,7 @@ const mdApi = {
     },
 
     // 获取MD文件内容
-    getFileContent(path) {
+    getContent(path) {
         return axios.get('/api/md/file', { params: { path } })
             .then(res => res.data.data)
             .catch(err => {
