@@ -44,6 +44,7 @@ const handlePathChange = (path) => {
     mdApi.getContent(encodeURIComponent(path)).then(data => {
       currentContent.value = data
       currentTocList.value = parseTocFromMd(currentContent.value)
+      console.log('目录解析结果:', currentContent.value)
     })
   } catch (e) {
     currentContent.value = '## 加载失败\n无法获取该文件内容。'
@@ -69,7 +70,6 @@ const handleContentScroll = () => {
     }
   });
 
-
   // 更新激活状态（避免频繁更新）
   if (activeTocId && activeTocId !== currentActiveId.value) {
     currentActiveId.value = activeTocId;
@@ -79,12 +79,5 @@ const handleContentScroll = () => {
 </script>
 
 <style scoped>
-:deep(.scrollbar-custom::-webkit-scrollbar) {
-  width: 0;
-}
 
-:deep(.scrollbar-custom) {
-  /* 火狐 */
-  scrollbar-width: none;
-}
 </style>

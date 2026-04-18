@@ -1,6 +1,5 @@
 import axios from 'axios'
 
-//
 const mdApi = {
 
     // 获取目录树（MdNode列表）

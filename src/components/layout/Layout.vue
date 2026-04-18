@@ -12,7 +12,7 @@
 <script setup>
 import Header from "./Header.vue";
 import Footer from "./Footer.vue";
-import { useTheme } from '../../data/useTheme.js'
+import { useTheme } from '@/data/useTheme.js'
 const { isDark, toggleTheme } = useTheme()
 </script>
 
