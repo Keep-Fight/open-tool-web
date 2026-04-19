@@ -44,7 +44,6 @@ const handlePathChange = (path) => {
     mdApi.getContent(encodeURIComponent(path)).then(data => {
       currentContent.value = data
       currentTocList.value = parseTocFromMd(currentContent.value)
-      console.log('目录解析结果:', currentContent.value)
     })
   } catch (e) {
     currentContent.value = '## 加载失败\n无法获取该文件内容。'
