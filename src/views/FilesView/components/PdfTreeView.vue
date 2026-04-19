@@ -27,28 +27,27 @@
             :key="category.name"
             class="mb-2"
         >
-          <!-- 一级：目录 -->
           <div
               class="flex items-center px-4 py-2 cursor-pointer hover:bg-slate-100 dark:hover:bg-[#1a1a1b] transition-colors"
               @click="toggleCategory(category.name)"
+              :title="category.displayName || category.name"
           >
             <ChevronRight
-                class="w-4 h-4 text-slate-400 transition-transform duration-200 mr-2"
+                class="w-4 h-4 text-slate-400 transition-transform duration-200 mr-2 shrink-0"
                 :class="{ 'rotate-90': expandedCategories.has(category.name) }"
             />
             <Folder
-                class="w-5 h-5 mr-2"
+                class="w-5 h-5 mr-2 shrink-0"
                 :class="expandedCategories.has(category.name) ? 'text-yellow-500' : 'text-slate-400'"
             />
-            <span class="text-sm font-medium text-slate-700 dark:text-slate-200">
+            <span class="text-sm font-medium text-slate-700 dark:text-slate-200 truncate flex-1">
               {{ category.displayName || category.name }}
             </span>
-            <span class="ml-auto text-xs text-slate-400">
+            <span class="ml-2 text-xs text-slate-400 shrink-0">
               {{ category.children?.length || 0 }}
             </span>
           </div>
 
-          <!-- 二级：PDF 文件列表 -->
           <div
               v-show="expandedCategories.has(category.name)"
               class="ml-6 mt-1 space-y-0.5"
@@ -58,8 +57,9 @@
                 :key="file.path"
                 class="flex items-center px-3 py-1.5 cursor-pointer hover:bg-slate-100 dark:hover:bg-[#1a1a1b] rounded transition-colors"
                 @click="handleFileClick(file)"
+                :title="file.displayName || file.name"
             >
-              <FileText class="w-4 h-4 mr-2 text-red-500" />
+              <FileText class="w-4 h-4 mr-2 text-red-500 shrink-0" />
               <span class="text-sm text-slate-600 dark:text-slate-300 truncate flex-1">
                 {{ file.displayName || file.name }}
               </span>
@@ -72,7 +72,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import { Folder, FileText, ChevronRight } from 'lucide-vue-next'
 import pdfApi from '@/api/pdfApi'
 
