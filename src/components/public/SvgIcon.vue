@@ -21,7 +21,7 @@ const iconComponent = shallowRef(null)
 watchEffect(() => {
   try {
     iconComponent.value = defineAsyncComponent(() =>
-        import(`../assets/icons/${props.name}.svg?component`)
+        import(`@/assets/icons/${props.name}.svg?component`)
     )
   } catch (e) {
     console.error(`图标 ${props.name} 加载失败`, e)

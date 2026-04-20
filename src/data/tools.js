@@ -3,9 +3,7 @@ import {defineAsyncComponent} from 'vue'
 // 工具数据的定义
 const toolsJson = [
     {
-        id: 'dev',
-        name: '开发人员工具',
-        color: 'blue',
+        category: '开发人员工具',
         tools: [
             {
                 id: 'base-converter',
@@ -34,9 +32,7 @@ const toolsJson = [
         ]
     },
     {
-        id: 'text',
-        name: '文本与图像',
-        color: 'blue',
+        category: '文本与图像',
         tools: [
             {
                 id: 'id-generation',
@@ -52,9 +48,9 @@ const toolsJson = [
 const toolsComponent = {
     'base-converter': defineAsyncComponent(() => import('../components/tools/BaseConverter.vue')),
     'json-formatter': defineAsyncComponent(() => import('../components/tools/JsonFormatter.vue')),
-    'sql-formatter': defineAsyncComponent(()=>import('../components/tools/SqlFormatter.vue')),
-    'id-generation': defineAsyncComponent(()=>import("../components/tools/IdGenerator.vue")),
-    'color-picker' : defineAsyncComponent( ()=>import("../components/tools/ColorPicker.vue"))
+    'sql-formatter': defineAsyncComponent(() => import('../components/tools/SqlFormatter.vue')),
+    'id-generation': defineAsyncComponent(() => import("../components/tools/IdGenerator.vue")),
+    'color-picker': defineAsyncComponent(() => import("../components/tools/ColorPicker.vue"))
 }
 
 export {toolsJson, toolsComponent};
