@@ -26,24 +26,21 @@ provide('selectPath', handleSelect)
 const formatTreeToMenu = (tree) => {
   return tree.map(node => {
     if (node.directory) {
-      return {
-        title: node.name,
-        icon: node.icon || 'folder_open',
-        isOpen: false,
-        path: node.path,
-        directory: true,
-        children: formatTreeToMenu(node.children)
-      }
+      node.icon = node.icon || 'folder'
     } else {
-      return {
-        title: node.name,
-        icon: node.icon || 'description',
-        isOpen: false,
-        active: false,
-        directory: false,
-        path: node.path
-      }
+      node.icon = node.icon || 'description'
     }
+
+    if(node.active) {
+      // 默认选中第一个
+      handleSelect(node.path)
+    }
+
+    // 递归处理子节点（99% 你需要这个！）
+    if (node.children && node.children.length) {
+      node.children = formatTreeToMenu(node.children)
+    }
+    return node;
   })
 }
 

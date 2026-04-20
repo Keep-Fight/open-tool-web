@@ -14,7 +14,7 @@ const mdApi = {
 
     // 获取MD文件内容
     getContent(path) {
-        return request.get('/md/file', { params: { path } })
+        return request.get('/md/content', { params: { path } })
             .then(res => res.data)
             .catch(err => {
                 console.error(`获取文件[${path}]失败:`, err)
