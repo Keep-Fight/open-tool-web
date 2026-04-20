@@ -31,7 +31,6 @@ import SvgIcon from "@/components/public/SvgIcon.vue";
           >
             <div class="w-12 h-12 shrink-0 rounded-lg flex items-center justify-center transition-colors
                         bg-[#0066ff]/10 text-[#0066ff] group-hover:bg-[#0066ff] group-hover:text-white">
-              <!-- 使用 SvgIcon 组件，传递 iconName 作为 name 属性，自定义样式类 -->
               <SvgIcon
                   :name="tool.iconName"
                   class="w-6 h-6 group-hover:fill-white transition-colors"

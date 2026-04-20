@@ -19,14 +19,12 @@ const router = createRouter({
                     path: 'tools',
                     name: 'Tools',
                     component: () => import('../views/ToolsView/index.vue'),
-                    children: [
-                        {
-                            path: '/:id',
-                            name: 'ToolWindow',
-                            component: () => import('../views/ToolsView/components/ToolWindow.vue'),
-                            props: true,
-                        }
-                    ]
+                },
+                {
+                    path: 'tools/:id',
+                    name: 'ToolWindow',
+                    component: () => import('../views/ToolsView/components/ToolWindow.vue'),
+                    props: true,
                 },
                 {
                     path: 'notes',
