@@ -14,7 +14,7 @@ const emit = defineEmits(['path-change'])
 const handleSelect = (path) => {
   activePath.value = path
   // 向 index.vue 发送事件
-  emit('path-change', path)
+  emit('path-change', path);
 }
 
 // 将 activePath 和选择函数提供给所有子组件
@@ -23,22 +23,30 @@ provide('selectPath', handleSelect)
 
 
 // 格式化文件目录
-const formatTreeToMenu = (tree) => {
+const formatTreeToMenu = (tree, parent = null) => {
   return tree.map(node => {
+    // 给节点添加父级引用，用于后续遍历
+    node.parent = parent;
+
     if (node.directory) {
-      node.icon = node.icon || 'folder'
+      // 目录默认图标为folder（未展开）
+      node.icon = node.icon || 'folder';
+      if (node.isOpen && node.icon === 'folder') {
+        node.icon = 'folder_open';
+      }
     } else {
-      node.icon = node.icon || 'description'
+      // 文件默认图标为description
+      node.icon = node.icon || 'description';
     }
 
-    if(node.active) {
+    if (node.active) {
       // 默认选中第一个
       handleSelect(node.path)
     }
 
-    // 递归处理子节点（99% 你需要这个！）
+    // 递归处理子节点，传入当前节点作为父级
     if (node.children && node.children.length) {
-      node.children = formatTreeToMenu(node.children)
+      node.children = formatTreeToMenu(node.children, node);
     }
     return node;
   })

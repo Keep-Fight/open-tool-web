@@ -1,9 +1,9 @@
 <script setup>
-import { inject, computed } from 'vue' // 引入 inject
+import {inject, computed} from 'vue' // 引入 inject
 
 const props = defineProps({
-  item: { type: Object, required: true },
-  depth: { type: Number, default: 0 }
+  item: {type: Object, required: true},
+  depth: {type: Number, default: 0}
 })
 
 // 注入父级提供的状态
@@ -15,11 +15,16 @@ const isActive = computed(() => activePath.value === props.item.path)
 
 const handleClick = () => {
   if (props.item.children) {
-    // 如果是目录，点击仅切换展开/收起
-    props.item.isOpen = !props.item.isOpen
+    // 如果是目录，切换展开/收起状态
+    props.item.isOpen = !props.item.isOpen;
+    // 根据展开状态更新文件夹图标
+    if (props.item.icon === 'folder' || props.item.icon === 'folder_open') {
+      props.item.icon = props.item.isOpen ? 'folder_open' : 'folder';
+    }
+
   } else {
     // 如果是文件，执行选择逻辑
-    selectPath(props.item.path)
+    selectPath(props.item.path);
   }
 }
 </script>
