@@ -10,62 +10,21 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
-        <div class="category-card group">
-          <div class="icon-box text-dev bg-dev/10">
-            <span class="material-symbols-outlined text-3xl">code</span>
+        <div
+          v-for="category in categoriesWithLimit"
+          :key="category.category"
+          class="category-card group"
+        >
+          <div :class="['icon-box', category.colorClass]">
+            <span class="material-symbols-outlined text-3xl">{{ category.icon }}</span>
           </div>
-          <h3 class="text-xl font-bold font-headline mb-4">开发</h3>
+          <h3 class="text-xl font-bold font-headline mb-4">{{ category.category }}</h3>
           <ul class="space-y-3">
-            <li v-for="link in ['JSON 格式化', 'Base64 Encode/Decode', 'JWT Debugger']" :key="link">
-              <a class="nav-link" href="#">
-                {{ link }}
+            <li v-for="tool in category.tools" :key="tool.id">
+              <router-link class="nav-link" :to="`/tools/${tool.id}`">
+                {{ tool.title }}
                 <span class="material-symbols-outlined text-xs">arrow_forward</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="category-card group">
-          <div class="icon-box text-design bg-design/10">
-            <span class="material-symbols-outlined text-3xl">palette</span>
-          </div>
-          <h3 class="text-xl font-bold font-headline mb-4">设计</h3>
-          <ul class="space-y-3">
-            <li v-for="link in ['SVG 优化器', 'Color 选择器', 'Icon 生成器']" :key="link">
-              <a class="nav-link" href="#">
-                {{ link }}
-                <span class="material-symbols-outlined text-xs">arrow_forward</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="category-card group">
-          <div class="icon-box text-prod bg-prod/10">
-            <span class="material-symbols-outlined text-3xl">clock_loader_40</span>
-          </div>
-          <h3 class="text-xl font-bold font-headline mb-4">生产力</h3>
-          <ul class="space-y-3">
-            <li v-for="link in ['Markdown 编辑器', '文本差异检测']" :key="link">
-              <a class="nav-link" href="#">
-                {{ link }}
-                <span class="material-symbols-outlined text-xs">arrow_forward</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div class="category-card group">
-          <div class="icon-box text-media bg-media/10">
-            <span class="material-symbols-outlined text-3xl">photo_camera</span>
-          </div>
-          <h3 class="text-xl font-bold font-headline mb-4">多媒体</h3>
-          <ul class="space-y-3">
-            <li v-for="link in ['图像压缩', '视频编码转换']" :key="link">
-              <a class="nav-link" href="#">
-                {{ link }}
-                <span class="material-symbols-outlined text-xs">arrow_forward</span>
-              </a>
+              </router-link>
             </li>
           </ul>
         </div>
@@ -74,6 +33,31 @@
     </div>
   </section>
 </template>
+
+<script setup>
+import { computed } from 'vue'
+import { toolsJson } from '@/data/tools.js'
+
+const colorMap = {
+  'dev-tools': 'text-dev bg-dev/10',
+  'text-image': 'text-design bg-design/10'
+}
+
+const iconMap = {
+  'dev-tools': 'code',
+  'text-image': 'palette'
+}
+
+const categoriesWithLimit = computed(() => {
+  return toolsJson.map(cat => ({
+    ...cat,
+    icon: iconMap[cat.icon] || 'tools',
+    colorClass: colorMap[cat.icon] || 'text-primary bg-primary/10',
+    tools: cat.tools.slice(0, 3)
+  }))
+})
+</script>
+
 <style scoped>
 @reference "../../../style.css";
 
