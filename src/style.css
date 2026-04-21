@@ -32,11 +32,12 @@
     /* 白天模式色值 */
     :root {
         --app-primary: #0066ff;
-        --app-background: #f8f9ff;
-        --app-surface: #f8f9ff;
+        --app-background: #f0f2f7;         /* 略深的底色 */
+        --app-surface: #f8f9ff;            /* 基础表面 */
         --app-surface-container: #e5eeff;
-        --app-surface-container-low: #eff4ff;
-        --app-surface-container-lowest: #ffffff;
+        --app-surface-container-low: #f1f4fb;
+        --app-surface-container-high: #e2e8f5;
+        --app-surface-container-lowest: #ffffff; /* 最亮的卡片色 */
         --app-on-surface: #0b1c30;
         --app-on-surface-variant: #424656;
         --app-outline: #727687;
@@ -51,11 +52,12 @@
     /* 黑夜模式色值 */
     .dark {
         --app-primary: #0066ff;
-        --app-background: #0a0a0b;
-        --app-surface: #121214;
+        --app-background: #080809;         /* 纯黑背景 */
+        --app-surface: #121214;            /* 深灰表面 */
         --app-surface-container: #1c1c1f;
-        --app-surface-container-low: #1c1c1f;
-        --app-surface-container-lowest: #1c1c1f;
+        --app-surface-container-low: #18181b;
+        --app-surface-container-high: #27272a;
+        --app-surface-container-lowest: #1f1f22; /* 悬浮卡片色 */
         --app-on-surface: #f1f1f1;
         --app-on-surface-variant: #a1a1aa;
         --app-outline: #3f3f46;

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="zh-CN"><head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>JSON 格式化/校验 (深色模式) - Open Toolbox</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container": "#201f20",
+                        "on-secondary-container": "#b7b4b7",
+                        "secondary-fixed": "#e5e1e4",
+                        "on-error": "#690005",
+                        "inverse-primary": "#0054d6",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "background": "#131314",
+                        "outline": "#8c90a1",
+                        "tertiary-container": "#cc4204",
+                        "secondary-fixed-dim": "#c8c6c8",
+                        "error-container": "#93000a",
+                        "secondary": "#c8c6c8",
+                        "primary-container": "#0066ff",
+                        "on-secondary-fixed-variant": "#474649",
+                        "surface-dim": "#131314",
+                        "surface-tint": "#b3c5ff",
+                        "on-tertiary-fixed-variant": "#832600",
+                        "error": "#ffb4ab",
+                        "on-tertiary": "#5d1900",
+                        "on-surface": "#e5e2e3",
+                        "on-tertiary-container": "#fff6f4",
+                        "surface-container-high": "#2a2a2b",
+                        "on-tertiary-fixed": "#390c00",
+                        "on-primary-container": "#f8f7ff",
+                        "surface": "#131314",
+                        "primary": "#b3c5ff",
+                        "on-secondary-fixed": "#1b1b1d",
+                        "on-primary-fixed-variant": "#003fa4",
+                        "tertiary-fixed": "#ffdbd0",
+                        "surface-container-low": "#1c1b1c",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "on-secondary": "#303032",
+                        "on-background": "#e5e2e3",
+                        "primary-fixed": "#dae1ff",
+                        "surface-bright": "#3a393a",
+                        "tertiary": "#ffb59d",
+                        "surface-variant": "#353436",
+                        "surface-container-highest": "#353436",
+                        "on-primary": "#002b75",
+                        "surface-container-lowest": "#0e0e0f",
+                        "secondary-container": "#474649",
+                        "inverse-surface": "#e5e2e3",
+                        "inverse-on-surface": "#313031",
+                        "on-error-container": "#ffdad6",
+                        "on-primary-fixed": "#001849",
+                        "on-surface-variant": "#c2c6d8",
+                        "outline-variant": "#424656"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .code-glow:focus-within {
+            box-shadow: 0 0 0 4px rgba(0, 102, 255, 0.1);
+        }
+        /* Custom Scrollbar for Obsidian Aesthetic */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0e0e0f; }
+        ::-webkit-scrollbar-thumb { background: #353436; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #424656; }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col">
+<!-- TopNavBar (Shared Component) -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-sm border-b border-outline-variant/10">
+    <div class="flex justify-between items-center px-6 py-4 max-w-full mx-auto">
+        <div class="flex items-center gap-8">
+            <span class="text-xl font-bold font-headline text-on-surface tracking-tight">Open Toolbox</span>
+            <div class="hidden md:flex items-center gap-6">
+                <a class="text-primary-container border-b-2 border-primary-container pb-1 font-headline font-semibold tracking-tight transition-colors" href="#">Formatter</a>
+                <a class="text-on-surface-variant hover:text-on-surface font-headline font-semibold tracking-tight transition-colors" href="#">Validator</a>
+                <a class="text-on-surface-variant hover:text-on-surface font-headline font-semibold tracking-tight transition-colors" href="#">Compare</a>
+                <a class="text-on-surface-variant hover:text-on-surface font-headline font-semibold tracking-tight transition-colors" href="#">minify</a>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <button class="text-on-surface-variant hover:text-on-surface font-headline font-semibold text-sm transition-colors px-3 py-2 rounded-lg hover:bg-surface-container">Help</button>
+            <div class="flex items-center gap-2">
+                <button class="p-2 text-on-surface-variant hover:text-on-surface transition-transform active:scale-95 duration-200">
+                    <span class="material-symbols-outlined" data-icon="settings">settings</span>
+                </button>
+                <button class="p-2 text-on-surface-variant hover:text-on-surface transition-transform active:scale-95 duration-200">
+                    <span class="material-symbols-outlined" data-icon="dark_mode">dark_mode</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+<main class="flex-grow pt-24 pb-12 px-6 max-w-7xl mx-auto w-full">
+    <!-- Hero Header -->
+    <header class="mb-10 text-center md:text-left">
+        <h1 class="text-4xl md:text-5xl font-bold font-headline tracking-tighter text-on-surface mb-2">JSON 格式化/校验 (深色模式)</h1>
+        <p class="text-on-surface-variant text-lg">高精度、零日志的结构化数据处理工作台。</p>
+    </header>
+    <!-- Main Workspace: Bento Style -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-12">
+        <!-- Source Content Editor -->
+        <div class="lg:col-span-3 bg-surface-container-low rounded-lg p-1 flex flex-col min-h-[600px] code-glow transition-shadow overflow-hidden">
+            <div class="flex items-center justify-between px-4 py-3 bg-surface-container-high/40 border-b border-outline-variant/10">
+                <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary-container" data-icon="code">code</span>
+                    <span class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Source Content</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="px-2 py-1 bg-surface-container-highest text-[10px] rounded text-on-surface-variant font-mono">UTF-8</span>
+                </div>
+            </div>
+            <textarea class="flex-grow bg-surface-container-lowest text-on-surface font-mono text-sm p-6 resize-none focus:ring-0 focus:outline-none border-none placeholder:text-outline/40 leading-relaxed" placeholder='{"key": "value", "hint": "Paste your JSON here..."}' spellcheck="false"></textarea>
+            <div class="px-4 py-2 bg-surface-container-lowest border-t border-outline-variant/5 text-[10px] text-outline flex justify-between">
+                <span>Lines: 1  |  Characters: 0</span>
+                <span class="text-primary-container/80">Ready to Process</span>
+            </div>
+        </div>
+        <!-- Operations Panel -->
+        <div class="lg:col-span-1 flex flex-col gap-6">
+            <div class="bg-surface-container-high rounded-lg p-6 flex flex-col gap-4">
+                <h2 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2">Operations</h2>
+                <button class="flex items-center justify-center gap-2 bg-primary-container text-on-primary-container py-3 px-4 rounded-lg font-bold transition-all active:scale-95 duration-200 hover:brightness-110 shadow-lg shadow-primary-container/20">
+                    <span class="material-symbols-outlined" data-icon="format_align_left">format_align_left</span>
+                    Format JSON
+                </button>
+                <button class="flex items-center justify-center gap-2 bg-secondary-container text-on-surface py-3 px-4 rounded-lg font-bold transition-all active:scale-95 duration-200 hover:bg-surface-container-highest">
+                    <span class="material-symbols-outlined" data-icon="verified">verified</span>
+                    Validate JSON
+                </button>
+                <button class="flex items-center justify-center gap-2 bg-secondary-container text-on-surface py-3 px-4 rounded-lg font-bold transition-all active:scale-95 duration-200 hover:bg-surface-container-highest">
+                    <span class="material-symbols-outlined" data-icon="compress">compress</span>
+                    Minify JSON
+                </button>
+                <div class="h-px bg-outline-variant/10 my-2"></div>
+                <button class="flex items-center justify-center gap-2 text-error hover:bg-error-container/10 py-3 px-4 rounded-lg font-bold transition-all active:scale-95 duration-200">
+                    <span class="material-symbols-outlined" data-icon="delete_sweep">delete_sweep</span>
+                    Clear
+                </button>
+            </div>
+            <!-- Secondary Tools Widget -->
+            <div class="bg-surface-container-low rounded-lg p-6 border border-outline-variant/5">
+                <h3 class="text-sm font-bold text-on-surface mb-4">Quick Settings</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs text-on-surface-variant">Indentation</label>
+                        <select class="bg-surface-container-highest text-on-surface text-xs rounded border-none py-1 px-2 focus:ring-1 focus:ring-primary-container">
+                            <option>2 Spaces</option>
+                            <option>4 Spaces</option>
+                            <option>Tab</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs text-on-surface-variant">Sort Keys</label>
+                        <button class="w-8 h-4 bg-surface-container-highest rounded-full relative transition-colors">
+                            <span class="absolute left-1 top-1 w-2 h-2 bg-outline rounded-full"></span>
+                        </button>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <label class="text-xs text-on-surface-variant">Strict Mode</label>
+                        <button class="w-8 h-4 bg-primary-container/40 rounded-full relative transition-colors">
+                            <span class="absolute right-1 top-1 w-2 h-2 bg-primary-container rounded-full"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Information Sections -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- How to Use -->
+        <section class="bg-surface-container-low/40 rounded-xl p-8 border border-outline-variant/5">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-lg bg-primary-container/10 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-primary-container" data-icon="menu_book">menu_book</span>
+                </div>
+                <h2 class="text-2xl font-bold font-headline tracking-tight">How to Use</h2>
+            </div>
+            <ul class="space-y-4 text-on-surface-variant text-sm leading-relaxed">
+                <li class="flex gap-4">
+                    <span class="text-primary-container font-bold font-mono">01.</span>
+                    <p>Paste your raw, messy, or minified JSON string into the "Source Content" editor on the left.</p>
+                </li>
+                <li class="flex gap-4">
+                    <span class="text-primary-container font-bold font-mono">02.</span>
+                    <p>Click "Format JSON" to expand it into a human-readable structure with consistent indentation.</p>
+                </li>
+                <li class="flex gap-4">
+                    <span class="text-primary-container font-bold font-mono">03.</span>
+                    <p>Use the "Validate" function to identify syntax errors such as missing commas or mismatched brackets.</p>
+                </li>
+                <li class="flex gap-4">
+                    <span class="text-primary-container font-bold font-mono">04.</span>
+                    <p>Toggle settings like indentation size or key sorting to customize the output precisely for your needs.</p>
+                </li>
+            </ul>
+        </section>
+        <!-- Privacy & Security -->
+        <section class="bg-surface-container-low/40 rounded-xl p-8 border border-outline-variant/5">
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-lg bg-tertiary-container/10 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-tertiary" data-icon="shield">shield</span>
+                </div>
+                <h2 class="text-2xl font-bold font-headline tracking-tight">Privacy &amp; Security</h2>
+            </div>
+            <div class="space-y-6">
+                <p class="text-on-surface-variant text-sm leading-relaxed">
+                    We prioritize the integrity and confidentiality of your engineering data above all else. This tool is built with a <strong>"Privacy First"</strong> architecture.
+                </p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-4 bg-surface-container-lowest rounded-lg">
+                        <span class="text-[10px] font-bold uppercase text-tertiary block mb-1">Local Processing</span>
+                        <p class="text-xs text-on-surface-variant">All operations happen within your browser's memory. No data is sent to our servers.</p>
+                    </div>
+                    <div class="p-4 bg-surface-container-lowest rounded-lg">
+                        <span class="text-[10px] font-bold uppercase text-tertiary block mb-1">No Logging</span>
+                        <p class="text-xs text-on-surface-variant">We do not store, cache, or log any content you input or the output generated.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+<!-- Footer (Shared Component) -->
+<footer class="bg-slate-50 dark:bg-slate-950 w-full py-12 px-8 border-t border-slate-200/50 dark:border-slate-800/50">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-7xl mx-auto">
+        <div class="flex flex-col items-center md:items-start gap-2">
+            <span class="font-['Manrope'] font-bold text-slate-400">Open Toolbox</span>
+            <p class="font-['Inter'] text-sm tracking-wide text-slate-500 dark:text-slate-400">© 2024 Open Toolbox — Precision Engineering for Web Data</p>
+        </div>
+        <div class="flex flex-wrap justify-center gap-x-8 gap-y-4">
+            <a class="font-['Inter'] text-sm tracking-wide text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 transition-all duration-300 underline underline-offset-4" href="#">API Documentation</a>
+            <a class="font-['Inter'] text-sm tracking-wide text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 transition-all duration-300 underline underline-offset-4" href="#">Schema Library</a>
+            <a class="font-['Inter'] text-sm tracking-wide text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 transition-all duration-300 underline underline-offset-4" href="#">GitHub</a>
+            <a class="font-['Inter'] text-sm tracking-wide text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 transition-all duration-300 underline underline-offset-4" href="#">Privacy</a>
+            <a class="font-['Inter'] text-sm tracking-wide text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 transition-all duration-300 underline underline-offset-4" href="#">Terms</a>
+        </div>
+    </div>
+</footer>
+</body></html>

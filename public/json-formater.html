@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html class="light" lang="zh-CN"><head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>JSON 格式化/校验 (浅色模式) - Open Toolbox</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+    <!-- Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-primary-fixed": "#001849",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#9bb4fe",
+                        "tertiary": "#a33200",
+                        "surface-variant": "#d3e4fe",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-primary": "#ffffff",
+                        "inverse-surface": "#213145",
+                        "on-surface-variant": "#424656",
+                        "outline-variant": "#c2c6d8",
+                        "surface": "#f8f9ff",
+                        "primary": "#0050cb",
+                        "on-secondary-fixed": "#001849",
+                        "on-primary-fixed-variant": "#003fa4",
+                        "on-primary-container": "#f8f7ff",
+                        "tertiary-fixed": "#ffdbd0",
+                        "surface-container-high": "#dce9ff",
+                        "on-tertiary-fixed": "#390c00",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#0b1c30",
+                        "surface-bright": "#f8f9ff",
+                        "primary-fixed": "#dae1ff",
+                        "surface-container-low": "#eff4ff",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "secondary": "#425ca0",
+                        "primary-container": "#0066ff",
+                        "on-secondary-fixed-variant": "#284386",
+                        "on-tertiary": "#ffffff",
+                        "on-surface": "#0b1c30",
+                        "on-tertiary-container": "#fff6f4",
+                        "surface-dim": "#cbdbf5",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#0054d6",
+                        "on-tertiary-fixed-variant": "#832600",
+                        "outline": "#727687",
+                        "secondary-fixed": "#dae1ff",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#b3c5ff",
+                        "surface-container": "#e5eeff",
+                        "on-secondary-container": "#294487",
+                        "tertiary-fixed-dim": "#ffb59d",
+                        "background": "#f8f9ff",
+                        "secondary-fixed-dim": "#b3c5ff",
+                        "error-container": "#ffdad6",
+                        "tertiary-container": "#cc4204"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "xxl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tonal-shift-bg {
+            background-color: #eff4ff;
+        }
+        .editor-line-numbers {
+            background: linear-gradient(to right, #eff4ff 0%, #f8f9ff 100%);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl shadow-sm">
+    <div class="flex justify-between items-center px-6 py-4 max-w-full mx-auto">
+        <div class="flex items-center gap-10">
+            <span class="text-xl font-bold font-['Manrope'] text-slate-900 dark:text-white">Open Toolbox</span>
+            <div class="hidden md:flex gap-8 items-center">
+                <a class="font-['Manrope'] font-semibold tracking-tight text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400 pb-1" href="#">Formatter</a>
+                <a class="font-['Manrope'] font-semibold tracking-tight text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="#">Validator</a>
+                <a class="font-['Manrope'] font-semibold tracking-tight text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="#">Compare</a>
+                <a class="font-['Manrope'] font-semibold tracking-tight text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 transition-colors" href="#">minify</a>
+            </div>
+        </div>
+        <div class="flex items-center gap-6">
+            <button class="hidden md:block text-slate-500 font-['Manrope'] font-semibold tracking-tight hover:text-slate-900">Help</button>
+            <div class="flex gap-4">
+                <span class="material-symbols-outlined text-on-surface-variant hover:bg-slate-50 p-2 rounded-full cursor-pointer transition-colors" data-icon="settings">settings</span>
+                <span class="material-symbols-outlined text-on-surface-variant hover:bg-slate-50 p-2 rounded-full cursor-pointer transition-colors" data-icon="dark_mode">dark_mode</span>
+            </div>
+        </div>
+    </div>
+</nav>
+<main class="pt-24 pb-20 px-6 max-w-[1600px] mx-auto min-h-screen">
+    <!-- Header Section -->
+    <header class="mb-10 space-y-2">
+        <h1 class="font-headline text-4xl md:text-5xl font-extrabold tracking-tight text-on-surface">
+            JSON 格式化/校验 <span class="text-primary">(浅色模式)</span>
+        </h1>
+        <p class="text-on-surface-variant text-lg max-w-2xl">
+            提供工业级的 JSON 处理能力。通过我们的精密验证引擎，格式化、验证、压缩并纠正您的数据结构。
+        </p>
+    </header>
+    <!-- Main Workspace -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- Source Content Editor (Left) -->
+        <div class="lg:col-span-9 bg-surface-container-lowest rounded-xxl shadow-sm overflow-hidden flex flex-col border border-outline-variant/10">
+            <div class="flex items-center justify-between px-6 py-4 bg-surface-container-low border-b border-outline-variant/10">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary text-xl" data-icon="code">code</span>
+                    <span class="font-headline font-bold text-sm tracking-widest text-on-surface-variant uppercase">Source Content</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-medium text-outline">Line: 1, Col: 1</span>
+                    <div class="h-4 w-px bg-outline-variant/30 mx-2"></div>
+                    <button class="flex items-center gap-1 text-xs font-bold text-primary hover:bg-primary/5 px-2 py-1 rounded transition-colors uppercase">
+                        <span class="material-symbols-outlined text-sm" data-icon="content_copy">content_copy</span>
+                        Copy
+                    </button>
+                </div>
+            </div>
+            <div class="flex h-[600px] relative">
+                <div class="w-12 editor-line-numbers border-r border-outline-variant/10 flex flex-col items-center pt-4 font-mono text-[11px] text-outline/50 select-none">
+                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+                </div>
+                <textarea class="flex-1 p-6 font-mono text-sm bg-transparent border-none focus:ring-0 resize-none text-on-surface placeholder:text-outline-variant/50" placeholder='{ "hint": "在此粘贴您的 JSON 代码..." }'></textarea>
+            </div>
+            <div class="px-6 py-4 bg-surface-container-low/50 flex gap-4">
+                <div class="flex items-center gap-2 bg-surface-container-lowest px-3 py-1.5 rounded-lg border border-outline-variant/10">
+                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    <span class="text-xs font-medium text-on-surface-variant">Ready to process</span>
+                </div>
+                <div class="flex items-center gap-2 bg-surface-container-lowest px-3 py-1.5 rounded-lg border border-outline-variant/10">
+                    <span class="text-xs font-medium text-on-surface-variant">Encoding: <span class="font-bold">UTF-8</span></span>
+                </div>
+            </div>
+        </div>
+        <!-- Operations Panel (Right) -->
+        <div class="lg:col-span-3 space-y-6">
+            <div class="bg-surface-container-lowest rounded-xxl p-6 shadow-sm border border-outline-variant/10">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="material-symbols-outlined text-primary" data-icon="bolt">bolt</span>
+                    <h2 class="font-headline font-bold text-lg text-on-surface">Operations</h2>
+                </div>
+                <div class="space-y-4">
+                    <button class="w-full group flex items-center justify-between bg-primary-container text-on-primary-container px-4 py-4 rounded-xl font-headline font-bold tracking-tight active:scale-95 transition-all duration-200">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="auto_fix_high">auto_fix_high</span>
+                                Format JSON
+                            </span>
+                        <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity" data-icon="arrow_forward">arrow_forward</span>
+                    </button>
+                    <button class="w-full group flex items-center justify-between bg-surface-container-highest text-on-surface-variant px-4 py-4 rounded-xl font-headline font-bold tracking-tight hover:bg-primary/5 active:scale-95 transition-all duration-200">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="fact_check">fact_check</span>
+                                Validate JSON
+                            </span>
+                    </button>
+                    <button class="w-full group flex items-center justify-between bg-surface-container-highest text-on-surface-variant px-4 py-4 rounded-xl font-headline font-bold tracking-tight hover:bg-primary/5 active:scale-95 transition-all duration-200">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" data-icon="compress">compress</span>
+                                Minify JSON
+                            </span>
+                    </button>
+                    <div class="pt-4 mt-4 border-t border-outline-variant/10">
+                        <button class="w-full flex items-center justify-center gap-2 text-error font-headline font-bold px-4 py-3 rounded-xl hover:bg-error-container/20 active:scale-95 transition-all duration-200">
+                            <span class="material-symbols-outlined" data-icon="delete_sweep">delete_sweep</span>
+                            Clear Workspace
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- Ad/Teaser Space -->
+            <div class="relative overflow-hidden rounded-xxl aspect-square flex flex-col justify-end p-6 group cursor-pointer shadow-sm">
+                <img alt="abstract technological pattern with blue neon light lines representing data flow" class="absolute inset-0 object-cover w-full h-full group-hover:scale-110 transition-transform duration-700" data-alt="abstract tech pattern with sleek neon blue lines on a dark background representing data visualization and connectivity" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCI2auewKj4mz9le1Nib3-vqtpSQG_nzC9vDdTClzetOR4116f0P1_m0Mz911xMzsPaqO58lTOYskX1qlNTb6kvoS0qQbNhgsrAW0mb_xflFFoFuELXOBbEBizQObMYXX-cTgopCTbxEBRCHfxzDejezF-1-rjbyKcdAeSf-1l9OPiTk0CuXC0dneCndyiQCWc6SvwXhMk_R6D5BoUW3-GBR0PSQ_3Y6RhbmBUrYFWePx_xBWaGQGjjh3EfmwCmQEZUYFmWM7MRlEgU"/>
+                <div class="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent"></div>
+                <div class="relative z-10">
+                    <span class="inline-block px-2 py-0.5 bg-white/20 backdrop-blur-md rounded text-[10px] font-bold text-white uppercase mb-2">New Feature</span>
+                    <h3 class="text-white font-headline font-bold text-lg">Compare JSON Structures</h3>
+                    <p class="text-white/80 text-xs mt-1">Visually diff two JSON files side-by-side with high precision.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- How to Use & Privacy Sections -->
+    <div class="mt-20 grid grid-cols-1 md:grid-cols-2 gap-12">
+        <section>
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center">
+                    <span class="material-symbols-outlined text-primary" data-icon="help_outline">help_outline</span>
+                </div>
+                <h2 class="font-headline font-bold text-2xl text-on-surface">How to Use</h2>
+            </div>
+            <div class="space-y-4">
+                <div class="flex gap-4 p-4 bg-surface-container-low rounded-xl">
+                    <span class="font-headline font-extrabold text-primary/30 text-2xl">01</span>
+                    <p class="text-on-surface-variant text-sm">Paste your raw or messy JSON data into the source content area on the left.</p>
+                </div>
+                <div class="flex gap-4 p-4 bg-surface-container-low rounded-xl">
+                    <span class="font-headline font-extrabold text-primary/30 text-2xl">02</span>
+                    <p class="text-on-surface-variant text-sm">Select an operation from the right panel. Use 'Format' to beautify or 'Minify' for production usage.</p>
+                </div>
+                <div class="flex gap-4 p-4 bg-surface-container-low rounded-xl">
+                    <span class="font-headline font-extrabold text-primary/30 text-2xl">03</span>
+                    <p class="text-on-surface-variant text-sm">If the JSON is invalid, our validator will pinpoint the exact line and character where the error occurs.</p>
+                </div>
+            </div>
+        </section>
+        <section>
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center">
+                    <span class="material-symbols-outlined text-primary" data-icon="shield">shield</span>
+                </div>
+                <h2 class="font-headline font-bold text-2xl text-on-surface">Privacy &amp; Security</h2>
+            </div>
+            <div class="bg-surface-container-lowest border border-outline-variant/10 rounded-xxl p-8">
+                <p class="text-on-surface-variant text-sm leading-relaxed mb-6">
+                    您的隐私是我们的首要任务。所有 JSON 处理均在您的浏览器本地完成。您的敏感数据绝不会发送到我们的服务器或第三方。
+                </p>
+                <ul class="space-y-3">
+                    <li class="flex items-center gap-3 text-xs font-semibold text-on-surface">
+                        <span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle">check_circle</span>
+                        No Server-Side Storage
+                    </li>
+                    <li class="flex items-center gap-3 text-xs font-semibold text-on-surface">
+                        <span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle">check_circle</span>
+                        Client-Side Local Processing
+                    </li>
+                    <li class="flex items-center gap-3 text-xs font-semibold text-on-surface">
+                        <span class="material-symbols-outlined text-primary text-sm" data-icon="check_circle">check_circle</span>
+                        SSL/TLS Encrypted Connection
+                    </li>
+                </ul>
+            </div>
+        </section>
+    </div>
+</main>
+<!-- Footer -->
+<footer class="bg-slate-50 dark:bg-slate-950 w-full py-12 px-8 border-t border-slate-200/50 dark:border-slate-800/50">
+    <div class="flex flex-col md:flex-row justify-between items-center gap-6 max-w-7xl mx-auto">
+        <span class="font-['Manrope'] font-bold text-slate-400">Open Toolbox</span>
+        <span class="font-['Inter'] text-sm tracking-wide text-slate-500 dark:text-slate-400">© 2024 Open Toolbox — Precision Engineering for Web Data</span>
+        <div class="flex flex-wrap justify-center gap-6">
+            <a class="font-['Inter'] text-sm tracking-wide text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 underline underline-offset-4 transition-all duration-300" href="#">API Documentation</a>
+            <a class="font-['Inter'] text-sm tracking-wide text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 underline underline-offset-4 transition-all duration-300" href="#">Schema Library</a>
+            <a class="font-['Inter'] text-sm tracking-wide text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 underline underline-offset-4 transition-all duration-300" href="#">GitHub</a>
+            <a class="font-['Inter'] text-sm tracking-wide text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 underline underline-offset-4 transition-all duration-300" href="#">Privacy</a>
+            <a class="font-['Inter'] text-sm tracking-wide text-slate-500 dark:text-slate-400 hover:text-blue-500 dark:hover:text-blue-300 underline underline-offset-4 transition-all duration-300" href="#">Terms</a>
+        </div>
+    </div>
+</footer>
+</body></html>

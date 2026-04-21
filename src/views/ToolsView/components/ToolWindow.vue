@@ -1,24 +1,31 @@
 <template>
-  <div class="h-full flex flex-col">
-    <div
-        @click="router.back()"
-        class="flex-shrink-0 inline-flex items-center text-sm transition-colors py-4 px-6 dark:text-gray-300 dark:hover:text-blue-400 text-gray-500 hover:text-blue-600 cursor-pointer"
-    >
-      <svg class="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path d="M15 19l-7-7 7-7" stroke-width="2"/>
-      </svg>
-      <span class="dark:text-gray-300 text-gray-500">返回</span>
+  <div class="h-full flex flex-col bg-background transition-colors duration-300">
+    <div class="flex-shrink-0 flex items-center justify-between py-4 px-8">
+      <div
+          @click="router.back()"
+          class="inline-flex items-center text-sm font-medium transition-all py-2 px-3 -ml-3 rounded-lg
+                 text-on-surface-variant hover:text-primary hover:bg-primary/5 cursor-pointer group"
+      >
+        <span class="material-symbols-outlined text-[20px] mr-1 group-hover:-translate-x-1 transition-transform">arrow_back</span>
+        <span>返回工具列表</span>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <span class="text-[10px] font-bold uppercase tracking-widest text-outline">Open Toolbox / {{ route.params.id }}</span>
+      </div>
     </div>
 
-    <div class="flex-1 overflow-auto px-6 pb-10">
+    <div class="flex-1 overflow-auto px-6 pb-6 h-full">
       <div
-          class="max-w-7xl mx-auto h-full rounded-3xl p-8 shadow-sm border transition-colors dark:bg-slate-800 dark:border-slate-700 bg-white border-gray-100">
-        <component :is="activeTool" v-if="activeTool" class="h-full"/>
-        <div
-            v-else
-            class="h-full flex items-center justify-center text-center transition-colors dark:text-gray-500 text-gray-400"
-        >
-          工具开发中...
+          class="max-w-10xl mx-auto h-full rounded-3xl p-6 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.1)]
+                 dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] border border-outline-variant/30
+                 bg-surface-container-lowest overflow-hidden transition-all"
+      >
+        <component :is="activeTool" v-if="activeTool" />
+
+        <div v-else class="h-full flex flex-col items-center justify-center text-outline">
+          <span class="material-symbols-outlined text-4xl mb-2 animate-pulse">construction</span>
+          <p class="font-headline font-bold">工具正在维护或开发中...</p>
         </div>
       </div>
     </div>
