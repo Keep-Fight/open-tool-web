@@ -1,14 +1,17 @@
 <template>
-  <div class="space-y-6">
-    <h2 class="text-2xl font-black mb-8">进制转换工具</h2>
-    <div class="grid gap-6">
+  <div class="space-y-6 h-full flex flex-col">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <h2 class="text-2xl font-black mb-2 md:mb-0">进制转换工具</h2>
+    </div>
+
+    <div class="grid gap-6 flex-1">
       <div v-for="base in [10, 2, 8, 16]" :key="base">
-        <label class="block text-sm font-bold text-gray-400 mb-2 uppercase">{{ base }} 进制</label>
+        <label class="block text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">{{ base }} 进制</label>
         <input
             v-model="values[base]"
             @input="convert(base)"
             type="text"
-            class="w-full px-4 py-3 dark:bg-slate-700 bg-gray-200 border-none rounded-xl focus:ring-2 focus:ring-blue-500 outline-none font-mono text-lg"
+            class="w-full h-full min-h-[60px] px-4 py-3 dark:bg-gray-900 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none font-mono text-lg transition-colors"
         >
       </div>
     </div>

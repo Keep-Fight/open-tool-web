@@ -30,7 +30,7 @@
             v-model="inputJson"
             @input="handleInput"
             placeholder="在此粘贴 JSON 字符串..."
-            class="w-full h-[500px] p-4 font-mono text-sm dark:bg-gray-900 bg-gray-50  border-none rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none resize-none transition-colors"
+            class="w-full h-full min-h-[400px] p-4 font-mono text-sm dark:bg-gray-900 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 outline-none resize-none transition-colors"
         ></textarea>
       </div>
 
@@ -42,7 +42,7 @@
           </div>
 
           <pre
-              class="w-full h-[500px] p-4 font-mono text-sm overflow-auto rounded-2xl transition-colors whitespace-pre-wrap break-all dark:bg-gray-900 bg-gray-50"
+              class="w-full h-full min-h-[400px] p-4 font-mono text-sm overflow-auto rounded-2xl transition-colors whitespace-pre-wrap break-all dark:bg-gray-900 bg-gray-50"
               :class="{'text-red-400': error, 'text-blue-600 dark:text-blue-400': !error }"
           >{{ outputJson || '等待输入...' }}</pre>
         </div>

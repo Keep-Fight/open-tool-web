@@ -94,9 +94,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
-    <div class="lg:col-span-7 space-y-4">
-      <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800">
+  <div class="mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
+    <div class="lg:col-span-7 space-y-4 flex flex-col">
+      <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 flex-1">
         <div class="flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl mb-6">
           <button @click="activeTarget = 'text'"
                   :class="activeTarget === 'text' ? 'bg-white dark:bg-slate-700 shadow-sm text-indigo-600 dark:text-white' : 'text-slate-500'"
@@ -108,7 +108,7 @@ onMounted(() => {
           </button>
         </div>
 
-        <div ref="svPanel" class="relative h-80 rounded-xl cursor-crosshair mb-4"
+        <div ref="svPanel" class="relative h-64 rounded-xl cursor-crosshair mb-4"
              :style="{ backgroundColor: `hsl(${colors[activeTarget].h}, 100%, 50%)` }"
              @mousedown="isDragging = true; updateSV($event)">
           <div class="absolute inset-0 bg-linear-to-r from-white to-transparent rounded-xl"></div>
@@ -173,11 +173,11 @@ onMounted(() => {
       </div>
     </div>
 
-    <div class="lg:col-span-5 space-y-10">
+    <div class="lg:col-span-5 space-y-6 flex flex-col">
       <div
-          class="h-80 rounded-3xl shadow-xl flex flex-col items-center justify-center p-8 transition-colors duration-200"
+          class="h-64 rounded-3xl shadow-xl flex flex-col items-center justify-center p-8 transition-colors duration-200"
           :style="{ backgroundColor: currentRgba('bg') }">
-        <h2 class="text-5xl font-black mb-2 tracking-tight" :style="{ color: currentRgba('text') }">Text 文本</h2>
+        <h2 class="text-4xl font-black mb-2 tracking-tight" :style="{ color: currentRgba('text') }">Text 文本</h2>
         <p class="text-sm opacity-80 max-w-xs text-center leading-relaxed" :style="{ color: currentRgba('text') }">
           Everything will be ok.
         </p>
@@ -187,12 +187,12 @@ onMounted(() => {
       </div>
 
       <div
-          class="bg-white h-50 dark:bg-slate-900 p-8 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between">
+          class="bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 flex items-center justify-between">
         <div>
           <div class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Contrast Ratio</div>
-          <div class="text-6xl font-black tabular-nums transition-all"
+          <div class="text-5xl font-black tabular-nums transition-all"
                :class="contrastRatio >= 4.5 ? 'text-emerald-500' : 'text-amber-500'">
-            {{ contrastRatio }}<span class="text-2xl">:1</span>
+            {{ contrastRatio }}<span class="text-xl">:1</span>
           </div>
         </div>
 

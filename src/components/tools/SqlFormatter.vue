@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6">
+  <div class="space-y-6 h-full flex flex-col">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <h2 class="text-2xl font-black">MyBatis Log转SQL</h2>
 
@@ -19,30 +19,30 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 gap-6">
-      <div class="space-y-2">
+    <div class="grid grid-cols-1 gap-6 flex-1">
+      <div class="space-y-2 flex-1 flex flex-col">
         <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">粘贴 MyBatis 日志</label>
         <textarea
             v-model="rawLog"
             placeholder="在此粘贴包含 Preparing: 和 Parameters: 的日志内容..."
-            class="w-full h-48 p-4 font-mono text-sm border-none rounded-2xl focus:ring-2 dark:bg-gray-900 bg-gray-50 focus:ring-blue-500 outline-none resize-none transition-colors"
+            class="w-full h-full min-h-[150px] p-4 font-mono text-sm border-none rounded-2xl focus:ring-2 dark:bg-gray-900 bg-gray-50 focus:ring-blue-500 outline-none resize-none transition-colors"
         ></textarea>
       </div>
 
-      <div class="space-y-2">
+      <div class="space-y-2 flex-1 flex flex-col">
         <label class="text-xs font-bold text-gray-400 uppercase tracking-wider">可执行 SQL</label>
-        <div class="relative">
+        <div class="relative flex-1">
           <div v-if="error" class="mb-2 text-red-500 text-xs font-mono">
             {{ error }}
           </div>
           <pre
-              class="w-full min-h-[200px] p-4 font-mono text-sm bg-blue-50/50 dark:bg-blue-900/20 dark:text-blue-300 text-blue-700 overflow-auto rounded-2xl whitespace-pre-wrap break-all border border-blue-100 dark:border-blue-900/30"
+              class="w-full h-full min-h-[150px] p-4 font-mono text-sm bg-blue-50/50 dark:bg-blue-900/20 dark:text-blue-300 text-blue-700 overflow-auto rounded-2xl whitespace-pre-wrap break-all border border-blue-100 dark:border-blue-900/30"
           >{{ resultSql || '等待解析...' }}</pre>
         </div>
       </div>
     </div>
 
-    <div :class="[' p-4 rounded-xl text-sm text-gray-500 dark:bg-gray-800 bg-gray-200 transition']">
+    <div :class="['p-4 rounded-xl text-sm text-gray-500 dark:bg-gray-800 bg-gray-200 transition']">
       <p class="font-bold mb-1">使用说明：</p>
       <ul class="list-disc ml-4 space-y-1">
         <li>直接复制控制台打印的 MyBatis 日志全文即可。</li>
