@@ -4,6 +4,7 @@ import {defineAsyncComponent} from 'vue'
 const toolsJson = [
     {
         category: '开发人员工具',
+        icon: 'dev-tools',
         tools: [
             {
                 id: 'base-converter',
@@ -33,6 +34,7 @@ const toolsJson = [
     },
     {
         category: '文本与图像',
+        icon: 'text-image',
         tools: [
             {
                 id: 'id-generation',

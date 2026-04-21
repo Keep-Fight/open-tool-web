@@ -5,7 +5,18 @@ import SvgIcon from "@/components/public/SvgIcon.vue";
 </script>
 
 <template>
-  <section class="py-16 px-8 transition-colors duration-300 bg-[#f8f9ff] dark:bg-[#121214] min-h-screen">
+  <section class="py-8 px-8 transition-colors duration-300 bg-[#f8f9ff] dark:bg-[#121214] min-h-screen">
+    <div class="relative max-w-2xl mx-auto group m-4">
+      <div class="absolute inset-y-0 left-5 flex items-center pointer-events-none">
+        <span class="material-symbols-outlined text-outline dark:text-on-surface-variant">search</span>
+      </div>
+      <input
+          class="w-full pl-14 pr-6 py-5 bg-surface-container-low dark:bg-surface-container border border-transparent dark:border-outline-variant rounded-2xl dark:rounded-xl text-on-surface placeholder:text-outline dark:placeholder:text-on-surface-variant focus:ring-2 dark:focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest dark:focus:border-primary shadow-sm dark:shadow-none hover:shadow-md dark:hover:shadow-none transition-all outline-none text-lg"
+          placeholder="关键词搜索"
+          type="text"
+      />
+    </div>
+
     <div class="max-w-7xl mx-auto">
 
       <div v-for="item in toolsJson" :key="item.category" class="mb-16 last:mb-0">

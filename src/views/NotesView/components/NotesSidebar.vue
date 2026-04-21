@@ -37,6 +37,7 @@ const formatTreeToMenu = (tree, parent = null) => {
     } else {
       // 文件默认图标为description
       node.icon = node.icon || 'description';
+      node.title = node.title.replace(/\.md$/, '');
     }
 
     if (node.active) {
