@@ -83,7 +83,7 @@ const copyToClipboard = () => {
 
 <template>
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start w-full">
-    <div class="lg:col-span-9 bg-surface-container-lowest dark:bg-surface-container-lowest rounded-2xl shadow-sm overflow-hidden flex flex-col border border-outline-variant/10 transition-colors">
+    <div class="lg:col-span-9 bg-surface-container-lowest dark:bg-surface-container-lowest rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden flex flex-col border border-white dark:border-black transition-all duration-300">
       <div class="flex items-center justify-between px-6 py-4 bg-surface-container-low dark:bg-surface-container-high/40 border-b border-outline-variant/10">
         <div class="flex items-center gap-3">
           <span class="material-symbols-outlined text-primary" data-icon="code">code</span>
@@ -126,7 +126,7 @@ const copyToClipboard = () => {
     </div>
 
     <div class="lg:col-span-3 space-y-6">
-      <div class="bg-surface-container-low dark:bg-surface-container-high rounded-2xl p-6 shadow-sm border border-outline-variant/10">
+      <div class="bg-surface-container-low dark:bg-surface-container-high rounded-2xl p-6 shadow-xl border border-white dark:border-black transition-all duration-300">
         <div class="flex items-center gap-3 mb-6 border-b border-outline-variant/10 pb-4">
           <span class="material-symbols-outlined text-primary">bolt</span>
           <h2 class="font-headline font-bold text-lg text-on-surface">操作</h2>
@@ -163,7 +163,7 @@ const copyToClipboard = () => {
         </div>
       </div>
 
-      <div class="bg-surface-container-low dark:bg-surface-container-low rounded-2xl p-6 border border-outline-variant/10">
+      <div class="bg-surface-container-low dark:bg-surface-container-low rounded-2xl p-6 shadow-xl border border-white dark:border-black transition-all duration-300">
         <h3 class="text-sm font-bold text-on-surface mb-5 uppercase tracking-widest">快捷设置</h3>
         <div class="space-y-5">
           <div class="flex items-center justify-between">

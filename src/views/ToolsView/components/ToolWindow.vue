@@ -19,7 +19,7 @@
       <div
           class="max-w-10xl mx-auto h-full rounded-3xl p-6 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.1)]
                  dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] border border-outline-variant/30
-                 bg-surface-container-lowest overflow-hidden transition-all"
+                 bg-surface overflow-hidden transition-all"
       >
         <component :is="activeTool" v-if="activeTool" />
 
