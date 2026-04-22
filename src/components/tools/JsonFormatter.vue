@@ -84,10 +84,10 @@ const copyToClipboard = () => {
 <template>
   <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start w-full">
     <div class="lg:col-span-9 bg-surface-container-lowest dark:bg-surface-container-lowest rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden flex flex-col border border-white dark:border-black transition-all duration-300">
-      <div class="flex items-center justify-between px-6 py-4 bg-surface-container-low dark:bg-surface-container-high/40 border-b border-outline-variant/10">
+      <div class="flex items-center justify-between px-6 py-4 bg-surface-container dark:bg-surface-container-high/40 border-b border-outline-variant/10">
         <div class="flex items-center gap-3">
           <span class="material-symbols-outlined text-primary" data-icon="code">code</span>
-          <span class="font-headline font-bold text-sm tracking-widest text-on-surface-variant uppercase">源内容</span>
+          <span class="font-headline font-bold text-sm tracking-widest text-on-surface-variant uppercase">JSON 格式化/校验</span>
         </div>
         <div class="flex items-center gap-2">
           <span class="text-xs font-medium text-outline">行数：{{ lineCount }}</span>
@@ -100,18 +100,15 @@ const copyToClipboard = () => {
       </div>
 
       <div class="flex h-[600px] relative">
-        <div class="w-12 bg-surface-container-low/30 border-r border-outline-variant/10 flex flex-col items-center pt-6 font-mono text-[11px] text-outline/50 select-none overflow-hidden">
-          <div v-for="n in lineCount" :key="n">{{ n }}</div>
-        </div>
         <textarea
             v-model="jsonInput"
-            class="flex-1 p-6 font-mono text-sm bg-transparent border-none focus:ring-0 focus:outline-none resize-none text-on-surface placeholder:text-outline-variant/50 leading-relaxed"
+            class="flex-1 p-6 font-mono text-sm bg-transparent border-none focus:ring-0 focus:outline-none resize-none text-on-surface leading-relaxed"
             placeholder='{ "hint": "在此粘贴您的 JSON 代码..." }'
             spellcheck="false"
         ></textarea>
       </div>
 
-      <div class="px-6 py-4 bg-surface-container-low/50 border-t border-outline-variant/5 flex justify-between items-center text-[10px]">
+      <div class="px-6 py-4 bg-surface-container border-t border-outline-variant/5 flex justify-between items-center text-[10px]">
         <div class="flex gap-4">
           <div class="flex items-center gap-2 bg-surface-container-lowest px-3 py-1.5 rounded-lg border border-outline-variant/10">
             <span :class="['w-2 h-2 rounded-full', status.includes('错误') || status.includes('无效') ? 'bg-error' : 'bg-primary animate-pulse']"></span>
