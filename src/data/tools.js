@@ -7,12 +7,6 @@ const toolsJson = [
         icon: 'dev-tools',
         tools: [
             {
-                id: 'base-converter',
-                title: '进制转换',
-                description: '支持二进制、八进制、十进制、十六进制等常见进制之间的在线实时转换。',
-                iconName: 'base-converter',
-            },
-            {
                 id: 'json-formatter',
                 title: 'JSON 格式化/校验',
                 description: '美化混乱的 JSON 数据，验证其格式是否正确，支持折叠和展开。',
@@ -48,11 +42,10 @@ const toolsJson = [
 
 // 工具组件的定义
 const toolsComponent = {
-    'base-converter': defineAsyncComponent(() => import('../components/tools/BaseConverter.vue')),
-    'json-formatter': defineAsyncComponent(() => import('../components/tools/JsonFormatter.vue')),
-    'sql-formatter': defineAsyncComponent(() => import('../components/tools/SqlFormatter.vue')),
-    'id-generation': defineAsyncComponent(() => import("../components/tools/IdGenerator.vue")),
-    'color-picker': defineAsyncComponent(() => import("../components/tools/ColorPicker.vue"))
+    'json-formatter': defineAsyncComponent(() => import('../components/tools/JsonFormatter/index.vue')),
+    'sql-formatter': defineAsyncComponent(() => import('../components/tools/SqlFormatter/index.vue')),
+    'id-generation': defineAsyncComponent(() => import("../components/tools/IdGenerator/index.vue")),
+    'color-picker': defineAsyncComponent(() => import("../components/tools/ColorPicker/index.vue"))
 }
 
 export {toolsJson, toolsComponent};

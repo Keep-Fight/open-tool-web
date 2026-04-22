@@ -13,17 +13,7 @@
       </div>
 
       <!-- Right -->
-      <ul class="flex items-center gap-6">
-        <li>
-          <a class="text-sm font-body text-on-surface-variant hover:text-primary transition-all" href="#">
-            文档资料
-          </a>
-        </li>
-        <li>
-          <a class="text-sm font-body text-on-surface-variant hover:text-primary transition-all" href="#">
-            更新日志
-          </a>
-        </li>
+      <ul class="flex items-center gap-3">
         <li>
           <a class="text-sm font-body text-on-surface-variant hover:text-primary transition-all" href="#">
             支持
@@ -31,16 +21,15 @@
         </li>
         <li>
           <a class="text-sm font-body text-on-surface-variant hover:text-primary transition-all" href="#">
-            隐私政策
+            邮箱联系
           </a>
         </li>
         <li>
           <a class="text-sm font-body text-on-surface-variant hover:text-primary transition-all" href="#">
-            条款
+            网站说明
           </a>
         </li>
       </ul>
-
     </div>
   </footer>
 </template>

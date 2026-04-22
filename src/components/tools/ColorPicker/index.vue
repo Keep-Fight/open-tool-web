@@ -1,6 +1,6 @@
 <script setup>
-import {ref, reactive, computed, watch, onMounted, onUnmounted} from 'vue'
-import {hsvToRgb, rgbToHex, hexToRgb, rgbToHsv, getContrast} from '../../utils/colorUtils'
+import {ref, reactive, computed, watch, onMounted} from 'vue'
+import {hsvToRgb, rgbToHex, hexToRgb, rgbToHsv, getContrast} from './js/colorUtils.js'
 
 // 当前编辑模式：'text' 或 'bg'
 const activeTarget = ref('text')
@@ -219,7 +219,7 @@ onMounted(() => {
 </template>
 
 <style scoped>
-@reference "../../style.css";
+@reference "@/style.css";
 
 .hue-slider {
   background: linear-gradient(to right, #f00 0%, #ff0 17%, #0f0 33%, #0ff 50%, #00f 67%, #f0f 83%, #f00 100%);

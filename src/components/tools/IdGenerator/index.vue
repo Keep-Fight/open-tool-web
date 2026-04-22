@@ -1,6 +1,6 @@
 <script setup>
 import { ref, reactive } from 'vue'
-import { IdGenerator } from '../../utils/idGenerator'
+import { IdGenerator } from './js/idGenerator.js'
 
 const generator = new IdGenerator()
 const settings = reactive({
@@ -35,7 +35,7 @@ const clearAll = () => {
 </script>
 
 <template>
-  <div class="flex flex-col h-full w-full bg-white dark:bg-slate-950 transition-colors text-slate-900 dark:text-slate-100">
+  <div class="flex flex-col h-full w-full bg-white dark:bg-slate-950 transition-colors text-slate-900 dark:text-slate-100 flex">
 
     <header class="flex-none h-16 border-b border-slate-200 dark:border-slate-800 px-6 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50 backdrop-blur-md">
       <div class="flex items-center gap-4">
@@ -120,7 +120,7 @@ const clearAll = () => {
 </template>
 
 <style scoped>
-@reference "../../style.css";
+@reference "@/style.css";
 
 /* 列表进入动画 */
 .fade-enter-active, .fade-leave-active {

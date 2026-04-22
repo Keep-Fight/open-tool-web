@@ -1,11 +1,24 @@
 <script setup>
 import { ref, computed } from 'vue';
+import VueJsonPretty from 'vue-json-pretty';
+import 'vue-json-pretty/lib/styles.css';
 
 const jsonInput = ref('');
 const indentation = ref(2);
 const sortKeys = ref(false);
 const strictMode = ref(true);
 const status = ref('准备就绪');
+const showPreview = ref(false);
+
+// 解析后的 JSON 数据
+const parsedJson = computed(() => {
+  try {
+    if (!jsonInput.value.trim()) return null;
+    return JSON.parse(jsonInput.value);
+  } catch {
+    return null;
+  }
+});
 
 // 计算行数
 const lineCount = computed(() => {
@@ -27,6 +40,7 @@ const formatJSON = () => {
 
     jsonInput.value = JSON.stringify(obj, null, parseInt(indentation.value));
     status.value = '格式化成功';
+    showPreview.value = true;
   } catch (e) {
     status.value = `错误：${e.message}`;
   }
@@ -39,6 +53,7 @@ const minifyJSON = () => {
     const obj = JSON.parse(jsonInput.value);
     jsonInput.value = JSON.stringify(obj);
     status.value = '压缩成功';
+    showPreview.value = false;
   } catch (e) {
     status.value = `错误：${e.message}`;
   }
@@ -72,6 +87,7 @@ const sortObject = (obj) => {
 const clearAll = () => {
   jsonInput.value = '';
   status.value = '准备就绪';
+  showPreview.value = false;
 };
 
 // 复制
@@ -99,13 +115,36 @@ const copyToClipboard = () => {
         </div>
       </div>
 
-      <div class="flex h-[600px] relative">
+      <div class="flex flex-col h-[600px] relative">
         <textarea
+            v-show="!showPreview"
             v-model="jsonInput"
             class="flex-1 p-6 font-mono text-sm bg-transparent border-none focus:ring-0 focus:outline-none resize-none text-on-surface leading-relaxed"
             placeholder='{ "hint": "在此粘贴您的 JSON 代码..." }'
             spellcheck="false"
         ></textarea>
+
+        <div v-if="showPreview && parsedJson" class="flex-1 overflow-auto">
+          <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-2 bg-surface-container-high/80 backdrop-blur-sm border-b border-outline-variant/10">
+            <span class="text-xs font-medium text-on-surface-variant">JSON 预览 · 可点击节点折叠</span>
+            <button @click="showPreview = false" class="text-xs text-primary hover:text-primary/80 cursor-pointer">返回编辑</button>
+          </div>
+          <div class="p-4">
+            <vue-json-pretty
+                :data="parsedJson"
+                :collapsed="1"
+                :show-length="true"
+                :show-line="true"
+                :show-icon="true"
+                line-color="var(--color-outline-variant)"
+                key-color="var(--color-primary)"
+                value-color="var(--color-on-surface)"
+                bracket-color="var(--color-on-surface-variant)"
+                quote-color="var(--color-primary)"
+                tree-height="500"
+            />
+          </div>
+        </div>
       </div>
 
       <div class="px-6 py-4 bg-surface-container border-t border-outline-variant/5 flex justify-between items-center text-[10px]">
@@ -211,4 +250,44 @@ textarea {
   opacity: 0.5;
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-outline); }
+
+/* JSON 树形视图折叠控制器样式 - 移至行首 */
+:deep(.vjs-tree-node.has-carets) {
+  padding-left: 20px;
+}
+
+:deep(.vjs-carets) {
+  position: absolute;
+  left: 0;
+  right: auto;
+  width: 16px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-primary);
+  z-index: 1;
+}
+
+:deep(.vjs-carets svg) {
+  transition: transform 0.2s;
+  width: 12px;
+  height: 12px;
+}
+
+:deep(.vjs-carets:hover) {
+  color: var(--color-primary);
+}
+
+:deep(.vjs-tree-node) {
+  position: relative;
+  padding-left: 20px !important;
+  line-height: 24px;
+}
+
+:deep(.vjs-tree-node:hover) {
+  background-color: var(--color-surface-container-high);
+  border-radius: 4px;
+}
 </style>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="40px" height="40px" viewBox="0 0 40 40" version="1.1">
+
+    <defs>
+        <linearGradient id="linear0" gradientUnits="userSpaceOnUse" x1="0.119649" y1="46.021687" x2="46.154816" y2="-0.151731" gradientTransform="matrix(0.867209,0,0,0.867209,0.000433604,0)">
+            <stop offset="0" style="stop-color:rgb(98.431373%,0%,0%);stop-opacity:1;"/>
+            <stop offset="1" style="stop-color:rgb(21.960784%,100%,95.294118%);stop-opacity:1;"/>
+        </linearGradient>
+    </defs>
+
+    <g id="surface1">
+        <!-- 圆角矩形背景 -->
+        <path style="stroke:none;fill-rule:nonzero;fill:url(#linear0);"
+              d="M 32.71875 0.0546875 L 7.28125 0.0546875
+           C 3.261719 0.0546875 0 3.316406 0 7.335938
+           L 0 32.664062
+           C 0 36.683594 3.261719 39.945312 7.28125 39.945312
+           L 32.71875 39.945312
+           C 36.738281 39.945312 40 36.683594 40 32.664062
+           L 40 7.335938
+           C 40 3.316406 36.738281 0.0546875 32.71875 0.0546875 Z"/>
+
+        <!-- X 叉号形状 - 两条对角线 -->
+        <path style="stroke:#FFFFFF;stroke-width:4;stroke-linecap:round;fill:none;"
+              d="M 11 9 L 29 31"/>
+        <path style="stroke:#FFFFFF;stroke-width:5;stroke-linecap:round;fill:none;"
+              d="M 29 9 L 11 31"/>
+    </g>
+
+</svg>
