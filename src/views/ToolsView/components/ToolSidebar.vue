@@ -15,15 +15,10 @@ const menus = [
 
 <template>
   <aside class="w-64 shrink-0">
-    <div class="p-4 space-y-1 rounded-2xl border
-                bg-[var(--color-surface)]
-                border-[var(--color-outline-variant)]">
-
-      <h3 class="px-4 py-2 text-xs font-semibold uppercase
-                 text-[var(--color-on-surface-variant)]">
+    <div class="p-4 space-y-1 rounded-2xl border bg-surface border-outline-variant">
+      <h3 class="px-4 py-2 text-xs font-semibold uppercase text-on-surface-variant">
         分类
       </h3>
-
       <!-- 分类列表 -->
       <nav class="space-y-1">
         <a v-for="m in menus"
@@ -32,8 +27,8 @@ const menus = [
            :class="[
              'flex items-center justify-between px-4 py-2.5 rounded-xl transition',
              m.active
-               ? 'bg-[var(--color-surface-container)] text-[var(--color-primary)] font-medium'
-               : 'text-[var(--color-on-surface-variant)] hover:bg-[var(--color-surface-container-low)]'
+               ? 'bg-surface-container text-primary font-medium'
+               : 'text-on-surface-variant hover:bg-surface-container-low'
            ]">
 
           <div class="flex items-center gap-3">
@@ -48,21 +43,21 @@ const menus = [
       <!-- 收藏卡片 -->
       <div class="pt-6 px-4">
         <div class="rounded-2xl p-4 text-center
-                    bg-[var(--color-surface-container)]">
+                    bg-surface-container">
 
-          <Star class="w-6 h-6 mx-auto mb-2 text-[var(--color-primary)]"/>
+          <Star class="w-6 h-6 mx-auto mb-2 text-primary"/>
 
-          <p class="text-sm font-semibold text-[var(--color-on-surface)]">
+          <p class="text-sm font-semibold text-on-surface">
             收藏夹
           </p>
 
-          <p class="text-xs mt-1 text-[var(--color-on-surface-variant)]">
+          <p class="text-xs mt-1 text-on-surface-variant">
             收藏您常用的工具
           </p>
 
           <button class="mt-3 w-full py-1.5 rounded-lg text-xs font-medium
-                         bg-[var(--color-surface-container-lowest)]
-                         border border-[var(--color-outline-variant)]
+                         bg-surface-container-lowest
+                         border border-outline-variant
                          hover:scale-[1.02] transition">
             查看收藏 (6)
           </button>
