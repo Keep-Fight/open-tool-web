@@ -1,84 +1,74 @@
 <script setup>
-import {toolsJson} from '@/data/tools.js'
-import SvgIcon from "@/components/public/SvgIcon.vue";
+import ToolSidebar from "./components/ToolSidebar.vue"
+import ToolCard from "./components/ToolCard.vue"
 
+import { Braces, ChevronsRight, SquareM } from "lucide-vue-next"
+
+const tools = [
+  {
+    title:'JSON 格式化和校验',
+    desc:'格式化、验证和美化 JSON 数据，支持语法校验和错误提示。',
+    icon:Braces,
+    color:'bg-green-50 text-green-500',
+    tags:['开发工具','格式化']
+  },
+  {
+    title:'文本对比工具',
+    desc:'对比两个文本内容的差异。',
+    icon:'div',
+    color:'bg-blue-50 text-blue-500',
+    tags:['文本工具','对比']
+  },
+  {
+    title:'字符串进制转换',
+    desc:'实现不同字符编码转换。',
+    icon:ChevronsRight,
+    color:'bg-purple-50 text-purple-500',
+    tags:['转换工具','编码']
+  },
+  {
+    title:'Markdown 编辑器',
+    desc:'实时编辑 Markdown。',
+    icon:SquareM,
+    color:'bg-orange-50 text-orange-500',
+    tags:['文本工具','编辑器']
+  }
+]
 </script>
 
 <template>
-  <section class="py-8 px-8 transition-colors duration-300 bg-[#f8f9ff] dark:bg-[#121214] min-h-screen">
-    <div class="relative max-w-2xl mx-auto group m-4">
-      <div class="absolute inset-y-0 left-5 flex items-center pointer-events-none">
-        <span class="material-symbols-outlined text-outline dark:text-on-surface-variant">search</span>
-      </div>
-      <input
-          class="w-full pl-14 pr-6 py-5 bg-surface-container-low dark:bg-surface-container border border-transparent dark:border-outline-variant rounded-2xl dark:rounded-xl text-on-surface placeholder:text-outline dark:placeholder:text-on-surface-variant focus:ring-2 dark:focus:ring-1 focus:ring-primary focus:bg-surface-container-lowest dark:focus:border-primary shadow-sm dark:shadow-none hover:shadow-md dark:hover:shadow-none transition-all outline-none text-lg"
-          placeholder="关键词搜索"
-          type="text"
-      />
-    </div>
+  <div class="min-h-screen p-6 bg-[var(--color-background)]">
+    <div class="max-w-[1400px] mx-auto flex gap-8">
 
-    <div class="max-w-7xl mx-auto">
+      <ToolSidebar/>
 
-      <div v-for="item in toolsJson" :key="item.category" class="mb-16 last:mb-0">
+      <main class="flex-1">
 
+        <!-- 顶部 -->
         <div class="flex items-center gap-4 mb-8">
-          <h2 class="text-sm font-black font-headline uppercase tracking-[0.2em] text-[#0066ff] whitespace-nowrap">
-            {{ item.category }}
-          </h2>
-          <div class="h-px w-full bg-slate-200 dark:bg-[#27272a]"></div>
+
+          <!-- 搜索 -->
+          <input
+              placeholder="搜索工具..."
+              class="flex-1 px-4 py-3 rounded-2xl shadow-sm
+                   bg-[var(--color-surface-container-lowest)]
+                   border border-[var(--color-outline-variant)]
+                   text-[var(--color-on-surface)]
+                   placeholder:text-[var(--color-on-surface-variant)]
+                   focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+          />
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <router-link
-              v-for="tool in item.tools"
-              :key="tool.id"
-              :to="`/tools/${tool.id}`"
-              class="group flex items-start gap-5 p-6 rounded-xl border transition-all duration-300 cursor-pointer min-h-27.5
-                   /* 白天模式 */
-                   bg-white border-slate-200/60 shadow-sm
-                   hover:-translate-y-1 hover:border-[#0066ff]/40 hover:shadow-[0_10px_30px_-10px_rgba(0,102,255,0.15)]
-                   /* 黑夜模式 */
-                   dark:bg-[#1c1c1f] dark:border-[#27272a] dark:hover:border-[#0066ff]/50 dark:hover:shadow-[0_0_20px_rgba(0,102,255,0.1)]"
-          >
-            <div class="w-12 h-12 shrink-0 rounded-lg flex items-center justify-center transition-colors
-                        bg-[#0066ff]/10 text-[#0066ff] group-hover:bg-[#0066ff] group-hover:text-white">
-              <SvgIcon
-                  :name="tool.iconName"
-                  class="w-6 h-6 group-hover:fill-white transition-colors"
-              />
-            </div>
-
-
-            <div class="grow">
-              <h3 class="text-base font-bold font-headline mb-1 text-[#0b1c30] dark:text-[#f1f1f1] group-hover:text-[#0066ff] transition-colors">
-                {{ tool.title }}
-              </h3>
-              <p class="text-xs leading-relaxed font-body text-[#424656] dark:text-[#a1a1aa] line-clamp-2">
-                {{ tool.description }}
-              </p>
-            </div>
-
-            <div class="self-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <span class="material-symbols-outlined text-sm text-[#0066ff]">chevron_right</span>
-            </div>
-          </router-link>
+        <div class="mb-6 text-sm text-[var(--color-on-surface-variant)]">
+          共 {{ tools.length }} 个工具
         </div>
-      </div>
 
+        <!-- 工具卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <ToolCard v-for="t in tools" :key="t.title" v-bind="t"/>
+        </div>
+
+      </main>
     </div>
-  </section>
+  </div>
 </template>
-
-<style scoped>
-.font-headline {
-  font-family: 'Manrope', sans-serif;
-}
-
-.font-body {
-  font-family: 'Inter', sans-serif;
-}
-
-.material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-}
-</style>

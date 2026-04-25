@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字符进制转换 - 在线工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 使 html 和 body 占据整个视口高度，并移除溢出 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        body {
+            background-color: #f4f7fb;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+        /* 容器占满 100% 高度并使用 flex 布局 */
+        .full-page-container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1.5rem; /* 对应 p-6 */
+        }
+    </style>
+</head>
+<body>
+
+<div class="full-page-container">
+    <div class="text-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">字符进制<span class="text-blue-600">转换</span></h1>
+        <p class="text-gray-500 text-sm">在不同的字符编码和进制表示之间进行转换，支持常见编码和进制格式。</p>
+    </div>
+
+    <div class="card p-6 mb-6 flex-grow flex flex-col justify-center">
+        <div class="flex flex-col md:flex-row items-stretch gap-4 h-full">
+
+            <div class="flex-1 flex flex-col">
+                <label class="block text-sm font-bold text-gray-700 mb-2">输入</label>
+                <div class="relative flex-grow">
+                    <textarea id="inputArea" class="w-full h-full p-4 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none resize-none text-sm" placeholder="请输入要转换的内容..."></textarea>
+                    <span class="absolute bottom-2 right-3 text-xs text-gray-400"><span id="charCount">0</span> / 10000</span>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <div>
+                        <label class="block text-xs text-gray-500 mb-1">输入编码</label>
+                        <select class="w-full border border-gray-200 rounded-md p-2 text-sm bg-white">
+                            <option>UTF-8</option>
+                            <option>GBK</option>
+                            <option>ASCII</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-500 mb-1">输入格式</label>
+                        <select class="w-full border border-gray-200 rounded-md p-2 text-sm bg-white">
+                            <option>字符串</option>
+                            <option>十六进制</option>
+                            <option>Base64</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex items-center justify-center">
+                <button class="bg-blue-50 text-blue-600 w-10 h-10 rounded-full hover:bg-blue-100 transition-colors border border-blue-100">
+                    <i class="fa-solid fa-right-left"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 flex flex-col">
+                <label class="block text-sm font-bold text-gray-700 mb-2">输出</label>
+                <div class="flex-grow">
+                    <textarea id="outputArea" class="w-full h-full p-4 border border-gray-200 rounded-lg bg-gray-50 focus:outline-none resize-none text-sm" placeholder="转换结果将显示在这里..." readonly></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mt-4">
+                    <div>
+                        <label class="block text-xs text-gray-500 mb-1">输出编码</label>
+                        <select class="w-full border border-gray-200 rounded-md p-2 text-sm bg-white">
+                            <option>UTF-8</option>
+                            <option>GBK</option>
+                            <option>ASCII</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-500 mb-1">输出格式</label>
+                        <select class="w-full border border-gray-200 rounded-md p-2 text-sm bg-white">
+                            <option>字符串</option>
+                            <option>十六进制</option>
+                            <option>Base64</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card bg-blue-50/50 p-3 flex items-center gap-4 text-[11px] text-gray-500 border border-blue-100 shrink-0">
+        <div class="flex items-center gap-1">
+            <i class="fa-solid fa-circle-info text-blue-400"></i>
+            <span class="font-bold">支持的编码：</span> UTF-8, GBK, GK2312, ASCII, ISO-8859-1
+        </div>
+        <div class="flex items-center gap-1">
+            <span class="font-bold ml-2">支持的格式：</span> 字符串, 十六进制, 十进制, 二进制, Base64, URL 编码
+        </div>
+    </div>
+</div>
+
+<script>
+    const inputArea = document.getElementById('inputArea');
+    const charCount = document.getElementById('charCount');
+    const outputArea = document.getElementById('outputArea');
+
+    inputArea.addEventListener('input', (e) => {
+        const length = e.target.value.length;
+        charCount.textContent = length;
+        outputArea.value = e.target.value;
+    });
+</script>
+</body>
+</html>

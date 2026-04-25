@@ -40,8 +40,8 @@ import {toolsComponent} from "@/data/tools.js";
 const route = useRoute()
 const router = useRouter()
 
-// 获取工具组件和标题
+// 获取工具组件
 const activeTool = computed(() => {
   return toolsComponent[route.params.id] || null
-})
+});
 </script>

@@ -94,7 +94,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 h-full">
+  <div class="mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-full">
     <div class="lg:col-span-7 space-y-4 flex flex-col">
       <div class="bg-white dark:bg-slate-900 p-6 rounded-3xl shadow-xl border border-slate-200 dark:border-slate-800 flex-1">
         <div class="flex p-1 bg-slate-100 dark:bg-slate-800 rounded-xl mb-6">
@@ -108,7 +108,7 @@ onMounted(() => {
           </button>
         </div>
 
-        <div ref="svPanel" class="relative h-64 rounded-xl cursor-crosshair mb-4"
+        <div ref="svPanel" class="relative h-120 rounded-xl cursor-crosshair mb-4"
              :style="{ backgroundColor: `hsl(${colors[activeTarget].h}, 100%, 50%)` }"
              @mousedown="isDragging = true; updateSV($event)">
           <div class="absolute inset-0 bg-linear-to-r from-white to-transparent rounded-xl"></div>

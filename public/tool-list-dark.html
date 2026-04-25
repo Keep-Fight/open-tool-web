@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>所有工具 - 开发者工具箱 (Dark)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0066ff",
+                        "background": "#0a0a0b",
+                        "surface": "#121214",
+                        "surface-container": "#1c1c1f",
+                        "surface-container-high": "#252529",
+                        "on-surface": "#f1f1f1",
+                        "on-surface-variant": "#a1a1aa",
+                        "outline": "#3f3f46",
+                        "outline-variant": "#27272a"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope", "sans-serif"],
+                        "body": ["Manrope", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            background-color: #0a0a0b;
+        }
+        /* 隐藏滚动条 */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="text-on-surface min-h-screen p-6">
+
+<div class="max-w-[1400px] mx-auto flex flex-col lg:flex-row gap-8">
+
+    <aside class="w-full lg:w-64 flex-shrink-0">
+        <div class="bg-surface-container rounded-2xl border border-outline-variant p-4 space-y-1">
+            <h3 class="px-4 py-2 text-xs font-bold text-on-surface-variant uppercase tracking-widest">分类</h3>
+            <nav class="space-y-1">
+                <a href="#" class="flex items-center justify-between px-4 py-2.5 bg-primary/15 text-primary rounded-xl font-bold">
+                    <div class="flex items-center gap-3"><i data-lucide="layout-grid" class="w-4 h-4"></i> 全部工具</div>
+                    <span class="text-xs opacity-70">32</span>
+                </a>
+                <a href="#" class="flex items-center justify-between px-4 py-2.5 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded-xl transition-all">
+                    <div class="flex items-center gap-3"><i data-lucide="code-2" class="w-4 h-4"></i> 开发工具</div>
+                    <span class="text-xs opacity-60">12</span>
+                </a>
+                <a href="#" class="flex items-center justify-between px-4 py-2.5 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded-xl transition-all">
+                    <div class="flex items-center gap-3"><i data-lucide="type" class="w-4 h-4"></i> 文本工具</div>
+                    <span class="text-xs opacity-60">8</span>
+                </a>
+                <a href="#" class="flex items-center justify-between px-4 py-2.5 text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface rounded-xl transition-all">
+                    <div class="flex items-center gap-3"><i data-lucide="check-square" class="w-4 h-4"></i> 格式化工具</div>
+                    <span class="text-xs opacity-60">6</span>
+                </a>
+            </nav>
+
+            <div class="pt-6 px-2">
+                <div class="bg-primary/10 border border-primary/20 rounded-2xl p-4 text-center">
+                    <i data-lucide="star" class="w-6 h-6 text-primary mx-auto mb-2"></i>
+                    <p class="text-sm font-bold text-on-surface">收藏夹</p>
+                    <p class="text-xs text-on-surface-variant mt-1">收藏您常用的工具</p>
+                    <button class="mt-3 w-full bg-surface-container-high text-on-surface py-2 rounded-lg text-xs font-bold border border-outline-variant hover:bg-outline-variant transition-colors">
+                        查看收藏 (6)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1">
+        <div class="mb-8">
+            <h1 class="text-3xl font-extrabold text-on-surface tracking-tight mb-2 font-headline">所有工具</h1>
+            <p class="text-on-surface-variant mb-6 font-medium">实用的在线工具，提升您的开发效率和工作效率</p>
+
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+                <div class="relative flex-1 w-full">
+                    <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-on-surface-variant"></i>
+                    <input type="text" placeholder="搜索工具 (例如: JSON 格式化、文本对比...)"
+                           class="w-full pl-12 pr-4 py-3.5 bg-surface-container border border-outline-variant rounded-2xl text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
+                </div>
+                <div class="flex items-center gap-4 w-full md:w-auto">
+                    <div class="flex bg-surface-container p-1 rounded-xl border border-outline-variant">
+                        <button class="p-2 bg-primary/20 text-primary rounded-lg"><i data-lucide="layout-grid" class="w-5 h-5"></i></button>
+                        <button class="p-2 text-on-surface-variant hover:text-on-surface"><i data-lucide="list" class="w-5 h-5"></i></button>
+                    </div>
+                    <select class="flex-1 md:flex-none bg-surface-container border border-outline-variant text-on-surface rounded-xl px-4 py-3 text-sm outline-none focus:border-primary">
+                        <option>默认排序</option>
+                        <option>最常使用</option>
+                        <option>最新发布</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mt-4 text-sm font-bold text-on-surface-variant/60 uppercase tracking-widest">共 32 个工具</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-6">
+
+            <div class="group bg-surface-container p-6 rounded-3xl border border-outline-variant hover:border-primary/50 hover:shadow-[0_0_20px_rgba(0,102,255,0.1)] transition-all duration-300 relative">
+                <button class="absolute top-6 right-6 text-on-surface-variant hover:text-yellow-500 transition-colors"><i data-lucide="star" class="w-5 h-5"></i></button>
+                <div class="w-14 h-14 bg-green-500/10 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                    <i data-lucide="braces" class="w-8 h-8 text-green-500"></i>
+                </div>
+                <h3 class="text-lg font-bold text-on-surface mb-2 font-headline">JSON 格式化和校验</h3>
+                <p class="text-sm text-on-surface-variant leading-relaxed mb-6">格式化、验证和美化 JSON 数据，支持语法校验和错误提示。</p>
+                <div class="flex gap-2">
+                    <span class="px-2.5 py-1 bg-surface-container-high text-on-surface-variant text-[10px] rounded-md font-bold uppercase tracking-wider border border-outline-variant">开发工具</span>
+                    <span class="px-2.5 py-1 bg-surface-container-high text-on-surface-variant text-[10px] rounded-md font-bold uppercase tracking-wider border border-outline-variant">格式化</span>
+                </div>
+            </div>
+
+            <div class="group bg-surface-container p-6 rounded-3xl border border-outline-variant hover:border-primary/50 hover:shadow-[0_0_20px_rgba(0,102,255,0.1)] transition-all duration-300 relative">
+                <button class="absolute top-6 right-6 text-on-surface-variant hover:text-yellow-500 transition-colors"><i data-lucide="star" class="w-5 h-5"></i></button>
+                <div class="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                    <span class="text-2xl font-bold text-primary">Aa</span>
+                </div>
+                <h3 class="text-lg font-bold text-on-surface mb-2 font-headline">文本对比工具</h3>
+                <p class="text-sm text-on-surface-variant leading-relaxed mb-6">对比两个文本内容的差异，支持高亮显示新增、删除和修改的内容。</p>
+                <div class="flex gap-2">
+                    <span class="px-2.5 py-1 bg-surface-container-high text-on-surface-variant text-[10px] rounded-md font-bold uppercase tracking-wider border border-outline-variant">文本工具</span>
+                    <span class="px-2.5 py-1 bg-surface-container-high text-on-surface-variant text-[10px] rounded-md font-bold uppercase tracking-wider border border-outline-variant">对比</span>
+                </div>
+            </div>
+
+            <div class="group bg-surface-container p-6 rounded-3xl border border-outline-variant hover:border-primary/50 hover:shadow-[0_0_20px_rgba(0,102,255,0.1)] transition-all duration-300 relative">
+                <button class="absolute top-6 right-6 text-on-surface-variant hover:text-yellow-500 transition-colors"><i data-lucide="star" class="w-5 h-5"></i></button>
+                <div class="w-14 h-14 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                    <i data-lucide="chevrons-right" class="w-8 h-8 text-purple-500"></i>
+                </div>
+                <h3 class="text-lg font-bold text-on-surface mb-2 font-headline">字符串进制转换</h3>
+                <p class="text-sm text-on-surface-variant leading-relaxed mb-6">实现不同的字符编码和进制表示之间进行转换，支持多种编码格式。</p>
+                <div class="flex gap-2">
+                    <span class="px-2.5 py-1 bg-surface-container-high text-on-surface-variant text-[10px] rounded-md font-bold uppercase tracking-wider border border-outline-variant">转换工具</span>
+                    <span class="px-2.5 py-1 bg-surface-container-high text-on-surface-variant text-[10px] rounded-md font-bold uppercase tracking-wider border border-outline-variant">编码</span>
+                </div>
+            </div>
+
+            <div class="group bg-surface-container p-6 rounded-3xl border border-outline-variant hover:border-primary/50 hover:shadow-[0_0_20px_rgba(0,102,255,0.1)] transition-all duration-300 relative">
+                <button class="absolute top-6 right-6 text-on-surface-variant hover:text-yellow-500 transition-colors"><i data-lucide="star" class="w-5 h-5"></i></button>
+                <div class="w-14 h-14 bg-orange-500/10 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                    <i data-lucide="m-square" class="w-8 h-8 text-orange-500"></i>
+                </div>
+                <h3 class="text-lg font-bold text-on-surface mb-2 font-headline">Markdown 编辑器</h3>
+                <p class="text-sm text-on-surface-variant leading-relaxed mb-6">实时编辑 Markdown 文本，支持预览和导出多种格式。</p>
+                <div class="flex gap-2">
+                    <span class="px-2.5 py-1 bg-surface-container-high text-on-surface-variant text-[10px] rounded-md font-bold uppercase tracking-wider border border-outline-variant">文本工具</span>
+                    <span class="px-2.5 py-1 bg-surface-container-high text-on-surface-variant text-[10px] rounded-md font-bold uppercase tracking-wider border border-outline-variant">编辑器</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mt-12 flex justify-center items-center gap-2">
+            <button class="p-2 text-on-surface-variant hover:text-on-surface transition-colors"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-primary text-white font-bold shadow-lg shadow-primary/20">1</button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container border border-outline-variant text-on-surface font-bold hover:bg-surface-container-high transition-all">2</button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container border border-outline-variant text-on-surface font-bold hover:bg-surface-container-high transition-all">3</button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-surface-container border border-outline-variant text-on-surface font-bold hover:bg-surface-container-high transition-all">4</button>
+            <button class="p-2 text-on-surface-variant hover:text-on-surface transition-colors"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
+        </div>
+    </main>
+</div>
+
+<script>
+    // 初始化图标
+    lucide.createIcons();
+</script>
+</body>
+</html>

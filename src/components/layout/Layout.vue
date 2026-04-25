@@ -2,7 +2,7 @@
 <template>
   <div class="min-h-screen flex flex-col" >
     <Header :is-dark="isDark" @toggle-theme="toggleTheme" />
-    <main class="pt-16 flex-1">
+    <main class="h-screen pt-16 flex flex-col flex-1">
       <router-view/>
     </main>
     <Footer />

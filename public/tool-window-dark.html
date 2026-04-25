@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文本对比工具 - 黑夜模式</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@400,0..1&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0066ff",
+                        "background": "#0a0a0b",
+                        "surface-container": "#1c1c1f",
+                        "surface-container-high": "#252529",
+                        "on-surface": "#f1f1f1",
+                        "on-surface-variant": "#a1a1aa",
+                        "outline-variant": "#27272a"
+                    },
+                    fontFamily: { "headline": ["Manrope", "sans-serif"] }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Manrope', sans-serif; background-color: #0a0a0b; color: #f1f1f1; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="p-8">
+
+<div class="max-w-7xl mx-auto">
+    <a href="#" class="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors mb-6 text-sm font-medium group">
+        <span class="material-symbols-outlined text-[18px] group-hover:-translate-x-1 transition-transform">arrow_back</span>
+        返回工具箱
+    </a>
+
+    <div class="bg-surface-container border border-outline-variant rounded-2xl p-8 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+
+        <div class="flex items-center gap-6">
+            <div class="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center flex-shrink-0 border border-primary/20">
+                <span class="text-primary text-3xl font-bold font-headline">Aa</span>
+            </div>
+
+            <div class="space-y-2">
+                <div class="flex items-center gap-3">
+                    <h1 class="text-2xl font-extrabold text-on-surface tracking-tight font-headline">文本对比工具</h1>
+                    <span class="px-2 py-0.5 bg-primary/15 text-primary text-[10px] font-bold rounded uppercase tracking-wider border border-primary/20">
+                            实用工具
+                        </span>
+                </div>
+                <p class="text-on-surface-variant text-sm leading-relaxed max-w-xl">
+                    对比两个文本内容的差异，支持高亮显示新增、删除和修改的内容，提升文本校对效率。
+                </p>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3 w-full md:w-auto">
+            <button class="flex-1 md:flex-none flex items-center justify-center gap-2 px-5 py-2.5 bg-surface-container-high border border-outline-variant text-on-surface font-semibold rounded-xl hover:bg-outline-variant transition-all active:scale-95">
+                <span class="material-symbols-outlined text-[20px]">star</span>
+                收藏
+            </button>
+            <button class="flex-1 md:flex-none flex items-center justify-center gap-2 px-6 py-2.5 bg-primary text-white font-semibold rounded-xl hover:brightness-110 shadow-lg shadow-primary/20 transition-all active:scale-95">
+                <span class="material-symbols-outlined text-[20px]">share</span>
+                分享
+            </button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

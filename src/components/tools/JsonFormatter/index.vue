@@ -98,8 +98,8 @@ const copyToClipboard = () => {
 </script>
 
 <template>
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start w-full">
-    <div class="lg:col-span-9 bg-surface-container-lowest dark:bg-surface-container-lowest rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden flex flex-col border border-white dark:border-black transition-all duration-300">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start w-full h-full">
+    <div class="h-full lg:col-span-9 bg-surface-container-lowest dark:bg-surface-container-lowest rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden flex flex-col border border-white dark:border-black transition-all duration-300">
       <div class="flex items-center justify-between px-6 py-4 bg-surface-container dark:bg-surface-container-high/40 border-b border-outline-variant/10">
         <div class="flex items-center gap-3">
           <span class="material-symbols-outlined text-primary" data-icon="code">code</span>
@@ -115,7 +115,7 @@ const copyToClipboard = () => {
         </div>
       </div>
 
-      <div class="flex flex-col h-[600px] relative">
+      <div class="flex flex-col h-full relative">
         <textarea
             v-show="!showPreview"
             v-model="jsonInput"
