@@ -16,7 +16,7 @@ const {
 </script>
 
 <template>
-  <div class="h-screen flex bg-[var(--color-background)] overflow-hidden">
+  <div class="h-screen flex bg-background overflow-hidden">
 
     <ToolSidebar
       :menus="menus"
@@ -33,15 +33,15 @@ const {
             v-model="searchQuery"
             placeholder="搜索工具..."
             class="flex-1 max-w-2xl px-4 py-3 rounded-2xl shadow-sm
-                 bg-[var(--color-surface-container-lowest)]
-                 border border-[var(--color-outline-variant)]
-                 text-[var(--color-on-surface)]
-                 placeholder:text-[var(--color-on-surface-variant)]
+                 bg-surface-container-lowest
+                 border border-outline-variant
+                 text-on-surface
+                 placeholder:text-on-surface-variant
                  focus:outline-none focus:ring-2 focus:ring-blue-500/20"
         />
       </div>
 
-      <div class="mb-6 text-sm text-[var(--color-on-surface-variant)]">
+      <div class="mb-6 text-sm text-on-surface-variant">
         共 {{ filteredTools.length }} 个工具
       </div>
 
@@ -55,8 +55,8 @@ const {
       </div>
 
       <div v-else class="flex flex-col items-center justify-center py-20 text-center">
-        <p class="text-lg text-[var(--color-on-surface-variant)]">没有找到匹配的工具</p>
-        <p class="text-sm text-[var(--color-on-surface-variant)] mt-2">尝试调整搜索条件或浏览其他分类</p>
+        <p class="text-lg text-on-surface-variant">没有找到匹配的工具</p>
+        <p class="text-sm text-on-surface-variant mt-2">尝试调整搜索条件或浏览其他分类</p>
       </div>
 
     </main>

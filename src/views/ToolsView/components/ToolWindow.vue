@@ -71,7 +71,7 @@ const goBack = () => {
               />
             </div>
             <div>
-              <h1 :class="`${tool.titleColor} text-2xl font-bold text-on-surface flex items-center gap-2 flex-wrap`">
+              <h1 :class="['text-2xl font-bold text-on-surface flex items-center gap-2 flex-wrap',tool.titleColor]">
                 {{ tool.title }}
                 <span v-for="cat in tool.category" :key="cat" class="text-[10px] font-normal bg-blue-100 text-blue-600 px-2 py-0.5 rounded dark:bg-blue-500/20 dark:text-blue-400">
                   {{ cat }}
