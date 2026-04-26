@@ -14,56 +14,48 @@ const menus = [
 </script>
 
 <template>
-  <aside class="w-64 shrink-0">
-    <div class="p-4 space-y-1 rounded-2xl border bg-surface border-outline-variant">
-      <h3 class="px-4 py-2 text-xs font-semibold uppercase text-on-surface-variant">
-        分类
+  <aside class="w-64 h-full shrink-0 border-r border-outline-variant bg-surface flex flex-col">
+
+    <div class="p-6">
+      <h3 class="text-xs font-bold uppercase tracking-wider text-on-surface-variant">
+        工具箱分类
       </h3>
-      <!-- 分类列表 -->
-      <nav class="space-y-1">
-        <a v-for="m in menus"
-           :key="m.name"
-           href="#"
-           :class="[
-             'flex items-center justify-between px-4 py-2.5 rounded-xl transition',
-             m.active
-               ? 'bg-surface-container text-primary font-medium'
-               : 'text-on-surface-variant hover:bg-surface-container-low'
-           ]">
-
-          <div class="flex items-center gap-3">
-            <component :is="m.icon" class="w-4 h-4"/>
-            {{ m.name }}
-          </div>
-
-          <span class="text-xs opacity-70">{{ m.count }}</span>
-        </a>
-      </nav>
-
-      <!-- 收藏卡片 -->
-      <div class="pt-6 px-4">
-        <div class="rounded-2xl p-4 text-center
-                    bg-surface-container">
-
-          <Star class="w-6 h-6 mx-auto mb-2 text-primary"/>
-
-          <p class="text-sm font-semibold text-on-surface">
-            收藏夹
-          </p>
-
-          <p class="text-xs mt-1 text-on-surface-variant">
-            收藏您常用的工具
-          </p>
-
-          <button class="mt-3 w-full py-1.5 rounded-lg text-xs font-medium
-                         bg-surface-container-lowest
-                         border border-outline-variant
-                         hover:scale-[1.02] transition">
-            查看收藏 (6)
-          </button>
-        </div>
-      </div>
-
     </div>
+
+    <div class="p-4 border-t border-outline-variant/50">
+      <div class="rounded-2xl p-4 bg-surface-container-low">
+        <div class="flex items-center gap-2 mb-2">
+          <Star class="w-4 h-4 text-yellow-500 fill-yellow-500"/>
+          <p class="text-sm font-semibold text-on-surface">收藏夹</p>
+        </div>
+        <button class="w-full py-2 rounded-lg text-xs font-medium
+                       bg-primary text-white hover:opacity-90 transition">
+          查看收藏 (6)
+        </button>
+      </div>
+    </div>
+
+    <nav class="flex-1 px-3 space-y-1">
+      <a v-for="m in menus"
+         :key="m.name"
+         href="#"
+         :class="[
+           'flex items-center justify-between px-4 py-3 rounded-xl transition',
+           m.active
+             ? 'bg-primary/10 text-primary font-semibold'
+             : 'text-on-surface-variant hover:bg-surface-container-low'
+         ]">
+
+        <div class="flex items-center gap-3">
+          <component :is="m.icon" class="w-5 h-5"/>
+          <span class="text-sm">{{ m.name }}</span>
+        </div>
+
+        <span class="text-xs opacity-60">{{ m.count }}</span>
+      </a>
+    </nav>
+
+
+
   </aside>
 </template>

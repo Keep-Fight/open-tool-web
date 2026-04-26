@@ -1,34 +1,19 @@
-import { computed } from "vue"
-import { toolsJson } from "@/data/tools"
+import {computed} from "vue"
+import {categories, tools} from "@/data/tools"
 
 export function useTools() {
 
-    // 分类列表
-    const categories = computed(() => {
-        return [{
-            category: '全部工具',
-            icon: '全部'
-        }, ...toolsJson.map(c => {
-            return {
-                category: c.category,
-                icon: c.icon
-            }
-        })]
+    // TODO 目录菜单（来自分类泪飙），增强功能，统计工具数量
+    const menus = computed(() => {
     })
 
-    // 扁平化工具列表（用于搜索/收藏）
-    const flatTools = computed(() => {
-        return toolsJson.flatMap(group =>
-            group.tools.map(tool => ({
-                ...tool,
-                category: group.category
-            }))
-        )
+    // TODO 工具列表，添加收藏夹标识字段、根据colorMap，循环设置color字段
+    const tools = computed(() => {
+
     })
 
     return {
-        categories,
-        flatTools,
-        toolsJson
+        menus,
+        tools
     }
 }

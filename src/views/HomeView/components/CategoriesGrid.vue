@@ -36,7 +36,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import { toolsJson } from '@/data/tools.js'
+import { tools } from '@/data/tools.js'
 
 const colorMap = {
   'dev-tools': 'text-dev bg-dev/10',
@@ -48,14 +48,14 @@ const iconMap = {
   'text-image': 'palette'
 }
 
-const categoriesWithLimit = computed(() => {
-  return toolsJson.map(cat => ({
-    ...cat,
-    icon: iconMap[cat.icon] || 'tools',
-    colorClass: colorMap[cat.icon] || 'text-primary bg-primary/10',
-    tools: cat.tools.slice(0, 3)
-  }))
-})
+// const categoriesWithLimit = computed(() => {
+//   return tools.map(cat => ({
+//     ...cat,
+//     icon: iconMap[cat.icon] || 'tools',
+//     colorClass: colorMap[cat.icon] || 'text-primary bg-primary/10',
+//     tools: cat.tools.slice(0, 3)
+//   }))
+// })
 </script>
 
 <style scoped>

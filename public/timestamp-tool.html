@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时间戳转换工具 - 复刻版</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        /* 针对 Tailwind 4 的一些细微阴影和背景增强 */
+        .card-shadow {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+
+<div class="max-w-6xl mx-auto space-y-6">
+
+    <a href="#" class="flex items-center text-xs text-slate-400 hover:text-slate-600 transition-colors mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        返回工具箱
+    </a>
+
+    <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div class="flex gap-4">
+            <div class="w-14 h-14 bg-indigo-50 text-indigo-500 rounded-2xl flex items-center justify-center shadow-sm shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    <circle cx="12" cy="14" r="3" stroke-width="1.5" />
+                    <path d="M12 12v2h1.5" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                    <h1 class="text-2xl font-bold text-slate-800">时间戳转换工具</h1>
+                    <span class="text-[10px] bg-blue-100 text-blue-500 px-2 py-0.5 rounded font-medium">实用工具</span>
+                </div>
+                <p class="text-sm text-slate-400">支持时间戳与多种时间格式之间的转换，毫秒级或秒级时间戳，日期时间字符串等互相转换。</p>
+
+                <div class="flex gap-2 mt-3">
+                    <button class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-600 shadow-sm">
+                        <span class="w-2 h-2 rounded-full bg-green-400"></span> 时间戳转换
+                    </button>
+                    <button class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-slate-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        时间格式化
+                    </button>
+                    <button class="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-400 hover:text-slate-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 002 2h1.5a2.5 2.5 0 012.5 2.5v.5m-5 5v1.5a2.5 2.5 0 005 0v-5" /></svg>
+                        时区转换
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex gap-2">
+            <button class="px-4 py-2 border border-slate-200 bg-white rounded-xl text-sm text-slate-600 hover:bg-slate-50 transition-colors shadow-sm flex items-center gap-2">
+                <span>☆</span> 收藏
+            </button>
+            <button class="px-4 py-2 border border-slate-200 bg-white rounded-xl text-sm text-slate-600 hover:bg-slate-50 transition-colors shadow-sm flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+                分享
+            </button>
+        </div>
+    </header>
+
+    <main class="bg-white rounded-3xl border border-slate-100 card-shadow p-8 relative">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 relative">
+
+            <div class="space-y-8">
+                <h2 class="text-sm font-bold text-slate-800">输入时间</h2>
+
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-slate-500">输入类型</label>
+                    <select class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all appearance-none">
+                        <option>当前时间</option>
+                        <option>时间戳 (ms)</option>
+                        <option>时间戳 (s)</option>
+                    </select>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-slate-500">当前时间</label>
+                    <div class="bg-indigo-50/50 rounded-2xl p-6 flex justify-between items-center border border-indigo-50/50">
+                        <div>
+                            <div class="text-2xl font-bold text-slate-800 tracking-tight">2024-05-20 15:30:45</div>
+                            <div class="text-xs text-indigo-400 mt-1 uppercase tracking-wider">北京时间 (UTC+8)</div>
+                        </div>
+                        <button class="text-indigo-500 flex items-center gap-1.5 text-xs font-bold hover:opacity-80 transition-opacity">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                            刷新
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                <div class="bg-white border border-blue-100 shadow-sm rounded-full p-2.5 text-blue-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" /></svg>
+                </div>
+                <div class="absolute top-1/2 left-1/2 -translate-y-48 -translate-x-px w-px h-96 bg-slate-100 -z-10"></div>
+            </div>
+
+            <div class="space-y-8">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-sm font-bold text-slate-800">转换结果</h2>
+                    <div class="flex items-center gap-3 w-2/3">
+                        <span class="text-xs font-bold text-slate-500 shrink-0">输出类型</span>
+                        <select class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 appearance-none">
+                            <option>全部格式</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="grid grid-cols-3 items-center">
+                        <span class="text-xs text-slate-400">毫秒时间戳 (ms)</span>
+                        <div class="col-span-2 relative group">
+                            <input type="text" value="1716197445000" readonly class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none">
+                            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-500 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 items-center">
+                        <span class="text-xs text-slate-400">秒级时间戳 (s)</span>
+                        <div class="col-span-2 relative">
+                            <input type="text" value="1716197445" readonly class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-2.5 text-sm text-slate-700">
+                            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-500"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg></button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 items-center">
+                        <div>
+                            <div class="text-xs text-slate-400 leading-tight">日期时间</div>
+                            <div class="text-[9px] text-slate-300">(yyyy-MM-dd HH:mm:ss)</div>
+                        </div>
+                        <div class="col-span-2 relative">
+                            <input type="text" value="2024-05-20 15:30:45" readonly class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-2.5 text-sm text-slate-700">
+                            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg></button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 items-center">
+                        <div>
+                            <div class="text-xs text-slate-400 leading-tight">日期时间</div>
+                            <div class="text-[9px] text-slate-300">(yyyy-MM-dd HH:mm:ss.SSS)</div>
+                        </div>
+                        <div class="col-span-2 relative">
+                            <input type="text" value="2024-05-20 15:30:45.000" readonly class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-2.5 text-sm text-slate-700">
+                            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg></button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 items-center">
+                        <span class="text-xs text-slate-400">日期 (yyyy-MM-dd)</span>
+                        <div class="col-span-2 relative">
+                            <input type="text" value="2024-05-20" readonly class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-2.5 text-sm text-slate-700">
+                            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg></button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 items-center">
+                        <span class="text-xs text-slate-400">时间 (HH:mm:ss)</span>
+                        <div class="col-span-2 relative">
+                            <input type="text" value="15:30:45" readonly class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-2.5 text-sm text-slate-700">
+                            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg></button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 items-center">
+                        <span class="text-xs text-slate-400">ISO 8601 (UTC)</span>
+                        <div class="col-span-2 relative">
+                            <input type="text" value="2024-05-20T07:30:45.000Z" readonly class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-2.5 text-sm text-slate-700">
+                            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <section class="bg-white rounded-3xl border border-slate-100 card-shadow p-8 space-y-6">
+        <div class="flex justify-between items-center">
+            <h3 class="text-sm font-bold text-slate-800">常用示例</h3>
+            <button class="text-blue-500 text-xs font-bold flex items-center gap-1">更多示例 <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></button>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+            <button class="px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-xs text-slate-500 hover:bg-slate-100 transition-colors">当前时间</button>
+            <button class="px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-xs text-slate-500 hover:bg-slate-100 transition-colors">毫秒时间戳 → 日期</button>
+            <button class="px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-xs text-slate-500 hover:bg-slate-100 transition-colors">秒级时间戳 → 日期</button>
+            <button class="px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-xs text-slate-500 hover:bg-slate-100 transition-colors">日期 → 毫秒时间戳</button>
+            <button class="px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-xs text-slate-500 hover:bg-slate-100 transition-colors">日期 → 秒级时间戳</button>
+            <button class="px-4 py-2.5 bg-slate-50 border border-slate-100 rounded-xl text-xs text-slate-500 hover:bg-slate-100 transition-colors">ISO 时间 → 时间戳</button>
+            <button class="px-2 py-2.5 text-blue-500 text-xs font-bold hover:underline">更多示例</button>
+        </div>
+
+        <div class="bg-blue-50/50 rounded-xl p-4 flex items-center gap-3">
+            <div class="w-5 h-5 bg-blue-500 text-white rounded-full flex items-center justify-center text-[10px] shrink-0 font-bold">i</div>
+            <p class="text-xs text-slate-400">
+                <span class="font-bold text-blue-500">提示：</span>
+                支持的时间格式包括：毫秒时间戳、秒级时间戳、yyyy-MM-dd HH:mm:ss、yyyy-MM-dd、HH:mm:ss、ISO 8601 等常见格式。
+            </p>
+        </div>
+    </section>
+
+</div>
+
+</body>
+</html>

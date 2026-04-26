@@ -1,51 +1,131 @@
 import {defineAsyncComponent} from 'vue'
+import SvgIcon from "@/components/public/SvgIcon.vue";
+import {Braces, CheckSquare, Code2, LayoutGrid, Palette, Repeat, Type} from "lucide-vue-next";
 
-// 工具数据的定义
-const toolsJson = [
+// 工具分类的定义
+const categories = [
     {
-        category: '开发人员工具',
-        icon: 'dev-tools',
-        tools: [
-            {
-                id: 'json-formatter',
-                title: 'JSON 格式化/校验',
-                description: '美化混乱的 JSON 数据，验证其格式是否正确，支持折叠和展开。',
-                component: defineAsyncComponent(() => import('../components/tools/JsonFormatter/index.vue')),
-                iconName: 'json-formatter',
-                tags: ['json', '格式化', '编码']
-            },
-            {
-                id: 'sql-formatter',
-                title: 'Mybatis Log转SQL',
-                description: '支持各种常见类型（String, Integer, Timestamp, Boolean 等）',
-                component: defineAsyncComponent(() => import('../components/tools/SqlFormatter/index.vue')),
-                iconName: 'sql-formatter',
-                tags: ['sql', '格式化', '编码']
-            },
-            {
-                id: 'color-picker',
-                title: '颜色选择器',
-                description: '可进行颜色选择，支持文本和背景的颜色对比功能',
-                component: defineAsyncComponent(() => import('../components/tools/ColorPicker/index.vue')),
-                iconName: 'color-picker',
-                tags: ['颜色', '选择器'],
-            }
-        ]
+        id: 'all',
+        title: '全部工具',
+        icon: LayoutGrid
     },
     {
-        category: '文本与图像',
-        icon: 'text-image',
-        tools: [
-            {
-                id: 'id-generation',
-                title: 'ID生成',
-                description: '支持UUID、雪花ID、雪花UUID',
-                component: defineAsyncComponent(() => import("../components/tools/IdGenerator/index.vue")),
-                iconName: 'id-generation'
-            }
-        ]
+        id: 'dev',
+        title: '开发工具',
+        icon: Code2
+    },
+    {
+        id: 'text',
+        title: '文本工具',
+        icon: Type
+    },
+    {
+        id: 'image',
+        title: '图片工具',
+        icon: 'image-tools'
+    },
+    {
+        id: 'convert',
+        title: '转换工具',
+        icon: Repeat
+    },
+    {
+        id: 'format',
+        title: '格式化工具',
+        icon: CheckSquare
+    },
+    {
+        id: 'design',
+        title: '设计工具',
+        icon: Palette
     }
 ]
 
-export {toolsJson};
+
+// 工具数据的定义
+const tools = [
+    {
+        id: 'json-formatter',
+        title: 'JSON 格式化/校验',
+        description: '格式化 JSON 字符串，验证其格式是否正确，支持折叠和展开。',
+        component: defineAsyncComponent(() => import('../components/tools/JsonFormatter/index.vue')),
+        category: ['开发工具'],
+        tags: ['json', '格式化'],
+        icon: Braces,
+        iconName: '',
+
+    },
+    {
+        id: 'color-picker',
+        title: '颜色选择器',
+        description: '可进行颜色选择，支持文本和背景的颜色对比功能',
+        component: defineAsyncComponent(() => import('../components/tools/ColorPicker/index.vue')),
+        category: ['开发工具', '设计工具'],
+        tags: ['颜色', '选择器'],
+        icon: SvgIcon,
+        iconName: 'color-picker',
+    },
+    {
+        id: 'id-generation',
+        title: 'ID 生成',
+        description: '支持UUID、雪花ID、雪花UUID',
+        component: defineAsyncComponent(() => import("../components/tools/IdGenerator/index.vue")),
+        category: ['开发工具'],
+        tags: ['颜色', '选择器'],
+        icon: SvgIcon,
+        iconName: 'id-generation',
+    },
+    {
+        id: 'base64-converter',
+        title: 'Base64 转换',
+        description: 'Base64转换工具，支持文本和图片的转换',
+        component: defineAsyncComponent(() => import('../components/tools/Base64Converter/index.vue')),
+        category: ['开发工具', '文本工具'],
+        tags: ['base64', '转换'],
+        icon: SvgIcon,
+        iconName: 'base64-converter',
+    },
+    {
+        id: 'ip-query',
+        title: 'IP 查询',
+        description: 'IP查询工具，查询IP地址信息',
+        component: defineAsyncComponent(() => import('../components/tools/IpQuery/index.vue')),
+        category: ['开发工具'],
+        tags: ['ip', '查询'],
+        icon: SvgIcon,
+        iconName: 'ip-query',
+    },
+    {
+        id: 'timestamp-converter',
+        title: '时间戳转换',
+        description: '时间戳转换工具，支持时间戳和日期的转换',
+        component: defineAsyncComponent(() => import('../components/tools/TimestampConverter/index.vue')),
+        category: ['开发工具'],
+        tags: ['时间戳', '转换'],
+        icon: SvgIcon,
+        iconName: 'timestamp-converter',
+    },
+    {
+        id: 'text-encryption',
+        title: '文本 加密/解密',
+        description: '文本加密解密工具，支持AES、RSA、DES、MD5、SHA1、SHA256、SHA512、HEX',
+        component: defineAsyncComponent(() => import('../components/tools/TextEncryption/index.vue')),
+        category: ['开发工具', '文本工具'],
+        tags: ['文本', '加密', '解密'],
+        icon: SvgIcon,
+        iconName: 'text-encryption'
+    },
+    {
+        id: 'string-converter',
+        title: '字符串转换',
+        description: '字符串转换工具，支持字符串的转换',
+        component: defineAsyncComponent(() => import('../components/tools/StringConverter/index.vue')),
+        category: ['开发工具', '文本工具'],
+        tags: ['字符串', '转换'],
+        icon: SvgIcon,
+        iconName: 'string-converter'
+    }
+]
+
+export {categories, tools};
 
