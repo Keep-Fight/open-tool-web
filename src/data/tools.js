@@ -55,7 +55,7 @@ const tools = [
         id: 'json-formatter',
         title: 'JSON 格式化/校验',
         description: '格式化 JSON 字符串，验证其格式是否正确，支持折叠和展开。',
-        component: defineAsyncComponent(() => import('../components/tools/UnDone/index.vue')),
+        component: defineAsyncComponent(() => import('../components/tools/JsonFormatter/index.vue')),
         category: ['格式化工具'],
         tags: ['json', '格式化'],
         icon: Braces,

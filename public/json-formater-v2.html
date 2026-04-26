@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON 格式化和校验工具 - 复刻版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        .code-font {
+            font-family: 'Fira Code', 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-700 min-h-screen p-6">
+
+<div class="max-w-[1400px] mx-auto">
+    <div class="flex border-b border-slate-200 mb-6">
+        <button class="px-6 py-3 border-b-2 border-blue-500 text-blue-600 font-medium">格式化</button>
+        <button class="px-6 py-3 text-slate-500 hover:text-slate-800">压缩</button>
+        <button class="px-6 py-3 text-slate-500 hover:text-slate-800">转义</button>
+        <button class="px-6 py-3 text-slate-500 hover:text-slate-800">JSON 转 YAML</button>
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+        <div class="col-span-9 space-y-6">
+            <div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden flex relative">
+                <div class="flex-1 flex flex-col border-r border-slate-100">
+                    <div class="flex justify-between items-center p-3 px-5 border-b border-slate-50">
+                        <span class="font-bold text-sm">输入 (原始 JSON)</span>
+                        <span class="text-xs text-slate-400">字符数: 176</span>
+                    </div>
+                    <div class="p-4 flex h-[450px]">
+                        <div class="text-slate-300 pr-4 text-sm text-right leading-6 select-none border-r border-slate-50 mr-4">
+                            1<br>2<br>3<br>4<br>5<br>6
+                        </div>
+                        <textarea
+                                class="flex-1 outline-none text-sm leading-6 code-font resize-none text-slate-700 bg-transparent">{"name":"Open Toolbox","version":"1.0.0","features":[{"name":"JSON 格式化","enabled":true},{"name":"JSON 校验","enabled":true},{"name":"压缩","enabled":true}],"author":{"name":"Open Toolbox","url":"https://opentoolbox.com"},"license":"MIT"}</textarea>
+                    </div>
+                </div>
+
+                <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                    <button class="w-10 h-10 bg-white border border-blue-100 rounded-full flex items-center justify-center text-blue-500 shadow-lg hover:bg-blue-50 transition">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+
+                <div class="flex-1 flex flex-col">
+                    <div class="flex justify-between items-center p-3 px-5 border-b border-slate-50">
+                        <span class="font-bold text-sm">输出 (格式化后的 JSON)</span>
+                        <div class="flex items-center gap-3 text-xs">
+                            <span class="text-slate-400">字符数: 259</span>
+                            <button class="text-blue-500 flex items-center gap-1"><i class="far fa-copy"></i> 复制
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-4 flex h-[450px] bg-slate-50/30">
+                        <div class="text-slate-300 pr-4 text-sm text-right leading-6 select-none border-r border-slate-100 mr-4">
+                            1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12
+                        </div>
+                        <pre class="flex-1 text-sm leading-6 code-font overflow-auto">
+<span class="text-slate-800">{</span>
+  <span class="text-pink-600">"name"</span>: <span class="text-green-600">"Open Toolbox"</span>,
+  <span class="text-pink-600">"version"</span>: <span class="text-green-600">"1.0.0"</span>,
+  <span class="text-pink-600">"features"</span>: [
+    {
+      <span class="text-pink-600">"name"</span>: <span class="text-green-600">"JSON 格式化"</span>,
+      <span class="text-pink-600">"enabled"</span>: <span class="text-blue-500">true</span>
+    },
+    {
+      <span class="text-pink-600">"name"</span>: <span class="text-green-600">"JSON 校验"</span>,
+      <span class="text-pink-600">"enabled"</span>: <span class="text-blue-500">true</span>
+    }
+  ]
+<span class="text-slate-800">}</span></pre>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="col-span-3 space-y-6">
+            <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
+                <h3 class="font-bold text-sm mb-4">校验结果</h3>
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-8 h-8 bg-green-500 text-white rounded-full flex items-center justify-center text-sm">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div>
+                        <div class="text-green-600 font-bold text-sm">JSON 格式正确</div>
+                        <div class="text-slate-400 text-xs">已通过所有语法校验</div>
+                    </div>
+                </div>
+                <div class="space-y-3 pt-4 border-t border-slate-50">
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">总长度 (格式化后)</span>
+                        <span class="font-medium text-slate-700">259 字符</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">键值对数量</span>
+                        <span class="font-medium text-slate-700">6</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">数组数量</span>
+                        <span class="font-medium text-slate-700">1</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">对象数量</span>
+                        <span class="font-medium text-slate-700">4</span>
+                    </div>
+                    <div class="flex justify-between text-sm">
+                        <span class="text-slate-400">层级深度</span>
+                        <span class="font-medium text-slate-700">3</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-xl shadow-sm p-5">
+                <h3 class="font-bold text-sm mb-4">工具选项</h3>
+                <div class="space-y-3">
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="checkbox" checked class="w-4 h-4 accent-blue-500">
+                        <span class="text-sm text-slate-600">自动格式化</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="checkbox" checked class="w-4 h-4 accent-blue-500">
+                        <span class="text-sm text-slate-600">显示行号</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer">
+                        <input type="checkbox" checked class="w-4 h-4 accent-blue-500">
+                        <span class="text-sm text-slate-600">语法高亮</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer text-slate-400">
+                        <input type="checkbox" class="w-4 h-4 accent-blue-500">
+                        <span class="text-sm">去除空格缩进</span>
+                    </label>
+                    <label class="flex items-center gap-3 cursor-pointer text-slate-400">
+                        <input type="checkbox" class="w-4 h-4 accent-blue-500">
+                        <span class="text-sm">按键排序</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-8 bg-blue-50/50 border border-blue-100 p-3 px-5 rounded-lg flex items-center gap-4 text-xs text-blue-500">
+        <i class="fas fa-info-circle text-blue-400 text-sm"></i>
+        <p>
+            <span class="font-bold mr-2">提示:</span>
+            支持拖拽文件或粘贴 JSON 内容。
+            快捷键: <code class="bg-white px-1 border border-blue-100 rounded mx-1">Ctrl + Enter</code> 格式化,
+            <code class="bg-white px-1 border border-blue-100 rounded mx-1">Ctrl + Shift + C</code> 压缩,
+            <code class="bg-white px-1 border border-blue-100 rounded mx-1">Ctrl + Shift + V</code> 校验
+        </p>
+    </div>
+</div>
+
+</body>
+</html>

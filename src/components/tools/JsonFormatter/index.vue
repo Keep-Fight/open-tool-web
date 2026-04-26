@@ -1,293 +1,228 @@
-<script setup>
-import { ref, computed } from 'vue';
-import VueJsonPretty from 'vue-json-pretty';
-import 'vue-json-pretty/lib/styles.css';
-
-const jsonInput = ref('');
-const indentation = ref(2);
-const sortKeys = ref(false);
-const strictMode = ref(true);
-const status = ref('准备就绪');
-const showPreview = ref(false);
-
-// 解析后的 JSON 数据
-const parsedJson = computed(() => {
-  try {
-    if (!jsonInput.value.trim()) return null;
-    return JSON.parse(jsonInput.value);
-  } catch {
-    return null;
-  }
-});
-
-// 计算行数
-const lineCount = computed(() => {
-  return jsonInput.value ? jsonInput.value.split('\n').length : 1;
-});
-
-// 计算字符数
-const charCount = computed(() => jsonInput.value.length);
-
-// 核心逻辑：格式化
-const formatJSON = () => {
-  try {
-    if (!jsonInput.value.trim()) return;
-    let obj = JSON.parse(jsonInput.value);
-
-    if (sortKeys.value) {
-      obj = sortObject(obj);
-    }
-
-    jsonInput.value = JSON.stringify(obj, null, parseInt(indentation.value));
-    status.value = '格式化成功';
-    showPreview.value = true;
-  } catch (e) {
-    status.value = `错误：${e.message}`;
-  }
-};
-
-// 核心逻辑：压缩
-const minifyJSON = () => {
-  try {
-    if (!jsonInput.value.trim()) return;
-    const obj = JSON.parse(jsonInput.value);
-    jsonInput.value = JSON.stringify(obj);
-    status.value = '压缩成功';
-    showPreview.value = false;
-  } catch (e) {
-    status.value = `错误：${e.message}`;
-  }
-};
-
-// 核心逻辑：校验
-const validateJSON = () => {
-  try {
-    if (!jsonInput.value.trim()) {
-      status.value = '内容为空';
-      return;
-    }
-    JSON.parse(jsonInput.value);
-    status.value = 'JSON 结构有效';
-  } catch (e) {
-    status.value = `无效：${e.message}`;
-  }
-};
-
-// 工具：对象排序
-const sortObject = (obj) => {
-  if (obj === null || typeof obj !== 'object') return obj;
-  if (Array.isArray(obj)) return obj.map(sortObject);
-  return Object.keys(obj).sort().reduce((result, key) => {
-    result[key] = sortObject(obj[key]);
-    return result;
-  }, {});
-};
-
-// 清空
-const clearAll = () => {
-  jsonInput.value = '';
-  status.value = '准备就绪';
-  showPreview.value = false;
-};
-
-// 复制
-const copyToClipboard = () => {
-  navigator.clipboard.writeText(jsonInput.value);
-  status.value = '已复制到剪贴板！';
-};
-</script>
-
 <template>
-  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start w-full h-full">
-    <div class="h-full lg:col-span-9 bg-surface-container-lowest dark:bg-surface-container-lowest rounded-2xl shadow-xl dark:shadow-2xl overflow-hidden flex flex-col border border-white dark:border-black transition-all duration-300">
-      <div class="flex items-center justify-between px-6 py-4 bg-surface-container dark:bg-surface-container-high/40 border-b border-outline-variant/10">
-        <div class="flex items-center gap-3">
-          <span class="material-symbols-outlined text-primary" data-icon="code">code</span>
-          <span class="font-headline font-bold text-sm tracking-widest text-on-surface-variant uppercase">JSON 格式化/校验</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <span class="text-xs font-medium text-outline">行数：{{ lineCount }}</span>
-          <div class="h-4 w-px bg-outline-variant/30 mx-2"></div>
-          <button @click="copyToClipboard" class="flex items-center gap-1 text-xs font-bold text-primary hover:bg-primary/5 px-2 py-1 rounded transition-colors uppercase cursor-pointer">
-            <span class="material-symbols-outlined text-sm">content_copy</span>
-            复制
-          </button>
-        </div>
-      </div>
+  <div class="bg-[#f0f5ff] h-full w-full font-[Inter]">
+    <div class=" mx-auto bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+      <main class="p-6 relative">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-      <div class="flex flex-col h-full relative">
-        <textarea
-            v-show="!showPreview"
-            v-model="jsonInput"
-            class="flex-1 p-6 font-mono text-sm bg-transparent border-none focus:ring-0 focus:outline-none resize-none text-on-surface leading-relaxed"
-            placeholder='{ "hint": "在此粘贴您的 JSON 代码..." }'
-            spellcheck="false"
-        ></textarea>
-
-        <div v-if="showPreview && parsedJson" class="flex-1 overflow-auto">
-          <div class="sticky top-0 z-10 flex items-center justify-between px-6 py-2 bg-surface-container-high/80 backdrop-blur-sm border-b border-outline-variant/10">
-            <span class="text-xs font-medium text-on-surface-variant">JSON 预览 · 可点击节点折叠</span>
-            <button @click="showPreview = false" class="text-xs text-primary hover:text-primary/80 cursor-pointer">返回编辑</button>
-          </div>
-          <div class="p-4">
-            <vue-json-pretty
-                :data="parsedJson"
-                :collapsed="1"
-                :show-length="true"
-                :show-line="true"
-                :show-icon="true"
-                line-color="var(--color-outline-variant)"
-                key-color="var(--color-primary)"
-                value-color="var(--color-on-surface)"
-                bracket-color="var(--color-on-surface-variant)"
-                quote-color="var(--color-primary)"
-                tree-height="500"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div class="px-6 py-4 bg-surface-container border-t border-outline-variant/5 flex justify-between items-center text-[10px]">
-        <div class="flex gap-4">
-          <div class="flex items-center gap-2 bg-surface-container-lowest px-3 py-1.5 rounded-lg border border-outline-variant/10">
-            <span :class="['w-2 h-2 rounded-full', status.includes('错误') || status.includes('无效') ? 'bg-error' : 'bg-primary animate-pulse']"></span>
-            <span class="font-medium text-on-surface-variant uppercase tracking-wider">{{ status }}</span>
-          </div>
-          <div class="flex items-center gap-2 bg-surface-container-lowest px-3 py-1.5 rounded-lg border border-outline-variant/10">
-            <span class="text-on-surface-variant font-medium">UTF-8</span>
-          </div>
-        </div>
-        <span class="text-outline hidden sm:block">字符数：{{ charCount }}</span>
-      </div>
-    </div>
-
-    <div class="lg:col-span-3 space-y-6">
-      <div class="bg-surface-container-low dark:bg-surface-container-high rounded-2xl p-6 shadow-xl border border-white dark:border-black transition-all duration-300">
-        <div class="flex items-center gap-3 mb-6 border-b border-outline-variant/10 pb-4">
-          <span class="material-symbols-outlined text-primary">bolt</span>
-          <h2 class="font-headline font-bold text-lg text-on-surface">操作</h2>
-        </div>
-        <div class="space-y-3">
-          <button @click="formatJSON" class="w-full group flex items-center justify-between bg-primary text-on-primary px-4 py-4 rounded-xl font-headline font-bold tracking-tight active:scale-95 transition-all duration-200 cursor-pointer shadow-lg shadow-primary/20">
-            <span class="flex items-center gap-3">
-              <span class="material-symbols-outlined">auto_fix_high</span>
-              格式化 JSON
-            </span>
-            <span class="material-symbols-outlined opacity-0 group-hover:opacity-100 transition-opacity">arrow_forward</span>
-          </button>
-
-          <button @click="validateJSON" class="w-full group flex items-center justify-between bg-secondary-container dark:bg-surface-container-highest text-on-secondary-container dark:text-on-surface px-4 py-4 rounded-xl font-headline font-bold tracking-tight hover:brightness-105 active:scale-95 transition-all duration-200 cursor-pointer">
-            <span class="flex items-center gap-3">
-              <span class="material-symbols-outlined text-primary">fact_check</span>
-              校验 JSON
-            </span>
-          </button>
-
-          <button @click="minifyJSON" class="w-full group flex items-center justify-between bg-secondary-container dark:bg-surface-container-highest text-on-secondary-container dark:text-on-surface px-4 py-4 rounded-xl font-headline font-bold tracking-tight hover:brightness-105 active:scale-95 transition-all duration-200 cursor-pointer">
-            <span class="flex items-center gap-3">
-              <span class="material-symbols-outlined text-primary">compress</span>
-              压缩 JSON
-            </span>
-          </button>
-
-          <div class="pt-4 mt-2 border-t border-outline-variant/10">
-            <button @click="clearAll" class="w-full flex items-center justify-center gap-2 text-error font-headline font-bold px-4 py-3 rounded-xl hover:bg-error/10 active:scale-95 transition-all duration-200 cursor-pointer">
-              <span class="material-symbols-outlined">delete_sweep</span>
-              清空工作区
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-surface-container-low dark:bg-surface-container-low rounded-2xl p-6 shadow-xl border border-white dark:border-black transition-all duration-300">
-        <h3 class="text-sm font-bold text-on-surface mb-5 uppercase tracking-widest">快捷设置</h3>
-        <div class="space-y-5">
-          <div class="flex items-center justify-between">
-            <label class="text-xs font-semibold text-on-surface-variant">缩进</label>
-            <select v-model="indentation" class="bg-surface-container-highest text-on-surface text-xs rounded-lg border-none py-1.5 px-3 focus:ring-2 focus:ring-primary/20 outline-none cursor-pointer">
-              <option :value="2">2 个空格</option>
-              <option :value="4">4 个空格</option>
-              <option :value="0">制表符</option>
-            </select>
+          <div class="flex flex-col">
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-sm font-semibold text-slate-700 italic">输入 (原始 JSON)</label>
+              <div class="flex items-center gap-3">
+                <span class="text-xs text-slate-400">字符数: {{ rawInput.length }}</span>
+                <button @click="handlePaste" class="text-xs text-blue-600 flex items-center gap-1 hover:underline cursor-pointer">
+                  <PasteIcon class="w-3 h-3" /> 粘贴
+                </button>
+              </div>
+            </div>
+            <div class="flex-1 bg-slate-50 border border-slate-200 rounded-xl overflow-hidden min-h-125 flex">
+              <textarea
+                  v-model="rawInput"
+                  class="w-full p-4 text-sm code-font bg-transparent outline-none resize-none leading-6 text-slate-600"
+                  placeholder="在此粘贴 JSON 代码..."
+                  @input="validateJson"
+              ></textarea>
+            </div>
           </div>
 
-          <div class="flex items-center justify-between">
-            <label class="text-xs font-semibold text-on-surface-variant">按键排序</label>
-            <button @click="sortKeys = !sortKeys" :class="['w-10 h-5 rounded-full relative transition-colors cursor-pointer', sortKeys ? 'bg-primary' : 'bg-surface-container-highest']">
-              <span :class="['absolute top-1 w-3 h-3 bg-white rounded-full transition-all', sortKeys ? 'right-1' : 'left-1']"></span>
+          <div class="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+            <button @click="formatJson" class="w-10 h-10 bg-white border border-slate-200 rounded-full shadow-lg flex items-center justify-center text-blue-500 hover:bg-blue-50 transition-all cursor-pointer">
+              <ChevronRightIcon class="w-6 h-6" />
             </button>
           </div>
 
-          <div class="flex items-center justify-between">
-            <label class="text-xs font-semibold text-on-surface-variant">严格模式</label>
-            <button @click="strictMode = !strictMode" :class="['w-10 h-5 rounded-full relative transition-colors cursor-pointer', strictMode ? 'bg-primary' : 'bg-surface-container-highest']">
-              <span :class="['absolute top-1 w-3 h-3 bg-white rounded-full transition-all', strictMode ? 'right-1' : 'left-1']"></span>
-            </button>
+          <div class="flex flex-col">
+            <div class="flex items-center justify-between mb-2">
+              <label class="text-sm font-semibold text-slate-700 italic">输出 (预览/折叠)</label>
+              <div class="flex items-center gap-3">
+                <span class="text-xs text-slate-400">节点数: {{ nodeCount }}</span>
+                <button @click="handleCopy" class="text-xs text-blue-600 flex items-center gap-1 hover:underline cursor-pointer">
+                  <CopyIcon class="w-3 h-3" /> {{ copyStatus }}
+                </button>
+              </div>
+            </div>
+            <div class="flex-1 bg-slate-50 border border-slate-200 rounded-xl overflow-hidden min-h-[500px] flex overflow-auto">
+              <div v-if="options.showLineNumbers" class="w-10 bg-slate-100/50 border-r border-slate-200 text-right pr-2 py-4 text-xs text-slate-300 select-none code-font">
+                <div v-for="n in 20" :key="n">{{ n }}</div>
+              </div>
+              <div class="p-4 w-full h-full overflow-auto custom-scrollbar">
+                <div v-if="parsedData">
+                  <JsonTreeNode :data="parsedData" :is-last="true" />
+                </div>
+                <div v-else class="text-slate-300 italic text-sm">等待有效输入...</div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </main>
+
+      <footer class="p-6 border-t border-slate-100 grid grid-cols-1 md:grid-cols-5 gap-8">
+        <div class="md:col-span-1">
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">校验结果</h3>
+          <div class="flex items-start gap-3">
+            <div :class="[isValid ? 'bg-emerald-100' : 'bg-rose-100']" class="mt-0.5 w-5 h-5 rounded-full flex items-center justify-center">
+              <component :is="isValid ? CheckIcon : XIcon" :class="[isValid ? 'text-emerald-600' : 'text-rose-600']" class="w-3.5 h-3.5" />
+            </div>
+            <div>
+              <p class="text-sm font-bold text-slate-700">{{ isValid ? 'JSON 格式正确' : '语法错误' }}</p>
+              <p class="text-xs text-slate-400 mt-0.5">{{ errorMsg || '未发现语法错误' }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="md:col-span-2">
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">工具选项</h3>
+          <div class="flex flex-wrap gap-x-5 gap-y-3">
+            <label v-for="(val, key) in options" :key="key" class="flex items-center gap-2 cursor-pointer group">
+              <input type="checkbox" v-model="options[key]" class="hidden" />
+              <div :class="[options[key] ? 'bg-blue-600 border-blue-600' : 'bg-white border-slate-300']" class="w-4 h-4 border rounded flex items-center justify-center text-white transition-colors">
+                <CheckIcon v-if="options[key]" class="w-3 h-3" />
+              </div>
+              <span class="text-xs font-medium text-slate-600 group-hover:text-blue-600 transition-colors">
+                {{ optionLabels[key] }}
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="md:col-span-2">
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">操作按钮</h3>
+          <div class="flex flex-wrap gap-x-3 gap-y-3">
+            <button @click="formatJson" class="text-xs font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg px-4 py-2 transition-colors cursor-pointer">格式化</button>
+            <button @click="minifyJson" class="text-xs font-medium text-white bg-slate-700 hover:bg-slate-800 rounded-lg px-4 py-2 transition-colors cursor-pointer">压缩</button>
+            <button @click="clearAll" class="text-xs font-medium text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg px-4 py-2 transition-colors cursor-pointer">清空</button>
+          </div>
+        </div>
+      </footer>
     </div>
   </div>
 </template>
 
-<style scoped>
-/* 继承 HTML 中的字体设置 */
-.font-headline { font-family: 'Manrope', sans-serif; }
+<script setup>
+import { ref, reactive, watch, computed } from 'vue';
+import {
+  Clipboard as PasteIcon,
+  Copy as CopyIcon,
+  Check as CheckIcon,
+  X as XIcon,
+  ChevronRight as ChevronRightIcon
+} from 'lucide-vue-next';
+import JsonTreeNode from './components/JsonTreeNode.vue';
 
-/* 简单的行号同步效果 */
-textarea {
-  tab-size: 2;
-  white-space: pre;
-  overflow-x: auto;
+// 状态
+const rawInput = ref('');
+const parsedData = ref(null);
+const isValid = ref(true);
+const errorMsg = ref('');
+const copyStatus = ref('复制');
+
+const options = reactive({
+  autoFormat: true,
+  showLineNumbers: true,
+  sortKeys: false
+});
+
+const optionLabels = {
+  autoFormat: '自动格式化',
+  showLineNumbers: '显示行号',
+  sortKeys: '按键排序'
+};
+
+// 逻辑
+const validateJson = () => {
+  if (!rawInput.value.trim()) {
+    parsedData.value = null;
+    isValid.value = true;
+    errorMsg.value = '';
+    return;
+  }
+  try {
+    let data = JSON.parse(rawInput.value);
+    if (options.sortKeys) data = sortObjectKeys(data);
+    parsedData.value = data;
+    isValid.value = true;
+    errorMsg.value = '';
+  } catch (e) {
+    isValid.value = false;
+    errorMsg.value = e.message;
+  }
+};
+
+const sortObjectKeys = (obj) => {
+  if (obj === null || typeof obj !== 'object') return obj;
+  if (Array.isArray(obj)) return obj.map(sortObjectKeys);
+  return Object.keys(obj).sort().reduce((acc, key) => {
+    acc[key] = sortObjectKeys(obj[key]);
+    return acc;
+  }, {});
+};
+
+const formatJson = () => {
+  validateJson();
+  if (isValid.value && parsedData.value) {
+    rawInput.value = JSON.stringify(parsedData.value, null, 2);
+  }
+};
+
+const minifyJson = () => {
+  validateJson();
+  if (isValid.value && parsedData.value) {
+    rawInput.value = JSON.stringify(parsedData.value);
+  }
+};
+
+const handleCopy = async () => {
+  try {
+    await navigator.clipboard.writeText(rawInput.value);
+    copyStatus.value = '已复制!';
+    setTimeout(() => copyStatus.value = '复制', 2000);
+  } catch (err) {
+    alert('复制失败');
+  }
+};
+
+const handlePaste = async () => {
+  const text = await navigator.clipboard.readText();
+  rawInput.value = text;
+  validateJson();
+};
+
+const clearAll = () => {
+  rawInput.value = '';
+  parsedData.value = null;
+};
+
+const nodeCount = computed(() => {
+  if (!parsedData.value) return 0;
+  return JSON.stringify(parsedData.value).length;
+});
+
+// 监听
+watch(() => options.autoFormat, (newVal) => {
+  if (newVal) validateJson();
+});
+
+watch(() => options.sortKeys, () => {
+  validateJson();
+});
+
+// 初始化
+validateJson();
+</script>
+
+<style>
+.code-font {
+  font-family: 'JetBrains Mono', monospace;
 }
 
-/* 滚动条美化 */
-::-webkit-scrollbar { width: 8px; height: 8px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb {
-  background: var(--color-outline-variant);
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #e2e8f0;
   border-radius: 10px;
-  opacity: 0.5;
 }
-::-webkit-scrollbar-thumb:hover { background: var(--color-outline); }
-
-/* JSON 树形视图折叠控制器样式 - 移至行首 */
-:deep(.vjs-tree-node.has-carets) {
-  padding-left: 20px;
-}
-
-:deep(.vjs-carets) {
-  position: absolute;
-  left: 0;
-  right: auto;
-  width: 16px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: var(--color-primary);
-  z-index: 1;
-}
-
-:deep(.vjs-carets svg) {
-  transition: transform 0.2s;
-  width: 12px;
-  height: 12px;
-}
-
-:deep(.vjs-carets:hover) {
-  color: var(--color-primary);
-}
-
-:deep(.vjs-tree-node) {
-  position: relative;
-  padding-left: 20px !important;
-  line-height: 24px;
-}
-
-:deep(.vjs-tree-node:hover) {
-  background-color: var(--color-surface-container-high);
-  border-radius: 4px;
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
 }
 </style>
