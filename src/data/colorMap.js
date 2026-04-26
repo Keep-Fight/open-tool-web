@@ -10,4 +10,16 @@ const colorMap = {
     slate: 'bg-slate-100 text-slate-600 dark:bg-slate-500/10 dark:text-slate-400',
 }
 
-export {colorMap}
+const textColorMap = {
+    blue: 'text-blue-600 dark:text-blue-400',
+    green: 'text-emerald-600 dark:text-emerald-400',
+    purple: 'text-purple-600 dark:text-purple-400',
+    orange: 'text-orange-600 dark:text-orange-400',
+    red: 'text-rose-600 dark:text-rose-400',
+    indigo: 'text-indigo-600 dark:text-indigo-400',
+    cyan: 'text-cyan-600 dark:text-cyan-400',
+    amber: 'text-amber-600 dark:text-amber-400',
+    slate: 'text-slate-600 dark:text-slate-400',
+}
+
+export {colorMap, textColorMap}

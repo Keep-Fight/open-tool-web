@@ -11,16 +11,16 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
 
         <div
-          v-for="category in categoriesWithLimit"
-          :key="category.category"
+          v-for="item in topCategories"
+          :key="item.category.id"
           class="category-card group"
         >
-          <div :class="['icon-box', category.colorClass]">
-            <span class="material-symbols-outlined text-3xl">{{ category.icon }}</span>
+          <div :class="['icon-box', item.colorClass]">
+            <component :is="item.category.icon" v-bind="{name: item.category.iconName}" class="w-7 h-7" />
           </div>
-          <h3 class="text-xl font-bold font-headline mb-4">{{ category.category }}</h3>
+          <h3 class="text-xl font-bold font-headline mb-4">{{ item.category.title }}</h3>
           <ul class="space-y-3">
-            <li v-for="tool in category.tools" :key="tool.id">
+            <li v-for="tool in item.tools" :key="tool.id">
               <router-link class="nav-link" :to="`/tools/${tool.id}`">
                 {{ tool.title }}
                 <span class="material-symbols-outlined text-xs">arrow_forward</span>
@@ -36,26 +36,37 @@
 
 <script setup>
 import { computed } from 'vue'
-import { tools } from '@/data/tools.js'
+import { categories, tools as allTools } from '@/data/tools.js'
+import { colorMap } from '@/data/colorMap.js'
 
-const colorMap = {
-  'dev-tools': 'text-dev bg-dev/10',
-  'text-image': 'text-design bg-design/10'
+// 颜色列表，用于给分类分配颜色
+const colorKeys = Object.keys(colorMap)
+
+// 获取分类的工具列表
+const getCategoryTools = (categoryTitle) => {
+  return allTools.filter(tool => tool.category.includes(categoryTitle))
 }
 
-const iconMap = {
-  'dev-tools': 'code',
-  'text-image': 'palette'
-}
+// 排除 'all' 分类
+const realCategories = categories.filter(c => c.id !== 'all')
 
-// const categoriesWithLimit = computed(() => {
-//   return tools.map(cat => ({
-//     ...cat,
-//     icon: iconMap[cat.icon] || 'tools',
-//     colorClass: colorMap[cat.icon] || 'text-primary bg-primary/10',
-//     tools: cat.tools.slice(0, 3)
-//   }))
-// })
+// 按工具数量排序，取前4个
+const topCategories = computed(() => {
+  return realCategories
+    .map(cat => ({
+      category: cat,
+      tools: getCategoryTools(cat.title),
+      count: getCategoryTools(cat.title).length
+    }))
+    .filter(item => item.count > 0)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 4)
+    .map((item, index) => ({
+      ...item,
+      colorClass: colorMap[colorKeys[index % colorKeys.length]],
+      tools: item.tools.slice(0, 3)
+    }))
+})
 </script>
 
 <style scoped>

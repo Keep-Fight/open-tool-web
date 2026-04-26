@@ -1,51 +1,36 @@
 <script setup>
 import ToolSidebar from "./components/ToolSidebar.vue"
 import ToolCard from "./components/ToolCard.vue"
+import {useTools} from "@/composables/useTools"
 
-import { Braces, ChevronsRight, SquareM } from "lucide-vue-next"
-
-// TODO 获取数据
-const tools = [
-  {
-    title:'JSON 格式化和校验',
-    desc:'格式化、验证和美化 JSON 数据，支持语法校验和错误提示。',
-    icon:Braces,
-    color:'green',
-    tags:['开发工具','格式化']
-  },
-  {
-    title:'文本对比工具',
-    desc:'对比两个文本内容的差异。',
-    icon:'div',
-    color:'blue',
-    tags:['文本工具','对比']
-  },
-  {
-    title:'字符串进制转换',
-    desc:'实现不同字符编码转换。',
-    icon:ChevronsRight,
-    color:'purple',
-    tags:['转换工具','编码']
-  },
-  {
-    title:'Markdown 编辑器',
-    desc:'实时编辑 Markdown。',
-    icon:SquareM,
-    color:'orange',
-    tags:['文本工具','编辑器']
-  }
-]
+const {
+  searchQuery,
+  activeCategory,
+  menus,
+  filteredTools,
+  favoriteCount,
+  selectCategory,
+  showFavorites,
+  toggleFavorite
+} = useTools()
 </script>
 
 <template>
   <div class="h-screen flex bg-[var(--color-background)] overflow-hidden">
 
-    <ToolSidebar/>
+    <ToolSidebar
+      :menus="menus"
+      :activeCategory="activeCategory"
+      :favoriteCount="favoriteCount"
+      @select="selectCategory"
+      @showFavorites="showFavorites"
+    />
 
     <main class="flex-1 p-8 overflow-y-auto">
 
       <div class="flex items-center gap-4 mb-8">
         <input
+            v-model="searchQuery"
             placeholder="搜索工具..."
             class="flex-1 max-w-2xl px-4 py-3 rounded-2xl shadow-sm
                  bg-[var(--color-surface-container-lowest)]
@@ -57,11 +42,21 @@ const tools = [
       </div>
 
       <div class="mb-6 text-sm text-[var(--color-on-surface-variant)]">
-        共 {{ tools.length }} 个工具
+        共 {{ filteredTools.length }} 个工具
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
-        <ToolCard v-for="t in tools" :key="t.title" v-bind="t"/>
+      <div v-if="filteredTools.length > 0" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-6">
+        <ToolCard
+          v-for="t in filteredTools"
+          :key="t.id"
+          v-bind="t"
+          @toggleFavorite="toggleFavorite"
+        />
+      </div>
+
+      <div v-else class="flex flex-col items-center justify-center py-20 text-center">
+        <p class="text-lg text-[var(--color-on-surface-variant)]">没有找到匹配的工具</p>
+        <p class="text-sm text-[var(--color-on-surface-variant)] mt-2">尝试调整搜索条件或浏览其他分类</p>
       </div>
 
     </main>
