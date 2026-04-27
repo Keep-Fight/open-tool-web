@@ -19,15 +19,31 @@
 
           <span v-if="collapsed" @click="collapsed = false" class="cursor-pointer text-on-surface-variant hover:text-primary">
             ... {{ isArray ? ']' : '}' }}
-            <span class="text-xs bg-outline-variant px-1 rounded ml-1">{{ Object.keys(data).length }} items</span>
+            <span class="text-xs bg-outline-variant px-1 rounded ml-1">{{ isArray ? data.length : Object.keys(data).length }} items</span>
           </span>
 
           <div v-show="!collapsed" class="pl-6 border-l border-outline ml-1.5 mt-1">
-            <div v-for="(value, key, index) in data" :key="key">
+            <!-- 数组 -->
+            <div v-if="isArray">
               <JsonTreeNode
-                  :node-key="isArray ? '' : key"
+                  v-for="(value, index) in data"
+                  :key="`${path}[${index}]`"
+                  :node-key="''"
+                  :data="value"
+                  :is-last="index === data.length - 1"
+                  :path="`${path}[${index}]`"
+              />
+            </div>
+
+            <!-- 对象 -->
+            <div v-else>
+              <JsonTreeNode
+                  v-for="(value, key, index) in data"
+                  :key="`${path}.${key}`"
+                  :node-key="key"
                   :data="value"
                   :is-last="index === Object.keys(data).length - 1"
+                  :path="`${path}.${key}`"
               />
             </div>
           </div>
@@ -50,16 +66,31 @@
   </div>
 </template>
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, inject, provide } from 'vue';
 import { ChevronDown, ChevronRight } from 'lucide-vue-next';
 
 const props = defineProps({
   nodeKey: String,
   data: [Object, Array, String, Number, Boolean, null],
-  isLast: Boolean
+  isLast: Boolean,
+  path: {
+    type: String,
+    default: 'root'
+  }
 });
 
-const collapsed = ref(false);
+// 获取或创建全局折叠状态
+const collapsedMap = inject('collapsedMap', null);
+const localCollapsedMap = collapsedMap ?? ref({});
+provide('collapsedMap', localCollapsedMap);
+const collapsed = computed({
+  get() {
+    return localCollapsedMap.value[props.path] ?? false;
+  },
+  set(val) {
+    localCollapsedMap.value[props.path] = val;
+  }
+});
 
 const isObject = computed(() => props.data !== null && typeof props.data === 'object' && !Array.isArray(props.data));
 const isArray = computed(() => Array.isArray(props.data));

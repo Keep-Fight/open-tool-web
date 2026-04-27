@@ -32,6 +32,12 @@
               <label class="text-sm font-semibold text-on-surface italic">JSON 预览</label>
               <div class="flex items-center gap-3">
                 <span class="text-xs text-on-surface-variant">节点数: {{ nodeCount }}</span>
+                <button @click="expandAll" class="text-xs text-blue-600 flex items-center gap-1 hover:underline cursor-pointer">
+                  <ChevronsLeftRight class="w-3 h-3" /> 全部展开
+                </button>
+                <button @click="collapseAll" class="text-xs text-blue-600 flex items-center gap-1 hover:underline cursor-pointer">
+                  <ChevronsRightLeft class="w-3 h-3" />  全部折叠
+                </button>
               </div>
             </div>
             <div class="flex-1 bg-surface border border-outline/30 rounded-xl overflow-hidden max-h-125 flex ">
@@ -40,7 +46,7 @@
               </div>
               <div class="p-4 w-full h-3xl overflow-auto scrollbar-custom">
                 <div v-if="parsedData">
-                  <JsonTreeNode :data="parsedData" :is-last="true" />
+                  <JsonTreeNode :data="parsedData" :is-last="true" path="root" />
                 </div>
                 <div v-else class="text-on-surface-variant italic text-sm">等待有效输入...</div>
               </div>
@@ -94,10 +100,10 @@
 </template>
 
 <script setup>
-import { ref, reactive, watch, computed } from 'vue';
+import { ref, reactive, watch, computed , provide} from 'vue';
 import {
-  Clipboard as PasteIcon,
-  Copy as CopyIcon,
+  ChevronsRightLeft,
+  ChevronsLeftRight,
   Check as CheckIcon,
   X as XIcon,
   ChevronRight as ChevronRightIcon
@@ -111,6 +117,8 @@ const parsedData = ref(null);
 const isValid = ref(true);
 const errorMsg = ref('');
 const toast = useToast();
+const collapsedMap = ref({})
+provide('collapsedMap', collapsedMap)
 
 const options = reactive({
   autoFormat: true,
@@ -123,6 +131,52 @@ const optionLabels = {
   showLineNumbers: '显示行号',
   sortKeys: '按键排序'
 };
+
+function collectPaths(data, basePath = 'root') {
+  const paths = [basePath]
+
+  if (data && typeof data === 'object') {
+    if (Array.isArray(data)) {
+      data.forEach((item, index) => {
+        const childPath = `${basePath}[${index}]`
+        paths.push(...collectPaths(item, childPath))
+      })
+    } else {
+      Object.keys(data).forEach(key => {
+        const childPath = `${basePath}.${key}`
+        paths.push(...collectPaths(data[key], childPath))
+      })
+    }
+  }
+
+  return paths
+}
+
+function expandAll() {
+  if (!parsedData.value) return
+
+  const allPaths = collectPaths(parsedData.value)
+
+  const map = {}
+  allPaths.forEach(path => {
+    map[path] = false
+  })
+
+  collapsedMap.value = map
+}
+
+function collapseAll() {
+  if (!parsedData.value) return
+
+  const allPaths = collectPaths(parsedData.value)
+
+  const map = {}
+  allPaths.forEach(path => {
+    map[path] = true
+  })
+
+  collapsedMap.value = map
+}
 
 // 逻辑
 const validateJson = () => {
