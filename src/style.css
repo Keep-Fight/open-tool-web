@@ -52,7 +52,7 @@
     /* 黑夜模式色值 */
     .dark {
         --app-primary: #0066ff;
-        --app-background: #080809;         /* 纯黑背景 */
+        --app-background: #0a0a0b;         /* 纯黑背景 */
         --app-surface: #121214;            /* 深灰表面 */
         --app-surface-container: #1c1c1f;
         --app-surface-container-low: #18181b;
