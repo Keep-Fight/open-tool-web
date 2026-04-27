@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>所有工具 - 开发者工具箱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', 'PingFang SC', sans-serif; }
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-slate-700 min-h-screen p-6">
+
+<div class="max-w-[1400px] mx-auto flex gap-8">
+
+    <aside class="w-64 flex-shrink-0">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 space-y-1">
+            <h3 class="px-4 py-2 text-xs font-semibold text-slate-400 uppercase tracking-wider">分类</h3>
+            <nav class="space-y-1">
+                <a href="#" class="flex items-center justify-between px-4 py-2.5 bg-blue-50 text-blue-600 rounded-xl font-medium">
+                    <div class="flex items-center gap-3"><i data-lucide="layout-grid" class="w-4 h-4"></i> 全部工具</div>
+                    <span class="text-xs opacity-70">32</span>
+                </a>
+                <a href="#" class="flex items-center justify-between px-4 py-2.5 text-slate-600 hover:bg-slate-50 rounded-xl transition-colors">
+                    <div class="flex items-center gap-3"><i data-lucide="code-2" class="w-4 h-4"></i> 开发工具</div>
+                    <span class="text-xs text-slate-400">12</span>
+                </a>
+                <a href="#" class="flex items-center justify-between px-4 py-2.5 text-slate-600 hover:bg-slate-50 rounded-xl transition-colors">
+                    <div class="flex items-center gap-3"><i data-lucide="type" class="w-4 h-4"></i> 文本工具</div>
+                    <span class="text-xs text-slate-400">8</span>
+                </a>
+                <a href="#" class="flex items-center justify-between px-4 py-2.5 text-slate-600 hover:bg-slate-50 rounded-xl transition-colors">
+                    <div class="flex items-center gap-3"><i data-lucide="check-square" class="w-4 h-4"></i> 格式化工具</div>
+                    <span class="text-xs text-slate-400">6</span>
+                </a>
+                <a href="#" class="flex items-center justify-between px-4 py-2.5 text-slate-600 hover:bg-slate-50 rounded-xl transition-colors">
+                    <div class="flex items-center gap-3"><i data-lucide="repeat" class="w-4 h-4"></i> 转换工具</div>
+                    <span class="text-xs text-slate-400">4</span>
+                </a>
+                <a href="#" class="flex items-center justify-between px-4 py-2.5 text-slate-600 hover:bg-slate-50 rounded-xl transition-colors">
+                    <div class="flex items-center gap-3"><i data-lucide="palette" class="w-4 h-4"></i> 设计工具</div>
+                    <span class="text-xs text-slate-400">6</span>
+                </a>
+            </nav>
+
+            <div class="pt-6 px-4">
+                <div class="bg-blue-50 rounded-2xl p-4 text-center">
+                    <i data-lucide="star" class="w-6 h-6 text-blue-500 mx-auto mb-2"></i>
+                    <p class="text-sm font-semibold text-blue-900">收藏夹</p>
+                    <p class="text-xs text-blue-600 mt-1">收藏您常用的工具</p>
+                    <button class="mt-3 w-full bg-white text-blue-600 py-1.5 rounded-lg text-xs font-medium shadow-sm border border-blue-100 hover:bg-blue-50 transition-colors">
+                        查看收藏 (6)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-slate-800 mb-2">所有工具</h1>
+            <p class="text-slate-500 mb-6">实用的在线工具，提升您的开发效率和工作效率</p>
+
+            <div class="flex gap-4 items-center">
+                <div class="relative flex-1">
+                    <i data-lucide="search" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                    <input type="text" placeholder="搜索工具 (例如: JSON 格式化、文本对比、图片压缩...)"
+                           class="w-full pl-12 pr-4 py-3 bg-white border border-slate-200 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all">
+                </div>
+                <div class="flex bg-white p-1 rounded-xl border border-slate-200 shadow-sm">
+                    <button class="p-2 bg-blue-50 text-blue-600 rounded-lg"><i data-lucide="layout-grid" class="w-5 h-5"></i></button>
+                    <button class="p-2 text-slate-400 hover:text-slate-600"><i data-lucide="list" class="w-5 h-5"></i></button>
+                </div>
+                <select class="bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm shadow-sm outline-none">
+                    <option>默认排序</option>
+                    <option>最常使用</option>
+                    <option>最新发布</option>
+                </select>
+            </div>
+            <div class="mt-4 text-sm text-slate-400">共 32 个工具</div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+            <div class="group bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative">
+                <button class="absolute top-5 right-5 text-slate-300 hover:text-yellow-400"><i data-lucide="star" class="w-5 h-5"></i></button>
+                <div class="w-14 h-14 bg-green-50 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                    <i data-lucide="braces" class="w-8 h-8 text-green-500"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-2">JSON 格式化和校验</h3>
+                <p class="text-sm text-slate-500 leading-relaxed mb-6">格式化、验证和美化 JSON 数据，支持语法校验和错误提示。</p>
+                <div class="flex gap-2">
+                    <span class="px-2.5 py-1 bg-slate-100 text-slate-500 text-[11px] rounded-md font-medium uppercase tracking-wider">开发工具</span>
+                    <span class="px-2.5 py-1 bg-slate-100 text-slate-500 text-[11px] rounded-md font-medium uppercase tracking-wider">格式化</span>
+                </div>
+            </div>
+
+            <div class="group bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative">
+                <button class="absolute top-5 right-5 text-slate-300 hover:text-yellow-400"><i data-lucide="star" class="w-5 h-5"></i></button>
+                <div class="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                    <span class="text-2xl font-bold text-blue-500">Aa</span>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-2">文本对比工具</h3>
+                <p class="text-sm text-slate-500 leading-relaxed mb-6">对比两个文本内容的差异，支持高亮显示新增、删除和修改的内容。</p>
+                <div class="flex gap-2">
+                    <span class="px-2.5 py-1 bg-slate-100 text-slate-500 text-[11px] rounded-md font-medium uppercase tracking-wider">文本工具</span>
+                    <span class="px-2.5 py-1 bg-slate-100 text-slate-500 text-[11px] rounded-md font-medium uppercase tracking-wider">对比</span>
+                </div>
+            </div>
+
+            <div class="group bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative">
+                <button class="absolute top-5 right-5 text-slate-300 hover:text-yellow-400"><i data-lucide="star" class="w-5 h-5"></i></button>
+                <div class="w-14 h-14 bg-purple-50 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                    <i data-lucide="chevrons-right" class="w-8 h-8 text-purple-500"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-2">字符串进制转换</h3>
+                <p class="text-sm text-slate-500 leading-relaxed mb-6">实现不同的字符编码和进制表示之间进行转换，支持多种编码格式。</p>
+                <div class="flex gap-2">
+                    <span class="px-2.5 py-1 bg-slate-100 text-slate-500 text-[11px] rounded-md font-medium uppercase tracking-wider">转换工具</span>
+                    <span class="px-2.5 py-1 bg-slate-100 text-slate-500 text-[11px] rounded-md font-medium uppercase tracking-wider">编码</span>
+                </div>
+            </div>
+
+            <div class="group bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative">
+                <button class="absolute top-5 right-5 text-slate-300 hover:text-yellow-400"><i data-lucide="star" class="w-5 h-5"></i></button>
+                <div class="w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                    <i data-lucide="m-square" class="w-8 h-8 text-orange-500"></i>
+                </div>
+                <h3 class="text-lg font-bold text-slate-800 mb-2">Markdown 编辑器</h3>
+                <p class="text-sm text-slate-500 leading-relaxed mb-6">实时编辑 Markdown 文本，支持预览和导出多种格式。</p>
+                <div class="flex gap-2">
+                    <span class="px-2.5 py-1 bg-slate-100 text-slate-500 text-[11px] rounded-md font-medium uppercase tracking-wider">文本工具</span>
+                    <span class="px-2.5 py-1 bg-slate-100 text-slate-500 text-[11px] rounded-md font-medium uppercase tracking-wider">编辑器</span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="mt-12 flex justify-center items-center gap-2">
+            <button class="p-2 text-slate-400 hover:text-slate-600"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl bg-blue-600 text-white font-medium shadow-md shadow-blue-200">1</button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white border border-transparent hover:border-slate-200 transition-all">2</button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white border border-transparent hover:border-slate-200 transition-all">3</button>
+            <button class="w-10 h-10 flex items-center justify-center rounded-xl hover:bg-white border border-transparent hover:border-slate-200 transition-all">4</button>
+            <button class="p-2 text-slate-400 hover:text-slate-600"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
+        </div>
+    </main>
+</div>
+
+<script>
+    // 初始化图标
+    lucide.createIcons();
+</script>
+</body>
+</html>

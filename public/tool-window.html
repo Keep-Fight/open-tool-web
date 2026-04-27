@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>字符进制转换 - Open Toolbox</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <style type="text/tailwindcss">
+        @theme {
+            --color-primary: #0066ff;
+            --color-background: #f4f7fb;
+            --color-surface: #ffffff;
+            --color-outline: #e5e7eb;
+            --color-text-main: #1f2937;
+            --color-text-muted: #6b7280;
+            --font-sans: 'Manrope', sans-serif;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* 模拟图片中的细微阴影 */
+        .card-shadow {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+        }
+    </style>
+</head>
+<body class="bg-background font-sans text-text-main p-4 md:p-8">
+
+<div class="max-w-7xl mx-auto">
+    <a href="#" class="flex items-center text-text-muted hover:text-primary text-sm mb-6 transition-colors">
+        <span class="material-symbols-outlined text-sm mr-1">arrow_back</span>
+        返回工具箱
+    </a>
+
+    <div class="bg-surface rounded-2xl p-6 border border-outline card-shadow flex flex-col md:flex-row items-center justify-between mb-6">
+        <div class="flex items-center gap-5">
+            <div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center text-primary">
+                <span class="material-symbols-outlined text-4xl">font_download</span>
+            </div>
+            <div>
+                <div class="flex items-center gap-3 mb-1">
+                    <h1 class="text-2xl font-bold">字符进制转换</h1>
+                    <span class="bg-blue-50 text-primary text-[10px] px-2 py-0.5 rounded font-bold uppercase">实用工具</span>
+                </div>
+                <p class="text-text-muted text-sm">在不同的字符编码和进制表示之间进行转换，支持常见编码和进制格式。</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3 mt-4 md:mt-0">
+            <button class="flex items-center gap-2 px-4 py-2 border border-outline rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                <span class="material-symbols-outlined text-sm">star</span> 收藏
+            </button>
+            <button class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-semibold hover:brightness-110 transition-all shadow-lg shadow-blue-500/20">
+                <span class="material-symbols-outlined text-sm">share</span> 分享
+            </button>
+        </div>
+    </div>
+
+    <div class="flex border-b border-outline mb-8 px-2 gap-8">
+        <button class="pb-3 text-primary border-b-2 border-primary font-bold text-sm">工具</button>
+        <button class="pb-3 text-text-muted font-medium text-sm hover:text-text-main">使用说明</button>
+        <button class="pb-3 text-text-muted font-medium text-sm hover:text-text-main">示例</button>
+        <button class="pb-3 text-text-muted font-medium text-sm hover:text-text-main">API说明</button>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+
+        <div class="lg:col-span-3 space-y-6">
+            <div class="bg-surface rounded-2xl p-8 border border-outline card-shadow">
+                <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] items-stretch gap-6">
+
+                    <div class="flex flex-col">
+                        <label class="text-sm font-bold mb-3 flex items-center justify-between">
+                            输入内容
+                            <span class="text-[10px] text-text-muted font-normal uppercase">Input</span>
+                        </label>
+                        <div class="relative flex-grow">
+                            <textarea class="w-full h-48 p-4 bg-gray-50/50 border border-outline rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none text-sm" placeholder="请输入要转换的内容..."></textarea>
+                            <span class="absolute bottom-3 right-4 text-[10px] text-gray-400">0 / 10000</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <span class="text-[10px] font-bold text-text-muted mb-1 block uppercase">输入编码</span>
+                                <select class="w-full bg-white border border-outline rounded-lg p-2 text-sm outline-none focus:border-primary">
+                                    <option>UTF-8</option>
+                                    <option>GBK</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold text-text-muted mb-1 block uppercase">输入格式</span>
+                                <select class="w-full bg-white border border-outline rounded-lg p-2 text-sm outline-none focus:border-primary">
+                                    <option>字符串</option>
+                                    <option>十六进制</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-center pt-8">
+                        <button class="w-10 h-10 bg-blue-50 text-primary rounded-full border border-blue-100 hover:bg-primary hover:text-white transition-all duration-300 flex items-center justify-center">
+                            <span class="material-symbols-outlined">sync_alt</span>
+                        </button>
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label class="text-sm font-bold mb-3 flex items-center justify-between">
+                            转换结果
+                            <span class="text-[10px] text-text-muted font-normal uppercase">Output</span>
+                        </label>
+                        <div class="flex-grow">
+                            <textarea class="w-full h-48 p-4 bg-gray-50/80 border border-outline rounded-xl text-sm text-text-muted italic outline-none resize-none" placeholder="转换结果将显示在这里..." readonly></textarea>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <span class="text-[10px] font-bold text-text-muted mb-1 block uppercase">输出编码</span>
+                                <select class="w-full bg-white border border-outline rounded-lg p-2 text-sm outline-none focus:border-primary">
+                                    <option>UTF-8</option>
+                                    <option>GBK</option>
+                                </select>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-bold text-text-muted mb-1 block uppercase">输出格式</span>
+                                <select class="w-full bg-white border border-outline rounded-lg p-2 text-sm outline-none focus:border-primary">
+                                    <option>字符串</option>
+                                    <option>十六进制</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 pt-6 border-t border-outline flex justify-end">
+                    <button class="px-8 py-3 bg-primary text-white font-bold rounded-xl hover:scale-[1.02] active:scale-[0.98] transition-all shadow-lg shadow-blue-500/30 flex items-center gap-2">
+                        <span class="material-symbols-outlined">bolt</span> 开始转换
+                    </button>
+                </div>
+            </div>
+
+            <div class="bg-surface rounded-2xl p-6 border border-outline card-shadow">
+                <h3 class="text-sm font-bold mb-6">常用进制格式</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <div class="p-4 border border-blue-100 bg-blue-50/20 rounded-xl flex flex-col items-center gap-2 cursor-pointer hover:border-primary transition-all">
+                        <div class="text-primary font-bold">Aa</div>
+                        <div class="text-[11px] font-bold">字符串</div>
+                    </div>
+                    <div class="p-4 border border-outline hover:border-primary rounded-xl flex flex-col items-center gap-2 cursor-pointer transition-all">
+                        <div class="text-green-500 font-bold">16</div>
+                        <div class="text-[11px] font-bold">十六进制</div>
+                    </div>
+                    <div class="p-4 border border-outline hover:border-primary rounded-xl flex flex-col items-center gap-2 cursor-pointer transition-all">
+                        <div class="text-purple-500 font-bold">10</div>
+                        <div class="text-[11px] font-bold">十进制</div>
+                    </div>
+                    <div class="p-4 border border-outline hover:border-primary rounded-xl flex flex-col items-center gap-2 cursor-pointer transition-all">
+                        <div class="text-sky-500 font-bold">01</div>
+                        <div class="text-[11px] font-bold">二进制</div>
+                    </div>
+                    <div class="p-4 border border-outline hover:border-primary rounded-xl flex flex-col items-center gap-2 cursor-pointer transition-all">
+                        <div class="text-indigo-500 font-bold text-xs">Base64</div>
+                        <div class="text-[11px] font-bold">Base64</div>
+                    </div>
+                    <div class="p-4 border border-outline hover:border-primary rounded-xl flex flex-col items-center gap-2 cursor-pointer transition-all">
+                        <div class="text-orange-500 font-bold">%</div>
+                        <div class="text-[11px] font-bold">URL 编码</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100 flex items-center gap-3 text-[11px] text-text-muted">
+                <span class="material-symbols-outlined text-primary text-base">info</span>
+                <div>
+                    <span class="font-bold text-text-main">支持的编码：</span> UTF-8, GBK, GK2312, ASCII, ISO-8859-1
+                    <span class="mx-2 text-gray-300">|</span>
+                    <span class="font-bold text-text-main">支持的格式：</span> 字符串, 十六进制, 十进制, 二进制, Base64, URL 编码
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="bg-surface rounded-2xl p-6 border border-outline card-shadow">
+                <h4 class="text-sm font-bold mb-4">工具信息</h4>
+                <div class="space-y-4 text-xs">
+                    <div class="flex justify-between">
+                        <span class="text-text-muted">版本</span>
+                        <span class="font-medium">1.0.0</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-text-muted">最后更新</span>
+                        <span class="font-medium">2024-05-20</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-text-muted">开发者</span>
+                        <span class="text-primary font-medium underline">Open Toolbox</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-text-muted">支持格式</span>
+                        <span class="font-medium">纯文本</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-surface rounded-2xl p-6 border border-outline card-shadow">
+                <h4 class="text-sm font-bold mb-4">功能特点</h4>
+                <ul class="space-y-3 text-xs text-text-muted">
+                    <li class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-base">check_circle</span> 实时编码转换
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-base">check_circle</span> 支持多种进制格式
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-base">check_circle</span> 浏览器本地计算，安全隐私
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary text-base">check_circle</span> 自动格式化输出
+                    </li>
+                </ul>
+            </div>
+
+            <div class="bg-surface rounded-2xl p-6 border border-outline card-shadow">
+                <h4 class="text-sm font-bold mb-4">相关工具</h4>
+                <div class="space-y-4">
+                    <a href="#" class="flex items-center justify-between group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-pink-50 rounded text-pink-600 flex items-center justify-center text-xs">
+                                <span class="material-symbols-outlined text-sm">terminal</span>
+                            </div>
+                            <span class="text-xs font-medium group-hover:text-primary transition-colors">JSON 格式化工具</span>
+                        </div>
+                        <span class="material-symbols-outlined text-sm text-gray-300">chevron_right</span>
+                    </a>
+                    <a href="#" class="flex items-center justify-between group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-green-50 rounded text-green-600 flex items-center justify-center text-xs">
+                                <span class="material-symbols-outlined text-sm">edit_note</span>
+                            </div>
+                            <span class="text-xs font-medium group-hover:text-primary transition-colors">Markdown 编辑器</span>
+                        </div>
+                        <span class="material-symbols-outlined text-sm text-gray-300">chevron_right</span>
+                    </a>
+                    <a href="#" class="flex items-center justify-between group">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 bg-orange-50 rounded text-orange-600 flex items-center justify-center text-xs">
+                                <span class="material-symbols-outlined text-sm">link</span>
+                            </div>
+                            <span class="text-xs font-medium group-hover:text-primary transition-colors">URL 编码/解码</span>
+                        </div>
+                        <span class="material-symbols-outlined text-sm text-gray-300">chevron_right</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
