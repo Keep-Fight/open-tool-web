@@ -103,13 +103,14 @@ import {
   ChevronRight as ChevronRightIcon
 } from 'lucide-vue-next';
 import JsonTreeNode from './components/JsonTreeNode.vue';
+import { useToast } from '@/composables/useToast';
 
 // 状态
 const rawInput = ref('');
 const parsedData = ref(null);
 const isValid = ref(true);
 const errorMsg = ref('');
-const copyStatus = ref('复制');
+const toast = useToast();
 
 const options = reactive({
   autoFormat: true,
@@ -156,6 +157,9 @@ const formatJson = () => {
   validateJson();
   if (isValid.value && parsedData.value) {
     rawInput.value = JSON.stringify(parsedData.value, null, 2);
+    toast.success('格式化成功');
+  } else {
+    toast.error('格式化失败：JSON 格式错误');
   }
 };
 
@@ -163,28 +167,36 @@ const minifyJson = () => {
   validateJson();
   if (isValid.value && parsedData.value) {
     rawInput.value = JSON.stringify(parsedData.value);
+    toast.success('压缩成功');
+  } else {
+    toast.error('压缩失败：JSON 格式错误');
   }
 };
 
 const handleCopy = async () => {
   try {
     await navigator.clipboard.writeText(rawInput.value);
-    copyStatus.value = '已复制!';
-    setTimeout(() => copyStatus.value = '复制', 2000);
+    toast.success('已复制到剪贴板');
   } catch (err) {
-    alert('复制失败');
+    toast.error('复制失败');
   }
 };
 
 const handlePaste = async () => {
-  const text = await navigator.clipboard.readText();
-  rawInput.value = text;
-  validateJson();
+  try {
+    const text = await navigator.clipboard.readText();
+    rawInput.value = text;
+    validateJson();
+    toast.info('已粘贴');
+  } catch (err) {
+    toast.error('粘贴失败，请手动粘贴');
+  }
 };
 
 const clearAll = () => {
   rawInput.value = '';
   parsedData.value = null;
+  toast.info('已清空');
 };
 
 const nodeCount = computed(() => {
