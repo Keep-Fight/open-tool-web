@@ -4,25 +4,25 @@
       <div class="flex items-start group">
         <button
             @click="collapsed = !collapsed"
-            class="mt-1.5 mr-1 cursor-pointer hover:bg-slate-200 rounded transition-colors"
+            class="mt-1.5 mr-1 cursor-pointer hover:bg-outline-variant rounded transition-colors"
         >
           <component
               :is="collapsed ? ChevronRight : ChevronDown"
-              class="w-3 h-3 text-slate-400"
+              class="w-3 h-3 text-on-surface-variant"
           />
         </button>
 
         <div class="flex-1">
-          <span v-if="nodeKey" class="text-rose-500">"{{ nodeKey }}"</span>
-          <span v-if="nodeKey" class="text-slate-800">: </span>
-          <span class="text-slate-800">{{ isArray ? '[' : '{' }}</span>
+          <span v-if="nodeKey" class="text-rose-500 dark:text-rose-400">"{{ nodeKey }}"</span>
+          <span v-if="nodeKey" class="text-on-surface">: </span>
+          <span class="text-on-surface">{{ isArray ? '[' : '{' }}</span>
 
-          <span v-if="collapsed" @click="collapsed = false" class="cursor-pointer text-slate-400 hover:text-blue-500">
+          <span v-if="collapsed" @click="collapsed = false" class="cursor-pointer text-on-surface-variant hover:text-primary">
             ... {{ isArray ? ']' : '}' }}
-            <span class="text-xs bg-slate-100 px-1 rounded ml-1">{{ Object.keys(data).length }} items</span>
+            <span class="text-xs bg-outline-variant px-1 rounded ml-1">{{ Object.keys(data).length }} items</span>
           </span>
 
-          <div v-show="!collapsed" class="pl-6 border-l border-slate-200 ml-1.5 mt-1">
+          <div v-show="!collapsed" class="pl-6 border-l border-outline ml-1.5 mt-1">
             <div v-for="(value, key, index) in data" :key="key">
               <JsonTreeNode
                   :node-key="isArray ? '' : key"
@@ -32,7 +32,7 @@
             </div>
           </div>
 
-          <div v-if="!collapsed" class="text-slate-800">
+          <div v-if="!collapsed" class="text-on-surface">
             {{ isArray ? ']' : '}' }}{{ isLast ? '' : ',' }}
           </div>
         </div>
@@ -41,15 +41,14 @@
 
     <template v-else>
       <div class="pl-4">
-        <span v-if="nodeKey" class="text-rose-500">"{{ nodeKey }}"</span>
-        <span v-if="nodeKey" class="text-slate-800">: </span>
+        <span v-if="nodeKey" class="text-rose-500 dark:text-rose-400">"{{ nodeKey }}"</span>
+        <span v-if="nodeKey" class="text-on-surface">: </span>
         <span :class="valueClass">{{ formatValue(data) }}</span>
-        <span v-if="!isLast" class="text-slate-800">,</span>
+        <span v-if="!isLast" class="text-on-surface">,</span>
       </div>
     </template>
   </div>
 </template>
-
 <script setup>
 import { ref, computed } from 'vue';
 import { ChevronDown, ChevronRight } from 'lucide-vue-next';
@@ -66,11 +65,11 @@ const isObject = computed(() => props.data !== null && typeof props.data === 'ob
 const isArray = computed(() => Array.isArray(props.data));
 
 const valueClass = computed(() => {
-  if (typeof props.data === 'string') return 'text-emerald-600';
-  if (typeof props.data === 'number') return 'text-orange-500';
-  if (typeof props.data === 'boolean') return 'text-blue-500 font-medium';
-  if (props.data === null) return 'text-slate-400 italic';
-  return 'text-slate-800';
+  if (typeof props.data === 'string') return 'text-emerald-600 dark:text-emerald-400';
+  if (typeof props.data === 'number') return 'text-orange-500 dark:text-orange-400';
+  if (typeof props.data === 'boolean') return 'text-blue-500 dark:text-blue-400 font-medium';
+  if (props.data === null) return 'text-on-surface-variant italic';
+  return 'text-on-surface';
 });
 
 const formatValue = (val) => {

@@ -45,7 +45,7 @@ const goBack = () => {
   <div class="h-full flex flex-col bg-background transition-colors duration-300">
 
     <!-- 返回按钮 -->
-    <div class="flex-shrink-0 flex items-center py-3 px-6">
+    <div class="shrink-0 flex items-center py-3 px-6">
       <div
           @click="goBack"
           class="inline-flex items-center text-sm font-medium transition-all py-2 px-3 -ml-3 rounded-lg
