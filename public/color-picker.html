@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>颜色选择器复刻</title>
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --bg-light: #f8f9fa;
+            --border-color: #e9ecef;
+            --text-main: #333;
+            --text-muted: #6c757d;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --current-color: #FF4D4F;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red);
+            border-radius: 8px;
+        }
+
+        .title-section h1 {
+            font-size: 20px;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .title-section p {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: white;
+            font-size: 13px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-main);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+        }
+
+        /* Main Content Grid */
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr 220px;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--text-main);
+        }
+
+        /* Left: Color Picker Area */
+        .picker-area {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .color-map {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(to bottom, transparent, black),
+            linear-gradient(to right, white, transparent),
+            red;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .map-pointer {
+            width: 12px;
+            height: 12px;
+            border: 2px solid white;
+            border-radius: 50%;
+            position: absolute;
+            top: 10%;
+            right: 10%;
+            box-shadow: 0 0 4px rgba(0,0,0,0.5);
+        }
+
+        .hue-slider {
+            width: 100%;
+            height: 12px;
+            background: linear-gradient(to right, red, #ff0, lime, cyan, blue, #f0f, red);
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .slider-thumb {
+            width: 6px;
+            height: 18px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            position: absolute;
+            top: -3px;
+            left: 50%;
+        }
+
+        .opacity-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .opacity-slider {
+            flex-grow: 1;
+            height: 12px;
+            background: linear-gradient(to right, transparent, var(--current-color)),
+            repeating-conic-gradient(#eee 0% 25%, transparent 0% 50%) 50% / 8px 8px;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        /* Middle: Color Values */
+        .values-area {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .value-row {
+            display: grid;
+            grid-template-columns: 60px 1fr 30px;
+            align-items: center;
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 4px 12px;
+        }
+
+        .value-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .value-input {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            color: var(--text-main);
+            padding: 6px;
+        }
+
+        .copy-icon {
+            cursor: pointer;
+            color: var(--text-muted);
+            opacity: 0.6;
+        }
+
+        /* Right: Preview */
+        .preview-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .preview-box {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .preview-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .color-rect {
+            width: 100%;
+            height: 60px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        .color-code-text {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Bottom: Contrast Checker */
+        .contrast-checker {
+            border-top: 1px solid var(--border-color);
+            padding-top: 24px;
+        }
+
+        .contrast-grid {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .color-input-box {
+            background: var(--bg-light);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 280px;
+        }
+
+        .swatch {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+        }
+
+        .swap-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            background: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .contrast-result {
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .ratio-val {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        .status-tags {
+            margin-top: 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .tag {
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+
+        .tag-pass { color: #f5a623; }
+        .tag-fail { color: #999; }
+
+        .wcag-note {
+            margin-top: 20px;
+            font-size: 11px;
+            color: var(--text-muted);
+            display: flex;
+            gap: 15px;
+        }
+
+        /* Helper for the Hue vertical slider in original image */
+        .hue-vertical {
+            width: 12px;
+            height: 200px;
+            background: linear-gradient(to bottom, red, #ff0, lime, cyan, blue, #f0f, red);
+            border-radius: 6px;
+            position: relative;
+            margin-left: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="header">
+        <div class="title-section">
+            <div class="logo-icon"></div>
+            <div>
+                <h1>颜色选择器</h1>
+                <p>在不同的颜色格式之间进行转换，支持常见颜色格式和实时预览。</p>
+            </div>
+        </div>
+        <div class="action-btns">
+            <button class="btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                清空
+            </button>
+            <button class="btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                复制结果
+            </button>
+            <button class="btn btn-primary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                下载结果
+            </button>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <div class="picker-area">
+            <div class="section-title">选择颜色</div>
+            <div style="display: flex;">
+                <div class="color-map">
+                    <div class="map-pointer"></div>
+                </div>
+                <div class="hue-vertical">
+                    <div class="slider-thumb" style="width: 18px; height: 6px; left: -3px; top: 15%;"></div>
+                </div>
+            </div>
+            <div class="opacity-row">
+                <div class="opacity-slider">
+                    <div class="slider-thumb" style="left: 95%;"></div>
+                </div>
+                <span style="font-size: 12px; color: #666; width: 40px;">100%</span>
+            </div>
+        </div>
+
+        <div class="values-area">
+            <div class="section-title">颜色值</div>
+            <div class="value-row">
+                <span class="value-label">HEX</span>
+                <input class="value-input" value="#FF4D4F">
+                <span class="copy-icon">📋</span>
+            </div>
+            <div class="value-row">
+                <span class="value-label">RGB</span>
+                <input class="value-input" value="rgb(255, 77, 79)">
+                <span class="copy-icon">📋</span>
+            </div>
+            <div class="value-row">
+                <span class="value-label">RGBA</span>
+                <input class="value-input" value="rgba(255, 77, 79, 1)">
+                <span class="copy-icon">📋</span>
+            </div>
+            <div class="value-row">
+                <span class="value-label">HSL</span>
+                <input class="value-input" value="hsl(0, 100%, 65%)">
+                <span class="copy-icon">📋</span>
+            </div>
+            <div class="value-row">
+                <span class="value-label">HSLA</span>
+                <input class="value-input" value="hsla(0, 100%, 65%, 1)">
+                <span class="copy-icon">📋</span>
+            </div>
+            <div class="value-row">
+                <span class="value-label">CMYK</span>
+                <input class="value-input" value="cmyk(0%, 70%, 69%, 0%)">
+                <span class="copy-icon">📋</span>
+            </div>
+        </div>
+
+        <div class="preview-area">
+            <div class="section-title">颜色预览</div>
+            <div class="preview-box">
+                <div class="preview-label">当前颜色</div>
+                <div class="color-rect" style="background-color: #FF4D4F;"></div>
+                <div class="color-code-text">#FF4D4F</div>
+            </div>
+            <div class="preview-box">
+                <div class="preview-label">背景颜色</div>
+                <div class="color-rect" style="background-color: #FFFFFF; border: 1px solid #eee;"></div>
+                <div class="color-code-text">#FFFFFF</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="contrast-checker">
+        <div class="section-title">对比度检查 (WCAG 2.1)</div>
+        <div class="contrast-grid">
+            <div>
+                <div style="font-size: 12px; color: #666; margin-bottom: 5px;">前景色</div>
+                <div class="color-input-box">
+                    <div class="swatch" style="background-color: #FF4D4F;"></div>
+                    <span style="font-size: 14px;">#FF4D4F</span>
+                </div>
+            </div>
+
+            <div class="swap-btn" style="margin-top: 18px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 16V4M7 4L3 8M7 4L11 8M17 8v12M17 20l4-4M17 20l-4-4"></path></svg>
+            </div>
+
+            <div>
+                <div style="font-size: 12px; color: #666; margin-bottom: 5px;">背景色</div>
+                <div class="color-input-box">
+                    <div class="swatch" style="background-color: #FFFFFF; border: 1px solid #eee;"></div>
+                    <span style="font-size: 14px;">#FFFFFF</span>
+                </div>
+            </div>
+
+            <div class="contrast-result">
+                <div style="font-size: 12px; color: #666;">对比度</div>
+                <div class="ratio-val">4.00 : 1</div>
+                <div class="status-tags">
+                    <span class="tag tag-pass">AA (大号文本)</span>
+                    <span class="tag tag-fail">未通过 AAA</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="wcag-note">
+            <span>ⓘ WCAG 标准:</span>
+            <span>AA ≥ 4.5:1 (普通文本)</span>
+            <span>AA ≥ 3:1 (大号文本)</span>
+            <span>AAA ≥ 7:1 (普通文本)</span>
+            <span>AAA ≥ 4.5:1 (大号文本)</span>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
