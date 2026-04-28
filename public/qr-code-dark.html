@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>二维码生成工具 - 深色版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0066ff",
+                        "background": "#0a0a0b",
+                        "surface": "#121214",
+                        "surface-container": "#1c1c1f",
+                        "surface-container-high": "#252529",
+                        "on-surface": "#f1f1f1",
+                        "on-surface-variant": "#a1a1aa",
+                        "outline": "#3f3f46",
+                        "outline-variant": "#27272a"
+                    },
+                    fontFamily: {
+                        sans: ["Manrope", "sans-serif"],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0a0a0b; color: #f1f1f1; }
+        .card-glow:hover {
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="p-6 md:p-12">
+
+<div class="max-w-6xl mx-auto space-y-6">
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+        <div class="bg-surface-container rounded-xl border border-outline-variant p-6 card-glow transition-all duration-300">
+            <h2 class="text-lg font-bold text-on-surface mb-6 flex items-center gap-2">
+                <i data-lucide="edit-3" class="w-5 h-5 text-primary"></i> 输入内容
+            </h2>
+
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-on-surface-variant mb-2">内容类型</label>
+                    <div class="relative">
+                        <select class="w-full bg-surface-container-high border border-outline-variant rounded-lg px-4 py-2.5 appearance-none focus:outline-none focus:ring-1 focus:ring-primary text-on-surface">
+                            <option>文本 / 链接</option>
+                            <option>WiFi</option>
+                            <option>名片</option>
+                        </select>
+                        <i data-lucide="chevron-down" class="absolute right-3 top-3 w-4 h-4 text-on-surface-variant"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-on-surface-variant mb-2">内容详情</label>
+                    <div class="relative">
+                        <textarea class="w-full bg-surface-container-high border border-outline-variant rounded-lg px-4 py-3 h-64 focus:outline-none focus:ring-1 focus:ring-primary resize-none text-on-surface placeholder:text-on-surface-variant/50">https://toolbox.example.com</textarea>
+                        <span class="absolute bottom-3 right-4 text-xs text-on-surface-variant">27 / 2000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-surface-container rounded-xl border border-outline-variant p-6 card-glow transition-all duration-300 flex flex-col">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-lg font-bold text-on-surface">预览中心</h2>
+                <div class="flex gap-3">
+                    <button class="flex items-center text-sm text-on-surface-variant hover:text-primary transition-colors">
+                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> 清空
+                    </button>
+                    <button class="flex items-center text-sm text-primary hover:brightness-110 transition-all">
+                        <i data-lucide="refresh-cw" class="w-4 h-4 mr-1"></i> 实时刷新
+                    </button>
+                </div>
+            </div>
+
+            <div class="flex-grow flex items-center justify-center py-8">
+                <div class="p-4 bg-white rounded-xl shadow-lg shadow-primary/5">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://toolbox.example.com" alt="QR Code" class="w-48 h-48">
+                </div>
+            </div>
+
+            <div class="mt-4 p-4 bg-surface-container-high rounded-lg border border-outline-variant flex justify-between items-center">
+                <div class="flex items-center text-sm text-on-surface-variant truncate mr-4">
+                    <i data-lucide="link" class="w-4 h-4 mr-2 flex-shrink-0"></i>
+                    <span class="truncate">https://toolbox.example.com</span>
+                </div>
+                <button class="text-on-surface-variant hover:text-primary transition-colors">
+                    <i data-lucide="copy" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-surface-container rounded-xl border border-outline-variant p-6 card-glow transition-all duration-300">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-lg font-bold text-on-surface">高级样式定制</h2>
+            <label class="flex items-center text-sm text-on-surface-variant cursor-pointer group">
+                <input type="checkbox" class="mr-2 w-4 h-4 rounded border-outline-variant bg-surface-container-high text-primary focus:ring-primary">
+                <span class="group-hover:text-on-surface transition-colors">圆角样式</span>
+            </label>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            <div class="space-y-2">
+                <label class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">纠错等级</label>
+                <select class="w-full bg-surface-container-high border border-outline-variant rounded-lg px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary">
+                    <option>M (适中)</option>
+                    <option>H (最高)</option>
+                </select>
+            </div>
+            <div class="space-y-2">
+                <label class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">尺寸</label>
+                <select class="w-full bg-surface-container-high border border-outline-variant rounded-lg px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary">
+                    <option>300 x 300</option>
+                    <option>500 x 500</option>
+                </select>
+            </div>
+            <div class="space-y-2">
+                <label class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">前景色</label>
+                <div class="flex items-center bg-surface-container-high border border-outline-variant rounded-lg px-3 py-2 space-x-2">
+                    <div class="w-4 h-4 rounded bg-primary"></div>
+                    <span class="text-sm text-on-surface">#0066FF</span>
+                </div>
+            </div>
+            <div class="space-y-2">
+                <label class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">背景色</label>
+                <div class="flex items-center bg-surface-container-high border border-outline-variant rounded-lg px-3 py-2 space-x-2">
+                    <div class="w-4 h-4 rounded border border-outline-variant bg-white"></div>
+                    <span class="text-sm text-on-surface">#FFFFFF</span>
+                </div>
+            </div>
+            <div class="space-y-2">
+                <label class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">内边距</label>
+                <select class="w-full bg-surface-container-high border border-outline-variant rounded-lg px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary">
+                    <option>中 (16px)</option>
+                </select>
+            </div>
+            <div class="space-y-2">
+                <label class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">LOGO</label>
+                <div class="w-full border border-dashed border-outline-variant rounded-lg py-2 flex items-center justify-center text-sm text-on-surface-variant cursor-pointer hover:border-primary hover:bg-primary/5 transition-all">
+                    <i data-lucide="image-plus" class="w-4 h-4 mr-2"></i> 上传
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bg-surface-container rounded-xl border border-outline-variant p-6 card-glow transition-all duration-300">
+        <h2 class="text-lg font-bold text-on-surface mb-6">资源导出</h2>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <button class="flex items-center justify-center bg-primary text-white py-3 rounded-lg font-semibold hover:brightness-110 transition-all active:scale-[0.98]">
+                <i data-lucide="download" class="w-4 h-4 mr-2"></i> 下载 PNG
+            </button>
+            <button class="flex items-center justify-center bg-surface-container-high border border-outline-variant text-on-surface py-3 rounded-lg hover:bg-outline-variant transition-colors">
+                <i data-lucide="file-type" class="w-4 h-4 mr-2"></i> 下载 JPG
+            </button>
+            <button class="flex items-center justify-center bg-surface-container-high border border-outline-variant text-on-surface py-3 rounded-lg hover:bg-outline-variant transition-colors">
+                <i data-lucide="code-2" class="w-4 h-4 mr-2"></i> 导出 SVG
+            </button>
+            <button class="flex items-center justify-center bg-surface-container-high border border-outline-variant text-on-surface py-3 rounded-lg hover:bg-outline-variant transition-colors">
+                <i data-lucide="share-2" class="w-4 h-4 mr-2"></i> 复制到剪贴板
+            </button>
+        </div>
+
+        <div class="mt-8 flex items-start gap-3 text-sm text-primary/80 bg-primary/5 p-4 rounded-lg border border-primary/10">
+            <i data-lucide="shield-check" class="w-5 h-5 flex-shrink-0"></i>
+            <p>隐私提示：所有二维码生成均在本地浏览器内完成，您的输入数据不会上传至任何服务器，确保隐私安全。</p>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // 初始化图标
+    lucide.createIcons();
+</script>
+</body>
+</html>

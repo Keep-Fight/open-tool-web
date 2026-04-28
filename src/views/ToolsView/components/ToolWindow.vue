@@ -93,8 +93,9 @@ const goBack = () => {
         </header>
 
         <!-- 工具内容 - flex-1 撑满剩余高度 -->
-        <div class="flex-1 overflow-auto ">
-          <component :is="activeTool" v-if="activeTool" />
+        <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
+          <component :is="activeTool" v-if="activeTool" class="flex-1" />
+
           <div v-else class="h-full flex flex-col items-center justify-center text-outline">
             <span class="material-symbols-outlined text-4xl mb-2 animate-pulse">construction</span>
             <p class="font-headline font-bold">工具正在维护或开发中...</p>
