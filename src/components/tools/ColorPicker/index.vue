@@ -1,12 +1,10 @@
 <script setup>
 import { ref, reactive, computed, onMounted, onUnmounted } from 'vue';
 
-// --- 基础状态 ---
 const currentColor = ref('#FF4D4F');
 const bgColor = ref('#FFFFFF');
-const colorState = reactive({ h: 0, s: 100, v: 100 });
+const colorState = reactive({ h: 0, s: 100, v: 100, a: 1 });
 
-// --- 颜色转换工具函数 ---
 const hexToRgb = (hex) => {
   const r = parseInt(hex.slice(1, 3), 16);
   const g = parseInt(hex.slice(3, 5), 16);
@@ -14,7 +12,6 @@ const hexToRgb = (hex) => {
   return [r, g, b];
 };
 
-// --- 对比度核心算法 ---
 const getLuminance = (r, g, b) => {
   const a = [r, g, b].map(v => {
     v /= 255;
@@ -28,12 +25,9 @@ const contrastData = computed(() => {
   const rgb2 = hexToRgb(bgColor.value);
   const l1 = getLuminance(...rgb1);
   const l2 = getLuminance(...rgb2);
-
   const ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
-  const roundedRatio = ratio.toFixed(2);
-
   return {
-    ratio: roundedRatio,
+    ratio: ratio.toFixed(2),
     aaSmall: ratio >= 4.5,
     aaLarge: ratio >= 3,
     aaaSmall: ratio >= 7,
@@ -41,22 +35,15 @@ const contrastData = computed(() => {
   };
 });
 
-// --- 交互操作 ---
 const swapColors = () => {
   const temp = currentColor.value;
   currentColor.value = bgColor.value;
   bgColor.value = temp;
 };
 
-// (此处省略之前的 HSV 拖拽逻辑代码，保持逻辑一致...)
-// --- 状态管理 ---
 const svPanel = ref(null);
 const isDraggingSV = ref(false);
-const isDraggingHue = ref(false);
 
-
-
-// --- 核心数学计算 (HSV to RGB/HEX/HSL) ---
 const hsvToRgb = (h, s, v) => {
   s /= 100; v /= 100;
   const i = Math.floor(h / 60);
@@ -93,7 +80,6 @@ const rgbToCmyk = (r, g, b) => {
   return [c, m, y, k];
 };
 
-// --- 计算属性 ---
 const rgb = computed(() => hsvToRgb(colorState.h, colorState.s, colorState.v));
 const hex = computed(() => rgbToHex(...rgb.value));
 const hsl = computed(() => `hsl(${colorState.h}, ${colorState.s}%, ${Math.round(colorState.v/2)}%)`);
@@ -102,7 +88,6 @@ const cmyk = computed(() => {
   return `cmyk(${c}%, ${m}%, ${y}%, ${k}%)`;
 });
 
-// --- 交互逻辑 ---
 const handleSVMove = (e) => {
   if (!svPanel.value) return;
   const rect = svPanel.value.getBoundingClientRect();
@@ -112,15 +97,12 @@ const handleSVMove = (e) => {
   colorState.v = Math.max(0, Math.min(100, (1 - y) * 100));
 };
 
-const handleHueMove = (e, isVertical = true) => {
+const handleHueMove = (e) => {
   const rect = e.currentTarget.getBoundingClientRect();
-  let percent = isVertical
-      ? (e.clientY - rect.top) / rect.height
-      : (e.clientX - rect.left) / rect.width;
+  let percent = (e.clientY - rect.top) / rect.height;
   colorState.h = Math.max(0, Math.min(360, percent * 360));
 };
 
-// 全局鼠标监听用于拖拽
 const onMouseMove = (e) => {
   if (isDraggingSV.value) handleSVMove(e);
 };
@@ -139,22 +121,21 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-6 flex justify-center items-center transition-colors">
+  <div class="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-6 flex justify-center items-center transition-colors font-sans">
     <div class="w-full max-w-5xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl p-8">
 
-      <div class="flex justify-between items-center mb-8">
+      <header class="flex justify-between items-center mb-10">
         <div class="flex items-center gap-3">
           <div class="w-10 h-10 rounded-lg bg-[conic-gradient(red,yellow,lime,aqua,blue,magenta,red)]"></div>
           <h1 class="text-xl font-bold dark:text-white">颜色选择器</h1>
         </div>
         <div class="flex gap-2">
-          <button class="px-4 py-2 text-sm border dark:border-zinc-700 dark:text-zinc-300 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors">复制结果</button>
-          <button class="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 transition-colors">下载结果</button>
+          <button class="btn-secondary">复制结果</button>
+          <button class="btn-primary">下载结果</button>
         </div>
-      </div>
+      </header>
 
-      <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr_240px] gap-10">
-
+      <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-10 mb-12">
         <section>
           <h2 class="text-xs font-black uppercase text-zinc-400 mb-4 tracking-widest">选择颜色</h2>
           <div class="flex gap-4">
@@ -204,38 +185,19 @@ onUnmounted(() => {
               <button class="opacity-0 group-hover:opacity-100 text-zinc-400 hover:text-blue-500 transition-opacity">📋</button>
             </div>
           </div>
-        </section>
 
-        <section class="space-y-6">
-          <h2 class="text-xs font-black uppercase text-zinc-400 mb-4 tracking-widest">预览</h2>
-          <div class="p-4 bg-zinc-50 dark:bg-zinc-800/30 border border-zinc-100 dark:border-zinc-800 rounded-2xl">
-            <div class="h-20 w-full rounded-lg shadow-inner mb-2 transition-colors duration-200" :style="{ backgroundColor: hex, opacity: colorState.a }"></div>
-            <p class="text-center font-mono text-xs dark:text-zinc-400">{{ hex }}</p>
+          <h2 class="text-xs font-black uppercase text-zinc-400 mb-4 mt-8 tracking-widest">预览</h2>
+          <div class="flex gap-4">
+            <div class="flex-1 p-4 bg-zinc-50 dark:bg-zinc-800/30 border border-zinc-100 dark:border-zinc-800 rounded-2xl">
+              <div class="h-20 w-full rounded-lg shadow-inner mb-2 transition-colors duration-200" :style="{ backgroundColor: hex, opacity: colorState.a }"></div>
+              <p class="text-center font-mono text-xs dark:text-zinc-400">{{ hex }}</p>
+            </div>
+            <div class="flex-1 p-4 bg-zinc-50 dark:bg-zinc-800/30 border border-zinc-100 dark:border-zinc-800 rounded-2xl">
+              <div class="h-20 w-full rounded-lg shadow-inner border border-zinc-200 dark:border-zinc-700 bg-white mb-2"></div>
+              <p class="text-center font-mono text-xs dark:text-zinc-400">#FFFFFF</p>
+            </div>
           </div>
-          <div class="p-4 bg-zinc-50 dark:bg-zinc-800/30 border border-zinc-100 dark:border-zinc-800 rounded-2xl">
-            <div class="h-20 w-full rounded-lg shadow-inner border border-zinc-200 dark:border-zinc-700 bg-white mb-2"></div>
-            <p class="text-center font-mono text-xs dark:text-zinc-400">#FFFFFF</p>
-          </div>
         </section>
-
-      </div>
-    </div>
-  </div>
-  <div class="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-6 flex justify-center items-center transition-colors font-sans">
-    <div class="w-full max-w-5xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl shadow-2xl p-8">
-
-      <header class="flex justify-between items-center mb-10">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 rounded-lg bg-[conic-gradient(red,yellow,lime,aqua,blue,magenta,red)]"></div>
-          <h1 class="text-xl font-bold dark:text-white">颜色选择器</h1>
-        </div>
-        <div class="flex gap-2">
-          <button class="btn-secondary">复制结果</button>
-          <button class="btn-primary">下载结果</button>
-        </div>
-      </header>
-
-      <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr_240px] gap-10 mb-12">
       </div>
 
       <footer class="pt-8 border-t border-zinc-100 dark:border-zinc-800">
@@ -294,7 +256,6 @@ onUnmounted(() => {
 <style scoped>
 @reference "@/style.css";
 
-/* 使用 Tailwind 4 的类组合建议 */
 .color-input-field {
   @apply flex items-center gap-3 px-4 py-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-xl border border-zinc-200 dark:border-zinc-800 focus-within:border-blue-500 transition-colors;
 }
