@@ -1,30 +1,38 @@
 <script setup>
-import { ref, reactive, computed, onMounted } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
+import Randexp from 'randexp';
 
 // --- 状态定义 ---
 const config = reactive({
   count: 10,
-  length: 32,
+  length: 100,
   type: 'UUID(v4)',
-  includeHyphen: true,
   uppercase: false,
-  noDuplicate: true,
   lowercase: false,
-  enableLength: false,
+  noDuplicate: true,
   removeHyphen: false,
   prefix: '',
-  suffix: ''
+  suffix: '',
+  regex: ''
 });
 
 // 选项配置
-const options = ref( {
-  includeHyphen: '包含连字符',
+const typeOptions = [
+  { value: 'UUID(v4)', label: 'UUID(v4)' },
+  { value: '随机数字', label: '随机数字' },
+  { value: '随机字符串', label: '随机字符串(不含特殊字符)' },
+  { value: 'NanoID', label: 'NanoID' },
+  { value: 'Snowflake', label: 'Snowflake' },
+  { value: 'Snowflake(UUID)', label: 'Snowflake(UUID)' },
+  { value: '正则表达式', label: '正则表达式' }
+];
+
+const options = ref({
   uppercase: '大写输出',
-  lowercase:'小写输出',
-  noDuplicate: '唯一性' ,
-  enableLength: '指定长度(从前开始截取)',
+  lowercase: '小写输出',
+  noDuplicate: '唯一性',
   removeHyphen: '去除连字符(-)'
-})
+});
 
 const results = ref([]);
 const stats = reactive({
@@ -32,7 +40,70 @@ const stats = reactive({
   total: 0
 });
 
-// --- 核心逻辑 ---
+// --- 工具函数 ---
+const CHARACTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+const NUMBERS = '0123456789';
+
+// 生成指定长度的随机字符串
+const generateRandomString = (length) => {
+  let result = '';
+  for (let i = 0; i < length; i++) {
+    result += CHARACTERS.charAt(Math.floor(Math.random() * CHARACTERS.length));
+  }
+  return result;
+};
+
+// 生成指定长度的随机数字
+const generateRandomNumber = (length) => {
+  let result = '';
+  // 确保第一位不是0
+  result += NUMBERS.charAt(Math.floor(Math.random() * 9) + 1);
+  for (let i = 1; i < length; i++) {
+    result += NUMBERS.charAt(Math.floor(Math.random() * 10));
+  }
+  return result;
+};
+
+// 生成 NanoID
+const generateNanoID = (length = 21) => {
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+  let id = '';
+  const bytes = crypto.getRandomValues(new Uint8Array(length));
+  for (let i = 0; i < length; i++) {
+    id += alphabet[bytes[i] & 63];
+  }
+  return id;
+};
+
+// 生成 Snowflake ID
+let snowflakeEpoch = Date.now();
+let snowflakeLastTime = 0;
+let snowflakeSequence = 0;
+
+const generateSnowflake = () => {
+  const timestamp = Date.now() - snowflakeEpoch;
+  if (timestamp === snowflakeLastTime) {
+    snowflakeSequence = (snowflakeSequence + 1) & 4095;
+  } else {
+    snowflakeSequence = 0;
+    snowflakeLastTime = timestamp;
+  }
+  const id = (BigInt(timestamp) << 22n) | (BigInt(0) << 12n) | BigInt(snowflakeSequence);
+  return id.toString();
+};
+
+// 生成 Snowflake 格式的 UUID (保留 Snowflake 的时间戳结构但格式为 UUID)
+const generateSnowflakeUUID = () => {
+  const timestamp = Date.now() - snowflakeEpoch;
+  const machineId = Math.floor(Math.random() * 4095);
+  const seq = snowflakeSequence & 4095;
+  const part1 = (timestamp & 0xFFFFFFFF).toString(16).padStart(8, '0');
+  const part2 = ((machineId << 8) | seq).toString(16).padStart(4, '0');
+  const part3 = '4' + Math.random().toString(16).slice(2, 5);
+  const part4 = ((Math.random() * 0x4000) | 0x8000).toString(16).slice(-4);
+  const part5 = Math.random().toString(16).slice(2, 14);
+  return `${part1}-${part2}-${part3}-${part4}-${part5}`;
+};
 
 // 生成 UUID v4
 const generateUUID = () => {
@@ -42,25 +113,104 @@ const generateUUID = () => {
     d = Math.floor(d / 16);
     return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
   });
+  return uuid;
+};
 
-  let finalId = uuid;
-  if (!config.includeHyphen) finalId = finalId.replace(/-/g, '');
-  if (config.uppercase) finalId = finalId.toUpperCase();
+// 根据正则表达式生成 - 使用 randexp.js
+const generateByRegex = (pattern) => {
+  try {
+    const randexp = new Randexp(pattern);
+    return randexp.gen();
+  } catch {
+    return generateRandomString(config.length);
+  }
+};
 
-  return `${config.prefix}${finalId}${config.suffix}`;
+// 处理 ID 格式（大小写、连字符等）
+const formatId = (id) => {
+  let result = id;
+
+  // 处理连字符（仅对 UUID 类型有效）
+  if (config.type === 'UUID(v4)' || config.type === 'Snowflake(UUID)') {
+    if (config.removeHyphen) {
+      result = result.replace(/-/g, '');
+    }
+  }
+
+  // 处理大小写
+  if (config.uppercase) {
+    result = result.toUpperCase();
+  } else if (config.lowercase) {
+    result = result.toLowerCase();
+  }
+
+  // 添加前后缀
+  result = `${config.prefix}${result}${config.suffix}`;
+
+  // 截断长度
+  if (config.noDuplicate && result.length > config.length) {
+    result = result.slice(0, config.length);
+  }
+
+  return result;
+};
+
+// 生成单个 ID
+const generateId = () => {
+  let id = '';
+
+  switch (config.type) {
+    case 'UUID(v4)':
+      id = generateUUID();
+      break;
+    case '随机数字':
+      id = generateRandomNumber(config.length);
+      break;
+    case '随机字符串':
+      id = generateRandomString(config.length);
+      break;
+    case 'NanoID':
+      id = generateNanoID(config.length);
+      break;
+    case 'Snowflake':
+      id = generateSnowflake();
+      break;
+    case 'Snowflake(UUID)':
+      id = generateSnowflakeUUID();
+      break;
+    case '正则表达式':
+      id = generateByRegex(config.regex);
+      break;
+    default:
+      id = generateUUID();
+  }
+
+  return formatId(id);
 };
 
 // 执行生成动作
 const handleGenerate = () => {
   const start = performance.now();
   const newResults = [];
-  const count = Math.min(Math.max(config.count, 1), 100); // 限制在 1-100 之间
+  const count = Math.min(Math.max(config.count, 1), 100);
+  const seen = new Set();
 
   for (let i = 0; i < count; i++) {
-    newResults.push({
-      id: generateUUID(),
-      copied: false
-    });
+    let id = generateId();
+
+    // 唯一性处理
+    if (config.noDuplicate) {
+      let attempts = 0;
+      while (seen.has(id) && attempts < 100) {
+        id = generateId();
+        attempts++;
+      }
+      seen.add(id);
+    } else {
+      seen.add(id);
+    }
+
+    newResults.push({ id, copied: false });
   }
 
   results.value = newResults;
@@ -86,7 +236,6 @@ const copyAll = async () => {
   const allIds = results.value.map(r => r.id).join('\n');
   try {
     await navigator.clipboard.writeText(allIds);
-    alert('全部 ID 已复制到剪贴板');
   } catch (err) {
     console.error('复制失败', err);
   }
@@ -127,13 +276,7 @@ onMounted(() => {
                 <label class="text-sm font-bold text-slate-700 dark:text-zinc-300">ID 类型</label>
                 <div class="relative">
                   <select v-model="config.type" class="w-full px-4 py-2.5 text-sm border border-slate-200 dark:border-zinc-700 rounded-lg appearance-none bg-white dark:bg-zinc-800 dark:text-zinc-100 outline-none shadow-sm">
-                    <option>随机数字</option>
-                    <option>随机字符串(不含特殊字符)</option>
-                    <option>UUID(v4)</option>
-                    <option>NanoID</option>
-                    <option>Snowflake</option>
-                    <option>Snowflake(UUID)</option>
-                    <option>正则表达式</option>
+                    <option v-for="opt in typeOptions" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
                   </select>
                   <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
@@ -145,7 +288,7 @@ onMounted(() => {
 
             <div class="grid grid-cols-2 gap-4">
             <div class="space-y-2">
-              <label class="text-sm font-bold text-slate-700 dark:text-zinc-300">ID 长度</label>
+              <label class="text-sm font-bold text-slate-700 dark:text-zinc-300">ID 长度(从前往后截取)</label>
               <div class="relative">
                 <div class="flex border border-slate-200 dark:border-zinc-700 rounded-lg overflow-hidden bg-white dark:bg-zinc-800 shadow-sm">
                   <input v-model.number="config.length" type="number" class="flex-1 px-4 py-2 text-sm outline-none dark:text-zinc-100 bg-transparent">
@@ -157,7 +300,7 @@ onMounted(() => {
 
               <div class="space-y-2">
                 <label class="text-sm font-bold text-slate-700 dark:text-zinc-300">正则表达式</label>
-                <input v-model="config.prefix" type="text" placeholder="例如：/1[3-9]\d{9}/" class="w-full px-4 py-2 text-sm border border-slate-200 dark:border-zinc-700 rounded-lg outline-none bg-white dark:bg-zinc-800 dark:text-zinc-100 shadow-sm">
+                <input v-model="config.regex" type="text" placeholder="例如：/1[3-9]\d{9}/" class="w-full px-4 py-2 text-sm border border-slate-200 dark:border-zinc-700 rounded-lg outline-none bg-white dark:bg-zinc-800 dark:text-zinc-100 shadow-sm">
               </div>
 
             </div>
