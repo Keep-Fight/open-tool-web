@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ID 生成器 - 复刻版</title>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        /* 针对输入框和按钮的细微样式微调 */
+        .custom-shadow {
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="p-6 md:p-10">
+
+<div class="max-w-6xl mx-auto bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+    <header class="flex justify-between items-center p-6 border-b border-slate-50">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 font-bold text-xl border border-indigo-100">
+                ID
+            </div>
+            <div>
+                <h1 class="text-xl font-bold text-slate-800">ID 生成器</h1>
+                <p class="text-sm text-slate-400">快速生成各种类型的唯一 ID，满足不同场景的需求。</p>
+            </div>
+        </div>
+        <div class="flex gap-3">
+            <button class="px-4 py-2 text-sm text-slate-600 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                清空结果
+            </button>
+            <button class="px-6 py-2 text-sm bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" /></svg>
+                生成 ID
+            </button>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3">
+        <aside class="p-8 border-r border-slate-50 bg-slate-50/30">
+            <div class="space-y-6">
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-slate-700">生成数量</label>
+                    <div class="flex border border-slate-200 rounded-lg overflow-hidden bg-white custom-shadow">
+                        <input type="number" value="10" class="flex-1 px-4 py-2 text-sm outline-none">
+                        <button class="px-3 border-l border-slate-200 text-slate-400 hover:bg-slate-50">—</button>
+                        <button class="px-3 border-l border-slate-200 text-slate-400 hover:bg-slate-50">+</button>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-slate-700">ID 类型</label>
+                    <div class="relative">
+                        <select class="w-full px-4 py-2.5 text-sm border border-slate-200 rounded-lg appearance-none bg-white outline-none custom-shadow">
+                            <option>UUID (v4)</option>
+                            <option>NanoID</option>
+                            <option>Snowflake</option>
+                        </select>
+                        <div class="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <label class="text-sm font-bold text-slate-700">选项</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="checkbox" checked class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                            <span class="text-sm text-slate-600 group-hover:text-slate-800">包含连字符</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="checkbox" class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                            <span class="text-sm text-slate-600 group-hover:text-slate-800">大写输出</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer group">
+                            <input type="checkbox" checked class="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                            <span class="text-sm text-slate-600 group-hover:text-slate-800 flex items-center gap-1">
+                                无重复保证
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-slate-700">前缀（可选）</label>
+                    <input type="text" placeholder="例如：user_" class="w-full px-4 py-2 text-sm border border-slate-200 rounded-lg outline-none bg-white custom-shadow">
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-sm font-bold text-slate-700">后缀（可选）</label>
+                    <input type="text" placeholder="例如：_2024" class="w-full px-4 py-2 text-sm border border-slate-200 rounded-lg outline-none bg-white custom-shadow">
+                </div>
+
+                <button class="w-full flex justify-between items-center px-4 py-3 border border-slate-100 rounded-xl bg-white text-sm text-slate-500 hover:bg-slate-50 transition-colors mt-4">
+                    <div class="flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                        高级选项
+                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                </button>
+            </div>
+        </aside>
+
+        <main class="lg:col-span-2 p-8 bg-white">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-slate-800 font-bold">生成结果 <span class="text-slate-400 font-normal ml-1">(10 个)</span></h3>
+                <button class="text-blue-600 text-sm flex items-center gap-1 hover:underline">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                    复制全部
+                </button>
+            </div>
+
+            <div class="space-y-3">
+                <div class="flex items-center justify-between p-3.5 border border-slate-100 rounded-xl hover:bg-slate-50/50 transition-colors group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-xs text-slate-300 font-mono w-4">1</span>
+                        <span class="text-sm text-slate-700 font-mono">550e8400-e29b-41d4-a716-446655440000</span>
+                    </div>
+                    <button class="text-blue-500 text-xs flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        复制
+                    </button>
+                </div>
+
+                <div class="flex items-center justify-between p-3.5 border border-green-100 bg-green-50/30 rounded-xl transition-colors">
+                    <div class="flex items-center gap-4">
+                        <span class="text-xs text-slate-300 font-mono w-4">4</span>
+                        <span class="text-sm text-green-600 font-mono">8b7c6d5e-4f3a-4b2d-a1c6-9e8f7d6c5b4a</span>
+                    </div>
+                    <span class="text-green-600 text-xs flex items-center gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
+                        已复制
+                    </span>
+                </div>
+
+                <div v-for="i in 8" class="flex items-center justify-between p-3.5 border border-slate-100 rounded-xl hover:bg-slate-50 transition-colors group">
+                    <div class="flex items-center gap-4">
+                        <span class="text-xs text-slate-300 font-mono w-4">...</span>
+                        <span class="text-sm text-slate-700 font-mono">f47ac10b-58cc-4372-a567-0e02b2c3d479</span>
+                    </div>
+                    <button class="text-blue-500 text-xs flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">复制</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="p-4 px-8 border-t border-slate-50 bg-slate-50/10 flex justify-between items-center text-[11px] text-slate-400">
+        <div class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            已生成 10 个唯一 ID
+        </div>
+        <div class="flex items-center gap-1 font-mono uppercase tracking-tighter">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            耗时 32ms
+        </div>
+    </footer>
+</div>
+
+</body>
+</html>
