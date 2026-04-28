@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="dark" lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时间戳转换工具 - Open Toolbox</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0066ff",
+                        "background": "#0a0a0b",
+                        "surface": "#121214",
+                        "surface-container": "#1c1c1f",
+                        "surface-container-high": "#252529",
+                        "on-surface": "#f1f1f1",
+                        "on-surface-variant": "#a1a1aa",
+                        "outline": "#3f3f46",
+                        "outline-variant": "#27272a"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope", "sans-serif"],
+                        "body": ["Manrope", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body { background-color: #0a0a0b; color: #f1f1f1; font-family: 'Manrope', sans-serif; }
+        .card-glow:hover { box-shadow: 0 0 20px rgba(0, 102, 255, 0.1); }
+        .glass-effect { backdrop-filter: blur(12px); background: rgba(28, 28, 31, 0.8); }
+        input[readonly] { cursor: default; }
+    </style>
+</head>
+<body class="p-4 md:p-10">
+
+<div class="max-w-6xl mx-auto space-y-8">
+
+    <a href="#" class="flex items-center text-sm text-on-surface-variant hover:text-primary transition-colors mb-6 group">
+        <span class="material-symbols-outlined text-sm mr-1 group-hover:-translate-x-1 transition-transform">arrow_back</span>
+        返回工具箱
+    </a>
+
+    <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div class="flex gap-5">
+            <div class="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center border border-primary/20 shrink-0">
+                <span class="material-symbols-outlined text-4xl">schedule</span>
+            </div>
+            <div class="space-y-1">
+                <div class="flex items-center gap-3">
+                    <h1 class="text-3xl font-extrabold text-on-surface font-headline tracking-tight">时间戳转换工具</h1>
+                    <span class="text-[10px] bg-primary/20 text-primary px-2 py-0.5 rounded border border-primary/30 font-bold uppercase">Utility</span>
+                </div>
+                <p class="text-sm text-on-surface-variant max-w-md">支持时间戳与多种时间格式之间的转换，毫秒级或秒级时间戳，日期时间字符串等互相转换。</p>
+
+                <div class="flex gap-2 mt-4">
+                    <button class="flex items-center gap-1.5 px-4 py-2 bg-primary text-white rounded-lg text-xs font-bold shadow-lg shadow-primary/20">
+                        时间戳转换
+                    </button>
+                    <button class="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-all">
+                        <span class="material-symbols-outlined text-sm">calendar_month</span> 时间格式化
+                    </button>
+                    <button class="flex items-center gap-1.5 px-4 py-2 text-xs font-bold text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-lg transition-all">
+                        <span class="material-symbols-outlined text-sm">public</span> 时区转换
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex gap-3">
+            <button class="px-5 py-2.5 border border-outline-variant bg-surface-container text-sm text-on-surface hover:border-primary/50 rounded-xl transition-all flex items-center gap-2">
+                <span class="material-symbols-outlined text-lg">star</span> 收藏
+            </button>
+            <button class="px-5 py-2.5 border border-outline-variant bg-surface-container text-sm text-on-surface hover:border-primary/50 rounded-xl transition-all flex items-center gap-2">
+                <span class="material-symbols-outlined text-lg">share</span> 分享
+            </button>
+        </div>
+    </header>
+
+    <main class="bg-surface rounded-[2rem] border border-outline-variant p-8 md:p-12 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-[100px] -z-10"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 relative">
+
+            <div class="space-y-10">
+                <h2 class="text-xs font-black uppercase tracking-widest text-primary">输入时间</h2>
+
+                <div class="space-y-3">
+                    <label class="text-xs font-bold text-on-surface-variant">输入类型</label>
+                    <div class="relative">
+                        <select class="w-full bg-surface-container border border-outline-variant rounded-xl px-5 py-4 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/50 appearance-none transition-all">
+                            <option>当前时间</option>
+                            <option>时间戳 (ms)</option>
+                            <option>时间戳 (s)</option>
+                        </select>
+                        <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <label class="text-xs font-bold text-on-surface-variant">当前时间预览</label>
+                    <div class="bg-surface-container-high border border-outline rounded-3xl p-8 flex justify-between items-center group card-glow transition-all">
+                        <div>
+                            <div class="text-3xl font-extrabold text-on-surface tracking-tighter mb-2">2024-05-20 15:30:45</div>
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                                <span class="text-xs font-bold text-primary uppercase tracking-widest">北京时间 (UTC+8)</span>
+                            </div>
+                        </div>
+                        <button class="w-12 h-12 rounded-full bg-background border border-outline-variant flex items-center justify-center text-on-surface hover:text-primary hover:border-primary transition-all">
+                            <span class="material-symbols-outlined">refresh</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+                <div class="bg-surface border border-outline-variant shadow-2xl rounded-full p-3 text-primary">
+                    <span class="material-symbols-outlined text-2xl">sync_alt</span>
+                </div>
+                <div class="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-px w-px h-64 bg-gradient-to-b from-transparent via-outline-variant to-transparent"></div>
+            </div>
+
+            <div class="space-y-10">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xs font-black uppercase tracking-widest text-primary">转换结果</h2>
+                    <div class="flex items-center gap-3 w-1/2">
+                        <select class="w-full bg-surface-container border border-outline-variant rounded-lg px-3 py-2 text-xs text-on-surface-variant focus:outline-none focus:ring-1 focus:ring-primary appearance-none">
+                            <option>全部格式</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="space-y-5">
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <span class="text-xs font-medium text-on-surface-variant">毫秒时间戳 (ms)</span>
+                        <div class="col-span-2 relative group">
+                            <input type="text" value="1716197445000" readonly class="w-full bg-surface-container border border-outline-variant rounded-xl px-5 py-3 text-sm text-on-surface focus:border-primary transition-all">
+                            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined text-lg">content_copy</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <span class="text-xs font-medium text-on-surface-variant">秒级时间戳 (s)</span>
+                        <div class="col-span-2 relative group">
+                            <input type="text" value="1716197445" readonly class="w-full bg-surface-container border border-outline-variant rounded-xl px-5 py-3 text-sm text-on-surface focus:border-primary transition-all">
+                            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined text-lg">content_copy</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <div>
+                            <div class="text-xs font-medium text-on-surface-variant">日期时间</div>
+                            <div class="text-[10px] text-primary/60 font-mono">yyyy-MM-dd HH:mm:ss</div>
+                        </div>
+                        <div class="col-span-2 relative group">
+                            <input type="text" value="2024-05-20 15:30:45" readonly class="w-full bg-surface-container border border-outline-variant rounded-xl px-5 py-3 text-sm text-on-surface focus:border-primary transition-all">
+                            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined text-lg">content_copy</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-3 items-center gap-4">
+                        <span class="text-xs font-medium text-on-surface-variant">ISO 8601 (UTC)</span>
+                        <div class="col-span-2 relative group">
+                            <input type="text" value="2024-05-20T07:30:45.000Z" readonly class="w-full bg-surface-container border border-outline-variant rounded-xl px-5 py-3 text-sm text-on-surface focus:border-primary transition-all">
+                            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-primary transition-colors">
+                                <span class="material-symbols-outlined text-lg">content_copy</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <section class="bg-surface-container rounded-3xl border border-outline-variant p-8 space-y-8">
+        <div class="flex justify-between items-center">
+            <h3 class="text-sm font-bold text-on-surface flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-lg">lightbulb</span> 常用示例
+            </h3>
+            <button class="text-primary text-xs font-bold flex items-center gap-1 hover:underline">
+                更多示例 <span class="material-symbols-outlined text-sm">expand_more</span>
+            </button>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            <button class="px-4 py-3 bg-background border border-outline-variant rounded-xl text-xs text-on-surface-variant hover:border-primary/50 hover:text-on-surface transition-all">当前时间</button>
+            <button class="px-4 py-3 bg-background border border-outline-variant rounded-xl text-xs text-on-surface-variant hover:border-primary/50 hover:text-on-surface transition-all">ms时间戳 → 日期</button>
+            <button class="px-4 py-3 bg-background border border-outline-variant rounded-xl text-xs text-on-surface-variant hover:border-primary/50 hover:text-on-surface transition-all">s时间戳 → 日期</button>
+            <button class="px-4 py-3 bg-background border border-outline-variant rounded-xl text-xs text-on-surface-variant hover:border-primary/50 hover:text-on-surface transition-all">日期 → ms时间戳</button>
+            <button class="px-4 py-3 bg-background border border-outline-variant rounded-xl text-xs text-on-surface-variant hover:border-primary/50 hover:text-on-surface transition-all">日期 → s时间戳</button>
+            <button class="px-4 py-3 bg-background border border-outline-variant rounded-xl text-xs text-on-surface-variant hover:border-primary/50 hover:text-on-surface transition-all">ISO → 时间戳</button>
+        </div>
+
+        <div class="bg-primary/5 border border-primary/10 rounded-2xl p-5 flex items-start gap-4">
+            <div class="w-6 h-6 bg-primary text-white rounded-lg flex items-center justify-center text-[10px] shrink-0">
+                <span class="material-symbols-outlined text-sm">info</span>
+            </div>
+            <p class="text-xs text-on-surface-variant leading-relaxed">
+                <span class="font-bold text-primary uppercase mr-1">提示：</span>
+                转换引擎支持自动识别大部分常见格式，包括毫秒时间戳 (13位)、秒级时间戳 (10位)、以及标准 ISO 8601。所有处理均在您的浏览器本地完成，保护您的隐私。
+            </p>
+        </div>
+    </section>
+
+    <footer class="text-center pb-10">
+        <p class="text-xs text-on-surface-variant/40 font-body">
+            © 2024 Open Toolbox. Precision Tools for Developers.
+        </p>
+    </footer>
+
+</div>
+
+</body>
+</html>

@@ -58,7 +58,7 @@ const goBack = () => {
 
     <!-- 主内容区 -->
     <div class="flex-1 overflow-hidden px-6 pb-6 flex flex-col">
-      <div class="flex-1 rounded-2xl shadow-sm border border-outline-variant/30 bg-surface overflow-hidden transition-all flex flex-col">
+      <div class="flex-1 rounded-2xl shadow-sm border border-outline-variant/30 bg-surface-container-lowest overflow-hidden transition-all flex flex-col">
 
         <!-- 工具头部 -->
         <header v-if="tool" class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-6 border-b border-outline-variant/30 shrink-0">
@@ -93,8 +93,8 @@ const goBack = () => {
         </header>
 
         <!-- 工具内容 - flex-1 撑满剩余高度 -->
-        <div class="flex-1 flex flex-col min-h-0 overflow-hidden">
-          <component :is="activeTool" v-if="activeTool" class="flex-1" />
+        <div class="flex-1 overflow-auto">
+          <component :is="activeTool" v-if="activeTool"/>
 
           <div v-else class="h-full flex flex-col items-center justify-center text-outline">
             <span class="material-symbols-outlined text-4xl mb-2 animate-pulse">construction</span>

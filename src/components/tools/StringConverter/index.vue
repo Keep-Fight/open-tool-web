@@ -1,7 +1,7 @@
 <template>
   <div class="h-full flex flex-col font-sans text-on-surface dark:text-gray-100 overflow-hidden">
     <div
-        class="h-full card p-6 mb-6 flex-grow flex flex-col justify-center bg-white dark:bg-[#121214] border border-gray-200 dark:border-[#27272a] shadow-sm">
+        class="h-full p-6 mb-6 flex-grow flex flex-col justify-center bg-white dark:bg-[#121214] border border-gray-200 dark:border-[#27272a]">
       <div class="flex flex-col md:flex-row items-stretch gap-4 h-full">
 
         <div class="flex-1 flex flex-col">
@@ -85,7 +85,7 @@
     </div>
 
     <div
-        class="card bg-blue-50/50 dark:bg-[#0066ff]/5 p-3 flex flex-wrap items-center gap-4 text-[11px] text-gray-500 dark:text-[#a1a1aa] border border-blue-100 dark:border-[#0066ff]/10 shrink-0">
+        class=" bg-blue-50/50 dark:bg-[#0066ff]/5 p-3 flex flex-wrap items-center gap-4 text-[11px] text-gray-500 dark:text-[#a1a1aa] border border-blue-100 dark:border-[#0066ff]/10 shrink-0">
       <div class="flex items-center gap-1">
         <i class="fa-solid fa-circle-info text-blue-400 dark:text-[#0066ff]"></i>
         <span class="font-bold">支持的编码：</span> UTF-8, GBK, GK2312, ASCII, ISO-8859-1
