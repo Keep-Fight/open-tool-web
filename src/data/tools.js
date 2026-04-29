@@ -126,7 +126,7 @@ const tools = [
         title: '字符串转换',
         description: '字符串转换工具，支持字符串的转换',
         component: defineAsyncComponent(() => import('../components/tools/StringConverter/index.vue')),
-        category: ['开发工具', '转换工具','文本工具'],
+        category: ['开发工具', '转换工具', '文本工具'],
         tags: ['字符串', '转换'],
         icon: SvgIcon,
         iconName: 'string-converter'
@@ -140,6 +140,15 @@ const tools = [
         tags: ['二维码', '生成'],
         icon: QrCode,
         iconName: ''
+    }, {
+        id: 'prompt-template',
+        title: '提示词模板',
+        description: '提示词模板，支持提示词的生成',
+        component: defineAsyncComponent(() => import('../components/tools/PromptTemplate/index.vue')),
+        category: ['开发工具'],
+        tags: ['提示词', '模板'],
+        icon: SvgIcon,
+        iconName: 'prompt-template'
     }
 ]
 
