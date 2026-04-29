@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
+import { sm2, sm4 } from 'sm-crypto';
 
 // --- 状态定义 ---
 const algorithm = ref('AES(高级加密标准)');
@@ -106,66 +107,75 @@ watch(algorithm, () => {
 
 // --- 逻辑处理 ---
 
-// 模拟生成逻辑 (使用 Web Crypto API 保证安全性)
+// 生成随机字节数组
+const generateRandomBytes = (byteLength) => {
+  const array = new Uint8Array(byteLength);
+  window.crypto.getRandomValues(array);
+  return array;
+};
+
+// 主生成函数
 const generateKey = async () => {
-  // 根据选择的长度获取字节数
-  const lengthMatch = keyLength.value.match(/(\d+)\s*bit/);
-  const bitLength = lengthMatch ? parseInt(lengthMatch[1]) : 256;
+  const algoName = algorithm.value;
+  const bitLength = parseInt(keyLength.value.match(/(\d+)\s*bit/)?.[1]) || 256;
   const byteLength = bitLength / 8;
-  const algoType = currentAlgoType.value;
 
-  // 转换函数：将 ArrayBuffer 转为 Hex 或 Base64
-  const toHex = (buffer) => Array.from(new Uint8Array(buffer))
-    .map(b => b.toString(16).padStart(2, '0')).join('');
-  const toBase64 = (buffer) => btoa(String.fromCharCode(...new Uint8Array(buffer)));
-
-  const formatOutput = (buffer) => outputFormat.value === 'Hex' ? toHex(buffer) : toBase64(buffer);
-
-  if (algoType === '非对称加密') {
-    let keyPair, exportPromises;
-
-    if (algorithm.value === 'RSA') {
-      keyPair = await window.crypto.subtle.generateKey(
-        {
-          name: 'RSA-OAEP',
-          modulusLength: bitLength,
-          publicExponent: new Uint8Array([1, 0, 1]),
-          hash: 'SHA-256'
-        },
-        true,
-        ['encrypt', 'decrypt']
-      );
-      exportPromises = [
-        window.crypto.subtle.exportKey('spki', keyPair.publicKey),
-        window.crypto.subtle.exportKey('pkcs8', keyPair.privateKey)
-      ];
+  if (algoName === 'SM2') {
+    // SM2 使用 sm-crypto 生成密钥对 (返回 Hex)
+    const keyPair = sm2.generateKeyPairHex();
+    if (outputFormat.value === 'Hex') {
+      hexOutput.value = keyPair.publicKey;
+      base64Output.value = keyPair.privateKey;
     } else {
-      // ECC 和 SM2 使用 ECDSA/ECDHE
-      const curve = bitLength === 521 ? 'P-521' : bitLength === 384 ? 'P-384' : 'P-256';
-      keyPair = await window.crypto.subtle.generateKey(
-        { name: 'ECDSA', namedCurve: curve },
-        true,
-        ['sign', 'verify']
-      );
-      exportPromises = [
-        window.crypto.subtle.exportKey('spki', keyPair.publicKey),
-        window.crypto.subtle.exportKey('pkcs8', keyPair.privateKey)
-      ];
+      // 转换为 Base64
+      const pubBytes = new Uint8Array(keyPair.publicKey.match(/.{2}/g).map(b => parseInt(b, 16)));
+      const privBytes = new Uint8Array(keyPair.privateKey.match(/.{2}/g).map(b => parseInt(b, 16)));
+      hexOutput.value = btoa(String.fromCharCode(...pubBytes));
+      base64Output.value = btoa(String.fromCharCode(...privBytes));
     }
 
-    const [publicKeyExported, privateKeyExported] = await Promise.all(exportPromises);
-    hexOutput.value = formatOutput(publicKeyExported);
-    base64Output.value = formatOutput(privateKeyExported);
+  } else if (algoName === 'SM4') {
+    // SM4 对称加密生成密钥 (128 bit = 16 bytes)
+    const key = generateRandomBytes(16);
+    // 分别输出 Hex 和 Base64 格式
+    hexOutput.value = Array.from(key).map(b => b.toString(16).padStart(2, '0')).join('');
+    base64Output.value = btoa(String.fromCharCode(...key));
+
+  } else if (algoName === 'RSA') {
+    // RSA 使用 Web Crypto API
+    const keyPair = await window.crypto.subtle.generateKey(
+      { name: 'RSA-OAEP', modulusLength: bitLength, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' },
+      true, ['encrypt', 'decrypt']
+    );
+    const [pub, priv] = await Promise.all([
+      window.crypto.subtle.exportKey('spki', keyPair.publicKey),
+      window.crypto.subtle.exportKey('pkcs8', keyPair.privateKey)
+    ]);
+    const pubBytes = new Uint8Array(pub);
+    const privBytes = new Uint8Array(priv);
+    hexOutput.value = Array.from(pubBytes).map(b => b.toString(16).padStart(2, '0')).join('');
+    base64Output.value = btoa(String.fromCharCode(...privBytes));
+
+  } else if (algoName === 'ECC(椭圆曲线加密)') {
+    // ECC 使用 Web Crypto API
+    const curve = bitLength === 521 ? 'P-521' : bitLength === 384 ? 'P-384' : 'P-256';
+    const keyPair = await window.crypto.subtle.generateKey(
+      { name: 'ECDSA', namedCurve: curve }, true, ['sign', 'verify']
+    );
+    const [pub, priv] = await Promise.all([
+      window.crypto.subtle.exportKey('spki', keyPair.publicKey),
+      window.crypto.subtle.exportKey('pkcs8', keyPair.privateKey)
+    ]);
+    const pubBytes = new Uint8Array(pub);
+    const privBytes = new Uint8Array(priv);
+    hexOutput.value = Array.from(pubBytes).map(b => b.toString(16).padStart(2, '0')).join('');
+    base64Output.value = btoa(String.fromCharCode(...privBytes));
+
   } else {
-    // 对称加密生成单个密钥
-    const array = new Uint8Array(byteLength);
-    window.crypto.getRandomValues(array);
-
-    const hex = Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
-    const base64 = btoa(String.fromCharCode(...array));
-
-    hexOutput.value = hex;
-    base64Output.value = base64;
+    // 其他对称加密算法 (AES, DES, RC4, IDEA, Blowfish)
+    const array = generateRandomBytes(byteLength);
+    hexOutput.value = Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
+    base64Output.value = btoa(String.fromCharCode(...array));
   }
 };
 
