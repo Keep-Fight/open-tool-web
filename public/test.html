@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>密钥生成工具 - 实用工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        body { font-family: 'Inter', "Microsoft YaHei", sans-serif; background-color: #f8fafc; }
+        .sidebar-item.active { background-color: #eff6ff; border-color: #3b82f6; color: #1d4ed8; }
+        .sidebar-item.active i { color: #3b82f6; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+<div class="max-w-7xl mx-auto">
+        <div class="flex-1 space-y-6">
+                <div class="bg-gray-50/50 p-6 border-t border-gray-100">
+                    <p class="text-sm font-bold text-gray-800 mb-4">密钥生成配置</p>
+                    <div class="flex flex-wrap items-end gap-6 grid-cols-1 md:grid-cols-2">
+
+                        <div class="space-x-1 space-y-1  min-w-[150px]">
+                            <label class="text-[11px] text-gray-400 uppercase">加密算法</label>
+                            <select class="w-full bg-white border border-gray-200 p-2 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 outline-none">
+                                <option>AES(高级加密标准)</option>
+                                <option>DES/3DES(数据加密标准)</option>
+                                <option>RC5</option>
+                                <option>IDEA</option>
+                                <option>Blowfish</option>
+                                <option>SM4</option>
+                                <option>RSA</option>
+                                <option>ECC</option>
+                            </select>
+                        </div>
+
+                        <div class="space-x-1 space-y-1  min-w-[150px]">
+                            <label class="text-[11px] text-gray-400 uppercase">密钥长度</label>
+                            <select class="w-full bg-white border border-gray-200 p-2 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 outline-none">
+                                <option>256 bit (32 字节)</option>
+                                <option>128 bit (16 字节)</option>
+                                <option>192 bit (24 字节)</option>
+                            </select>
+                        </div>
+                        <div class="space-x-2 space-y-1  min-w-[150px]">
+                            <label class="text-[11px] text-gray-400 uppercase">生成方式</label>
+                            <select class="w-full bg-white border border-gray-200 p-2 rounded-lg text-sm focus:ring-2 focus:ring-blue-100 outline-none">
+                                <option>安全随机生成 (推荐)</option>
+                                <option>基于密码短语 (KDF)</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[11px] text-gray-400 uppercase block">输出格式</label>
+                            <div class="flex gap-4 items-center h-9">
+                                <label class="flex items-center gap-2 text-sm cursor-pointer">
+                                    <input type="radio" name="format" checked class="text-blue-600"> Hex
+                                </label>
+                                <label class="flex items-center gap-2 text-sm cursor-pointer">
+                                    <input type="radio" name="format" class="text-blue-600"> Base64
+                                </label>
+                            </div>
+                        </div>
+                        <button onclick="generateKey()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-all shadow-md shadow-blue-200 flex items-center gap-2 ml-auto">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> 生成密钥
+                        </button>
+                        <button onclick="generateKey()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-lg text-sm font-medium transition-all shadow-md shadow-blue-200 flex items-center gap-2 ml-auto">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> 清空结果
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-6 space-y-6">
+                    <div class="bg-blue-50 border border-blue-100 text-blue-600 p-3 rounded-lg flex items-start gap-3 text-xs leading-relaxed">
+                        <i class="fa-solid fa-circle-info mt-0.5"></i>
+                        <p>以下为当前算法生成的密钥信息，请妥善保管密钥，切勿在生产环境中使用弱密钥或泄露密钥信息。</p>
+                    </div>
+
+                    <div>
+                        <p class="text-sm font-bold text-gray-800 mb-4">密钥信息</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="text-[11px] text-gray-400 uppercase tracking-wider">算法</label>
+                                <div class="bg-gray-50 border border-gray-100 p-2.5 rounded-lg text-sm text-gray-700">AES (高级加密标准)</div>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[11px] text-gray-400 uppercase tracking-wider">密钥类型</label>
+                                <div class="bg-gray-50 border border-gray-100 p-2.5 rounded-lg text-sm text-gray-700">对称密钥</div>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[11px] text-gray-400 uppercase tracking-wider">密钥长度</label>
+                                <div class="bg-gray-50 border border-gray-100 p-2.5 rounded-lg text-sm text-gray-700">256 bit (32 字节)</div>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="text-[11px] text-gray-400 uppercase tracking-wider">字符编码</label>
+                                <div class="bg-gray-50 border border-gray-100 p-2.5 rounded-lg text-sm text-gray-700">UTF-8</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="space-y-1">
+                            <label class="text-[11px] text-gray-400 uppercase tracking-wider">密钥 (Hex)</label>
+                            <div class="group relative">
+                                <textarea id="hex-output" readonly class="w-full bg-gray-50 border border-gray-100 p-3 pr-20 rounded-lg text-xs font-mono text-gray-600 focus:outline-none h-16 resize-none">d48e7f4a3c8b9d2e6f1a7b3c5d8e9f0a1b2c3d4e5f67890a1b2c3d4e5f67890</textarea>
+                                <button onclick="copyToClipboard('hex-output')" class="absolute right-3 top-3 text-[10px] bg-white border border-gray-200 px-2 py-1 rounded shadow-sm hover:bg-gray-50 text-gray-500">
+                                    <i class="fa-regular fa-copy mr-1"></i> 复制
+                                </button>
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="text-[11px] text-gray-400 uppercase tracking-wider">密钥 (Base64)</label>
+                            <div class="group relative">
+                                <textarea id="b64-output" readonly class="w-full bg-gray-50 border border-gray-100 p-3 pr-20 rounded-lg text-xs font-mono text-gray-600 focus:outline-none h-16 resize-none">1Fjn+jyLki5vPqexw13RXoN7D6CwqbLDPLU5eM+onZQ=</textarea>
+                                <button onclick="copyToClipboard('b64-output')" class="absolute right-3 top-3 text-[10px] bg-white border border-gray-200 px-2 py-1 rounded shadow-sm hover:bg-gray-50 text-gray-500">
+                                    <i class="fa-regular fa-copy mr-1"></i> 复制
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="space-y-3">
+                    <h3 class="text-sm font-bold text-gray-800">密钥说明</h3>
+                    <div class="bg-white rounded-xl border border-gray-100 overflow-hidden">
+                        <table class="w-full text-left text-xs">
+                            <thead class="bg-gray-50 text-gray-400 font-medium">
+                            <tr>
+                                <th class="px-4 py-3">类型</th>
+                                <th class="px-4 py-3">说明</th>
+                                <th class="px-4 py-3">示例算法</th>
+                            </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-50 text-gray-600">
+                            <tr>
+                                <td class="px-4 py-3 font-medium">对称密钥</td>
+                                <td class="px-4 py-3">加密和解密使用相同的密钥</td>
+                                <td class="px-4 py-3 text-blue-500">AES, DES, SM4</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 font-medium">非对称公钥</td>
+                                <td class="px-4 py-3">公开用于加密或验证</td>
+                                <td class="px-4 py-3 text-blue-500">RSA, ECC</td>
+                            </tr>
+                            <tr>
+                                <td class="px-4 py-3 font-medium">非对称私钥</td>
+                                <td class="px-4 py-3">私有用于解密或签名</td>
+                                <td class="px-4 py-3 text-blue-500">RSA, ECC</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="space-y-3">
+                    <h3 class="text-sm font-bold text-gray-800">安全建议</h3>
+                    <div class="bg-white p-5 rounded-xl border border-gray-100 h-full">
+                        <ul class="space-y-3 text-xs text-gray-500 list-disc pl-4 leading-relaxed">
+                            <li>建议使用 <strong class="text-gray-700">128 位及以上</strong> 的密钥长度 (AES 推荐 256 位)。</li>
+                            <li>密钥应通过安全的 <strong class="text-gray-700">随机数生成器</strong> 生成。</li>
+                            <li class="text-red-400 font-medium">请勿将密钥硬编码在代码中，避免泄露。</li>
+                            <li>定期更换密钥，降低密钥泄露带来的风险。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<script>
+    // 简单的随机密钥生成模拟
+    function generateKey() {
+        const hexChars = '0123456789abcdef';
+        let hex = '';
+        for (let i = 0; i < 64; i++) {
+            hex += hexChars[Math.floor(Math.random() * 16)];
+        }
+
+        document.getElementById('hex-output').value = hex;
+
+        // 简单模拟 Base64 转换
+        const b64 = btoa(hex.substring(0, 32)).substring(0, 44);
+        document.getElementById('b64-output').value = b64 + '=';
+
+        // 更新时间
+        const now = new Date();
+        const timeStr = now.toISOString().replace('T', ' ').substring(0, 19);
+        document.getElementById('gen-time').innerText = timeStr;
+    }
+
+    // 复制功能
+    function copyToClipboard(id) {
+        const textarea = document.getElementById(id);
+        textarea.select();
+        document.execCommand('copy');
+        alert('已复制到剪贴板！');
+    }
+
+    // 初始化
+    window.onload = generateKey;
+</script>
+</body>
+</html>

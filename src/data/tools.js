@@ -149,6 +149,16 @@ const tools = [
         tags: ['提示词', '模板'],
         icon: SvgIcon,
         iconName: 'prompt-template'
+    },
+    {
+        id: 'secret-key-generator',
+        title: '密钥生成',
+        description: '密钥生成工具，支持密钥的生成',
+        component: defineAsyncComponent(() => import('../components/tools/SecretKeyGenerator/index.vue')),
+        category: ['开发工具'],
+        tags: ['密钥', '生成'],
+        icon: SvgIcon,
+        iconName: 'secret-key-generator'
     }
 ]
 
