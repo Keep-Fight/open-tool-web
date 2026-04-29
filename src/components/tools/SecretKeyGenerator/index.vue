@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 
 // --- 状态定义 ---
 const algorithm = ref('AES(高级加密标准)');
@@ -16,56 +16,157 @@ const algorithms = ref([
     name: 'AES(高级加密标准)',
     type: '对称加密',
     value: 'AES',
+    description: '最广泛使用的对称加密算法，安全性高，性能优秀',
+    keyOptions: ['256 bit (32 字节)', '128 bit (16 字节)', '192 bit (24 字节)'],
+    recommended: true
   },
   {
     name: 'DES/3DES(数据加密标准)',
+    type: '对称加密',
     value: 'DES',
+    description: '旧版标准，DES已被破解，3DES安全性较低',
+    keyOptions: ['168 bit (24 字节)', '112 bit (16 字节)', '56 bit (8 字节)']
   },
   {
-    name: 'RC5'
+    name: 'RC4/RC5',
+    type: '对称加密',
+    value: 'RC',
+    description: '流加密算法，RC4已被发现存在弱点',
+    keyOptions: ['256 bit (32 字节)', '128 bit (16 字节)', '64 bit (8 字节)']
   },
   {
-    name: 'IDEA'
+    name: 'IDEA',
+    type: '对称加密',
+    value: 'IDEA',
+    description: '国际数据加密算法，曾用于PGP',
+    keyOptions: ['128 bit (16 字节)']
   },
   {
-    name: 'Blowfish'
-  },
-    {
-    name: 'SM4'
-  },
-  {
-    name: 'RSA'
+    name: 'Blowfish',
+    type: '对称加密',
+    value: 'Blowfish',
+    description: '对称分组密码，适合高效加密',
+    keyOptions: ['256 bit (32 字节)', '128 bit (16 字节)', '448 bit (56 字节)']
   },
   {
-    name: 'ECC'
+    name: 'SM4',
+    type: '对称加密',
+    value: 'SM4',
+    description: '中国国家密码管理局发布的对称加密算法',
+    keyOptions: ['128 bit (16 字节)']
   },
-    {
-    name: 'SM2'
+  {
+    name: 'RSA',
+    type: '非对称加密',
+    value: 'RSA',
+    description: '基于大数分解难题，广泛用于数据加密和数字签名',
+    keyOptions: ['4096 bit (512 字节)', '2048 bit (256 字节)', '1024 bit (128 字节)']
+  },
+  {
+    name: 'ECC(椭圆曲线加密)',
+    type: '非对称加密',
+    value: 'ECC',
+    description: '基于椭圆曲线数学，相比RSA使用更短的密钥达到同等安全级别',
+    keyOptions: ['521 bit', '384 bit', '256 bit (32 字节)']
+  },
+  {
+    name: 'SM2',
+    type: '非对称加密',
+    value: 'SM2',
+    description: '中国国家密码管理局发布的椭圆曲线公钥密码算法',
+    keyOptions: ['256 bit (32 字节)']
   }
 ])
+
+// 获取当前算法的密钥长度选项
+const currentKeyOptions = computed(() => {
+  const algo = algorithms.value.find(a => a.name === algorithm.value)
+  return algo?.keyOptions || ['256 bit (32 字节)']
+})
+
+// 获取当前算法的类型
+const currentAlgoType = computed(() => {
+  const algo = algorithms.value.find(a => a.name === algorithm.value)
+  return algo?.type || '对称加密'
+})
+
+// 获取当前算法的描述
+const currentAlgoDesc = computed(() => {
+  const algo = algorithms.value.find(a => a.name === algorithm.value)
+  return algo?.description || ''
+})
+
+// 重置密钥长度当算法变更时
+watch(algorithm, () => {
+  const options = currentKeyOptions.value
+  if (options.length > 0 && !options.includes(keyLength.value)) {
+    keyLength.value = options[0]
+  }
+})
 
 // --- 逻辑处理 ---
 
 // 模拟生成逻辑 (使用 Web Crypto API 保证安全性)
-const generateKey = () => {
+const generateKey = async () => {
   // 根据选择的长度获取字节数
   const lengthMatch = keyLength.value.match(/(\d+)\s*bit/);
   const bitLength = lengthMatch ? parseInt(lengthMatch[1]) : 256;
   const byteLength = bitLength / 8;
+  const algoType = currentAlgoType.value;
 
-  const array = new Uint8Array(byteLength);
-  window.crypto.getRandomValues(array);
+  // 转换函数：将 ArrayBuffer 转为 Hex 或 Base64
+  const toHex = (buffer) => Array.from(new Uint8Array(buffer))
+    .map(b => b.toString(16).padStart(2, '0')).join('');
+  const toBase64 = (buffer) => btoa(String.fromCharCode(...new Uint8Array(buffer)));
 
-  // 转换为 Hex
-  const hex = Array.from(array)
-      .map(b => b.toString(16).padStart(2, '0'))
-      .join('');
+  const formatOutput = (buffer) => outputFormat.value === 'Hex' ? toHex(buffer) : toBase64(buffer);
 
-  // 转换为 Base64
-  const base64 = btoa(String.fromCharCode(...array));
+  if (algoType === '非对称加密') {
+    let keyPair, exportPromises;
 
-  hexOutput.value = hex;
-  base64Output.value = base64;
+    if (algorithm.value === 'RSA') {
+      keyPair = await window.crypto.subtle.generateKey(
+        {
+          name: 'RSA-OAEP',
+          modulusLength: bitLength,
+          publicExponent: new Uint8Array([1, 0, 1]),
+          hash: 'SHA-256'
+        },
+        true,
+        ['encrypt', 'decrypt']
+      );
+      exportPromises = [
+        window.crypto.subtle.exportKey('spki', keyPair.publicKey),
+        window.crypto.subtle.exportKey('pkcs8', keyPair.privateKey)
+      ];
+    } else {
+      // ECC 和 SM2 使用 ECDSA/ECDHE
+      const curve = bitLength === 521 ? 'P-521' : bitLength === 384 ? 'P-384' : 'P-256';
+      keyPair = await window.crypto.subtle.generateKey(
+        { name: 'ECDSA', namedCurve: curve },
+        true,
+        ['sign', 'verify']
+      );
+      exportPromises = [
+        window.crypto.subtle.exportKey('spki', keyPair.publicKey),
+        window.crypto.subtle.exportKey('pkcs8', keyPair.privateKey)
+      ];
+    }
+
+    const [publicKeyExported, privateKeyExported] = await Promise.all(exportPromises);
+    hexOutput.value = formatOutput(publicKeyExported);
+    base64Output.value = formatOutput(privateKeyExported);
+  } else {
+    // 对称加密生成单个密钥
+    const array = new Uint8Array(byteLength);
+    window.crypto.getRandomValues(array);
+
+    const hex = Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
+    const base64 = btoa(String.fromCharCode(...array));
+
+    hexOutput.value = hex;
+    base64Output.value = base64;
+  }
 };
 
 const clearResults = () => {
@@ -104,26 +205,29 @@ onMounted(() => {
 
           <p class="text-sm font-bold text-slate-800 dark:text-[#f1f1f1] mb-4 uppercase tracking-widest">密钥生成配置</p>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 items-end">
-            <div class="space-y-2">
+            <div class="space-y-2 ">
+              <div class="flex items-center gap-3">
+                <span class="px-1.5 py-0.5 text-[10px] rounded" :class="currentAlgoType === '对称加密' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600' : 'bg-purple-100 dark:bg-purple-900/30 text-purple-600'">
+                  {{ currentAlgoType }}
+                </span>
+                <span v-if="algorithms.find(a => a.name === algorithm)?.recommended" class="text-[10px] text-[#0066ff]">⭐ 推荐</span>
+                <span class="text-[10px] text-slate-400 truncate">{{ currentAlgoDesc }}</span>
+              </div>
               <label class="text-[11px] text-slate-400 dark:text-[#a1a1aa] uppercase font-semibold tracking-wider">加密算法</label>
-              <select v-model="algorithm" class="w-full bg-slate-50 dark:bg-[#1c1c1f] border border-slate-200 dark:border-[#3f3f46] p-2.5 rounded-lg text-sm outline-none focus:ring-2 focus:ring-[#0066ff]/20 transition-all">
-                <option>AES(高级加密标准)</option>
-                <option>DES/3DES(数据加密标准)</option>
-                <option>RC5</option>
-                <option>IDEA</option>
-                <option>Blowfish</option>
-                <option>SM4</option>
-                <option>RSA</option>
-                <option>ECC</option>
-              </select>
+              <div class="relative">
+                <select v-model="algorithm" class="w-full bg-slate-50 dark:bg-[#1c1c1f] border border-slate-200 dark:border-[#3f3f46] p-2.5 rounded-lg text-sm outline-none focus:ring-2 focus:ring-[#0066ff]/20 transition-all pr-10">
+                  <option v-for="algo in algorithms" :key="algo.value" :value="algo.name">
+                    {{ algo.name }}
+                  </option>
+                </select>
+              </div>
+
             </div>
 
             <div class="space-y-2">
               <label class="text-[11px] text-slate-400 dark:text-[#a1a1aa] uppercase font-semibold tracking-wider">密钥长度</label>
               <select v-model="keyLength" class="w-full bg-slate-50 dark:bg-[#1c1c1f] border border-slate-200 dark:border-[#3f3f46] p-2.5 rounded-lg text-sm outline-none focus:ring-2 focus:ring-[#0066ff]/20 transition-all">
-                <option>256 bit (32 字节)</option>
-                <option>128 bit (16 字节)</option>
-                <option>192 bit (24 字节)</option>
+                <option v-for="opt in currentKeyOptions" :key="opt" :value="opt">{{ opt }}</option>
               </select>
             </div>
 
@@ -150,7 +254,7 @@ onMounted(() => {
             </div>
 
 
-            <div class="mt-8 flex flex-wrap gap-3 justify-end border-t border-slate-100 dark:border-[#27272a] pt-6">
+            <div class="mt-8 flex flex-wrap gap-3 justify-end  border-slate-100 dark:border-[#27272a] pt-6">
               <button @click="clearResults" class="px-6 py-2.5 rounded-lg text-sm font-medium border border-slate-200 dark:border-[#3f3f46] hover:bg-slate-50 dark:hover:bg-[#1c1c1f] transition-all flex items-center gap-2">
                 <i class="fa-solid fa-trash-can text-slate-400"></i> 清空结果
               </button>
@@ -169,7 +273,7 @@ onMounted(() => {
         <div>
           <p class="text-sm font-bold text-slate-800 dark:text-[#f1f1f1] mb-4 uppercase tracking-widest">密钥指纹信息</p>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div v-for="(val, label) in { '算法': algorithm, '密钥类型': '对称密钥', '密钥长度': keyLength, '字符编码': 'UTF-8' }" :key="label" class="space-y-1">
+            <div v-for="(val, label) in { '算法': algorithm, '密钥类型': currentAlgoType, '密钥长度': keyLength, '字符编码': 'UTF-8' }" :key="label" class="space-y-1">
               <label class="text-[10px] text-slate-400 dark:text-[#a1a1aa] uppercase tracking-tighter">{{ label }}</label>
               <div class="bg-slate-50 dark:bg-[#1c1c1f] border border-slate-100 dark:border-[#27272a] p-2.5 rounded-lg text-sm font-medium">
                 {{ val }}
@@ -181,7 +285,9 @@ onMounted(() => {
         <div class="grid grid-cols-1 gap-6">
           <div class="space-y-2">
             <div class="flex justify-between items-center">
-              <label class="text-[11px] text-slate-400 dark:text-[#a1a1aa] uppercase font-bold">公钥</label>
+              <label class="text-[11px] text-slate-400 dark:text-[#a1a1aa] uppercase font-bold">
+                {{ currentAlgoType === '非对称加密' ? '公钥' : '密钥 (Hex)' }}
+              </label>
             </div>
             <div class="group relative">
               <textarea readonly :value="hexOutput" class="w-full bg-slate-50 dark:bg-[#0a0a0b] border border-slate-200 dark:border-[#27272a] p-4 pr-24 rounded-xl text-xs font-mono text-slate-600 dark:text-[#a1a1aa] focus:outline-none h-20 resize-none transition-colors"></textarea>
@@ -192,7 +298,9 @@ onMounted(() => {
           </div>
 
           <div class="space-y-2">
-            <label class="text-[11px] text-slate-400 dark:text-[#a1a1aa] uppercase font-bold">私钥</label>
+            <label class="text-[11px] text-slate-400 dark:text-[#a1a1aa] uppercase font-bold">
+              {{ currentAlgoType === '非对称加密' ? '私钥' : '密钥 (Base64)' }}
+            </label>
             <div class="group relative">
               <textarea readonly :value="base64Output" class="w-full bg-slate-50 dark:bg-[#0a0a0b] border border-slate-200 dark:border-[#27272a] p-4 pr-24 rounded-xl text-xs font-mono text-slate-600 dark:text-[#a1a1aa] focus:outline-none h-20 resize-none transition-colors"></textarea>
               <button @click="copyToClipboard(base64Output)" class="absolute right-3 top-3 text-[11px] bg-white dark:bg-[#1c1c1f] border border-slate-200 dark:border-[#3f3f46] px-3 py-1.5 rounded-lg shadow-sm hover:bg-blue-50 dark:hover:bg-[#0066ff]/20 hover:text-[#0066ff] transition-all flex items-center gap-1.5">
@@ -212,20 +320,20 @@ onMounted(() => {
             <table class="w-full text-left text-xs">
               <thead class="bg-slate-50 dark:bg-[#1c1c1f] text-slate-500 dark:text-[#a1a1aa] font-medium">
               <tr>
+                <th class="px-4 py-3">算法名称</th>
                 <th class="px-4 py-3">类型</th>
                 <th class="px-4 py-3">说明</th>
-                <th class="px-4 py-3">示例</th>
+                <th class="px-4 py-3">密钥长度选项</th>
               </tr>
               </thead>
               <tbody class="divide-y divide-slate-100 dark:divide-[#27272a] text-slate-600 dark:text-[#a1a1aa]">
-              <tr v-for="item in [
-                  { t: '对称密钥', d: '加解密使用相同密钥', e: 'AES, SM4' },
-                  { t: '非对称公钥', d: '公开用于加密或验证', e: 'RSA, ECC' },
-                  { t: '非对称私钥', d: '私有用于解密或签名', e: 'RSA, ECC' }
-                ]" :key="item.t" class="hover:bg-slate-50/50 dark:hover:bg-[#1c1c1f]/50 transition-colors">
-                <td class="px-4 py-3 font-semibold text-slate-700 dark:text-[#f1f1f1]">{{ item.t }}</td>
-                <td class="px-4 py-3">{{ item.d }}</td>
-                <td class="px-4 py-3 text-[#0066ff] dark:text-[#0066ff] font-medium">{{ item.e }}</td>
+              <tr v-for="algo in algorithms" :key="algo.name" class="hover:bg-slate-50/50 dark:hover:bg-[#1c1c1f]/50 transition-colors">
+                <td class="px-4 py-3 font-semibold text-slate-700 dark:text-[#f1f1f1]">{{ algo.name }}</td>
+                <td class="px-4 py-3">
+                  <span class="px-1.5 py-0.5 text-[9px] rounded" :class="algo.type === '对称加密' ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-600' : 'bg-purple-100 dark:bg-purple-900/30 text-purple-600'">{{ algo.type }}</span>
+                </td>
+                <td class="px-4 py-3">{{ algo.description }}</td>
+                <td class="px-4 py-3 text-[#0066ff] dark:text-[#0066ff] font-medium">{{ algo.keyOptions.join(', ') }}</td>
               </tr>
               </tbody>
             </table>
