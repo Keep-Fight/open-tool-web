@@ -1,7 +1,10 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
+
+/* 采用标准的 .dark class 控制暗黑模式切换 */
 @variant dark (&:where(.dark, .dark *));
+
 @theme {
+    /* 将业务颜色变量映射至 Tailwind Utility Classes */
     --color-primary: var(--app-primary);
     --color-background: var(--app-background);
     --color-surface: var(--app-surface);
@@ -12,13 +15,15 @@
     --color-on-surface-variant: var(--app-on-surface-variant);
     --color-outline: var(--app-outline);
     --color-outline-variant: var(--app-outline-variant);
+    --color-card-window-header: var(--app-card-window-header);
 
-    /* 分类卡片特定颜色 */
+    /* 分类卡片特定交互颜色 */
     --color-dev: var(--app-dev);
     --color-design: var(--app-design);
     --color-prod: var(--app-prod);
     --color-media: var(--app-media);
 
+    /* 字体定义 */
     --font-headline: "Manrope", sans-serif;
     --font-body: "Inter", sans-serif;
 }
@@ -29,40 +34,42 @@
         padding: 0;
     }
 
-    /* 白天模式色值 */
+    /* 浅色模式色板 (基于 Light Mode HTML) */
     :root {
         --app-primary: #0066ff;
-        --app-background: #f0f2f7;         /* 略深的底色 */
-        --app-surface: #f8f9ff;            /* 基础表面 */
+        --app-background: #f8f9ff;
+        --app-surface: #f8f9ff;
         --app-surface-container: #e5eeff;
-        --app-surface-container-low: #f1f4fb;
-        --app-surface-container-high: #e2e8f5;
-        --app-surface-container-lowest: #ffffff; /* 最亮的卡片色 */
+        --app-surface-container-low: #eff4ff;
+        --app-surface-container-lowest: #ffffff;
         --app-on-surface: #0b1c30;
         --app-on-surface-variant: #424656;
         --app-outline: #727687;
         --app-outline-variant: #c2c6d8;
+        --app-card-window-header: #f8f9f7;
 
+        /* 分类专属色 */
         --app-dev: #0050cb;
         --app-design: #425ca0;
         --app-prod: #a33200;
         --app-media: #93000a;
     }
 
-    /* 黑夜模式色值 */
+    /* 暗黑模式色板 (基于 Dark Mode HTML) */
     .dark {
         --app-primary: #0066ff;
-        --app-background: #080809;         /* 纯黑背景 */
-        --app-surface: #121214;            /* 深灰表面 */
+        --app-background: #0a0a0b;
+        --app-surface: #121214;
         --app-surface-container: #1c1c1f;
         --app-surface-container-low: #18181b;
-        --app-surface-container-high: #27272a;
-        --app-surface-container-lowest: #1f1f22; /* 悬浮卡片色 */
+        --app-surface-container-lowest: #1f1f22;
         --app-on-surface: #f1f1f1;
         --app-on-surface-variant: #a1a1aa;
         --app-outline: #3f3f46;
         --app-outline-variant: #27272a;
+        --app-card-window-header: #1c1c1f;
 
+        /* 暗黑模式下分类色统一高亮 */
         --app-dev: #0066ff;
         --app-design: #0066ff;
         --app-prod: #0066ff;
@@ -73,9 +80,8 @@
         background-color: var(--color-background);
         color: var(--color-on-surface);
         font-family: var(--font-body);
-        transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-        transition-duration: 300ms;
+        /* 增加全局色彩过渡，让暗/亮切换更平滑 */
+        @apply transition-colors duration-300 ease-in-out;
     }
 
     .material-symbols-outlined {
@@ -83,6 +89,12 @@
     }
 }
 
+/* 玻璃拟态导航栏 */
+@utility glass-nav {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+/* 卡片悬浮发光效果 */
 @utility card-glow {
     &:hover {
         box-shadow: 0 0 20px rgba(0, 102, 255, 0.15);

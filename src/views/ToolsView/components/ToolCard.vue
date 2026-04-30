@@ -32,7 +32,7 @@ const handleToggleFavorite = (e) => {
 <template>
   <div
       class="group p-6 rounded-3xl border transition-all duration-300 relative h-full flex flex-col
-             bg-surface-container-lowest border-outline-variant/10 hover:-translate-y-1 card-glow cursor-pointer"
+             bg-surface-container-lowest border-outline-variant/10 hover:-translate-y-1 card-glow cursor-pointer shadow-sm"
       @click="goToTool">
 
     <button
