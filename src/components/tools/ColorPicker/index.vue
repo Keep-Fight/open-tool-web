@@ -147,7 +147,7 @@ const contrast = computed(() => {
 </script>
 
 <template>
-  <div class="w-full bg-white dark:bg-zinc-900 p-8  border-zinc-200 dark:border-zinc-800 ">
+  <div class="w-full bg-card-window-body p-8">
     <div class="flex flex-wrap lg:flex-nowrap gap-12">
 
       <section class="flex-none">

@@ -16,6 +16,7 @@
     --color-outline: var(--app-outline);
     --color-outline-variant: var(--app-outline-variant);
     --color-card-window-header: var(--app-card-window-header);
+    --color-card-window-body: var(--app-card-window-body);
 
     /* 分类卡片特定交互颜色 */
     --color-dev: var(--app-dev);
@@ -47,6 +48,7 @@
         --app-outline: #727687;
         --app-outline-variant: #c2c6d8;
         --app-card-window-header: #f8f9f7;
+        --app-card-window-body: #f8f9ff;
 
         /* 分类专属色 */
         --app-dev: #0050cb;
@@ -68,6 +70,7 @@
         --app-outline: #3f3f46;
         --app-outline-variant: #27272a;
         --app-card-window-header: #1c1c1f;
+        --app-card-window-body: #18181b;
 
         /* 暗黑模式下分类色统一高亮 */
         --app-dev: #0066ff;

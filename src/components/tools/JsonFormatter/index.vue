@@ -1,9 +1,10 @@
 <template>
-  <div class="bg-background h-full w-full font-body">
-    <div class="mx-auto shadow-sm border-outline-variant/30 bg-surface overflow-hidden">
-      <main class="p-6 relative">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div class="bg-card-window-body h-full w-full font-body">
+    <div class="mx-auto h-full border-outline-variant/30 overflow-hidden flex flex-col">
+      <main class="p-6 relative flex-1 min-h-0">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
 
+        <!-- JSON 输入 -->
           <div class="flex flex-col">
             <div class="flex items-center justify-between mb-2">
               <label class="text-sm font-semibold text-on-surface italic">JSON 数据</label>
@@ -11,10 +12,10 @@
                 <span class="text-xs text-on-surface-variant">字符数: {{ rawInput.length }}</span>
               </div>
             </div>
-            <div class="flex-1 bg-surface border border-outline-variant/60 rounded-xl overflow-hidden min-h-125 flex">
+            <div class="flex-1 bg-surface border border-outline-variant/60 rounded-xl overflow-hidden min-h-120 flex flex-col">
               <textarea
                   v-model="rawInput"
-                  class="w-full p-4 text-sm code-font bg-transparent outline-none resize-none leading-6 text-on-surface scrollbar-custom"
+                  class="min-h-120 w-full p-4 text-sm code-font bg-transparent outline-none resize-y rounded-xl leading-6 text-on-surface scrollbar-custom focus:border-primary focus:border-2 transition-colors"
                   placeholder="在此粘贴 JSON 代码..."
                   @input="validateJson"
               ></textarea>
@@ -27,6 +28,7 @@
             </button>
           </div>
 
+          <!-- JSON 输出 -->
           <div class="flex flex-col">
             <div class="flex items-center justify-between mb-2">
               <label class="text-sm font-semibold text-on-surface italic">JSON 预览</label>
@@ -40,11 +42,8 @@
                 </button>
               </div>
             </div>
-            <div class="flex-1 bg-surface border border-outline/30 rounded-xl overflow-hidden max-h-125 flex ">
-              <div v-if="options.showLineNumbers" class="w-10 bg-surface border-r border-outline/30 text-right pr-2 py-4 text-xs text-on-surface-variant/30 select-none code-font">
-                <div v-for="n in 20" :key="n">{{ n }}</div>
-              </div>
-              <div class="p-4 w-full h-3xl overflow-auto scrollbar-custom">
+            <div class="flex-1 bg-surface border border-outline/30 rounded-xl overflow-hidden min-h-120 flex flex-col">
+              <div class="p-4 w-full overflow-auto scrollbar-custom">
                 <div v-if="parsedData">
                   <JsonTreeNode :data="parsedData" :is-last="true" path="root" />
                 </div>
@@ -55,7 +54,7 @@
         </div>
       </main>
 
-      <footer class="p-6 border-t border-outline-variant grid grid-cols-1 md:grid-cols-5 gap-8">
+      <footer class="p-6  grid grid-cols-1 md:grid-cols-5 gap-8">
         <div class="md:col-span-1">
           <h3 class="text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-3">校验结果</h3>
           <div class="flex items-start gap-3">
