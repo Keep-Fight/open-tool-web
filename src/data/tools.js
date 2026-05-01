@@ -112,16 +112,6 @@ const tools = [
         iconName: 'timestamp-converter'
     },
     {
-        id: 'text-encryption',
-        title: '文本 加密/解密',
-        description: '文本加密解密工具，支持AES、RSA、DES、MD5、SHA1、SHA256、SHA512、HEX',
-        component: defineAsyncComponent(() => import('../components/tools/TextEncryption/index.vue')),
-        category: ['开发工具', '文本工具'],
-        tags: ['文本', '加密', '解密'],
-        icon: SvgIcon,
-        iconName: 'text-encryption'
-    },
-    {
         id: 'string-converter',
         title: '字符串转换',
         description: '支持 字符串、十六进制、十进制、二进制、Base64、URL 编码 之间的相互转换',
