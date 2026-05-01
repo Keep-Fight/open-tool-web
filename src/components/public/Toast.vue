@@ -24,7 +24,7 @@
 
 <script setup>
 import { Check as CheckIcon, X as XIcon, Info as InfoIcon } from 'lucide-vue-next';
-import { useToast } from '@/composables/useToast';
+import { useToast } from '@/composables/useToast.ts';
 
 const { toasts } = useToast();
 </script>

@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import Toast from '@/components/Toast.vue';
+import Toast from '@/components/public/Toast.vue';
 </script>
 
 <style>

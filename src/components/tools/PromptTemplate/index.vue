@@ -151,7 +151,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import PromptImportModal from './components/PromptImportModal.vue'
-import ConfirmDialog from '@/components/ConfirmDialog.vue'
+import ConfirmDialog from '@/components/public/ConfirmDialog.vue'
 import { useToast } from '@/composables/useToast'
 import Tips from "@/components/public/Tips.vue";
 
