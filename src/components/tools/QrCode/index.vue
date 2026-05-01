@@ -1,10 +1,9 @@
 <template>
-  <div class="min-h-screen bg-background p-6 md:p-12 font-sans text-on-surface">
-    <div class="max-w-6xl mx-auto space-y-6">
+    <div class="mx-auto space-y-6  bg-card-window-body">
 
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-        <div class="bg-surface-container rounded-xl border border-outline-variant p-6 card-glow transition-all duration-300">
+        <div class="p-6 transition-all duration-300">
           <h2 class="text-lg font-bold text-on-surface mb-6 flex items-center gap-2">
             <span class="material-symbols-outlined text-primary">edit_square</span>
             输入内容
@@ -16,7 +15,7 @@
               <div class="relative">
                 <select
                     v-model="qrConfig.type"
-                    class="w-full bg-surface-container-high border border-outline-variant rounded-lg px-4 py-2.5 appearance-none focus:outline-none focus:ring-1 focus:ring-primary text-on-surface"
+                    class="w-full -high border border-outline-variant rounded-lg px-4 py-2.5 appearance-none focus:outline-none focus:ring-1 focus:ring-primary text-on-surface"
                 >
                   <option value="text">文本 / 链接</option>
                   <option value="wifi">WiFi</option>
@@ -31,7 +30,7 @@
               <div class="relative">
                 <textarea
                     v-model="qrConfig.content"
-                    class="w-full bg-surface-container-high border border-outline-variant rounded-lg px-4 py-3 h-64 focus:outline-none focus:ring-1 focus:ring-primary resize-none text-on-surface placeholder:text-on-surface-variant/30"
+                    class="w-full -high border border-outline-variant rounded-lg px-4 py-3 h-64 focus:outline-none focus:ring-1 focus:ring-primary resize-none text-on-surface placeholder:text-on-surface-variant/30"
                     placeholder="请输入链接或文本内容..."
                 ></textarea>
                 <span class="absolute bottom-3 right-4 text-xs text-on-surface-variant">
@@ -42,7 +41,7 @@
           </div>
         </div>
 
-        <div class="bg-surface-container rounded-xl border border-outline-variant p-6 card-glow transition-all duration-300 flex flex-col">
+        <div class="p-6 transition-all duration-300 flex flex-col">
           <div class="flex justify-between items-center mb-6">
             <h2 class="text-lg font-bold text-on-surface">预览中心</h2>
             <div class="flex gap-3">
@@ -55,8 +54,8 @@
             </div>
           </div>
 
-          <div class="flex-grow flex items-center justify-center py-8">
-            <div class="p-4 bg-white rounded-xl shadow-lg shadow-primary/5">
+          <div class="  flex-grow flex items-center justify-center py-8">
+            <div class="p-4 bg-white  shadow-black/30 dark:shadow-white/20  shadow-2xl  card  ">
               <img
                   :src="`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrConfig.content || ' ')}`"
                   alt="QR Code"
@@ -65,23 +64,22 @@
             </div>
           </div>
 
-          <div class="mt-4 p-4 bg-surface-container-high rounded-lg border border-outline-variant flex justify-between items-center">
-            <div class="flex items-center text-sm text-on-surface-variant truncate mr-4">
-              <span class="material-symbols-outlined text-sm mr-2 flex-shrink-0">link</span>
-              <span class="truncate">{{ qrConfig.content || '等待输入...' }}</span>
-            </div>
-            <button @click="copyLink" class="text-on-surface-variant hover:text-primary transition-colors">
-              <span class="material-symbols-outlined text-sm">content_copy</span>
+          <div class="grid grid-cols-2 md:grid-cols-2 gap-4">
+            <button class="flex items-center justify-center bg-primary text-white py-3 rounded-lg font-semibold hover:brightness-110 transition-all active:scale-[0.98]">
+              <span class="material-symbols-outlined mr-2">download</span> 下载
+            </button>
+            <button @click="copyImage" class="flex items-center justify-center -high border border-outline-variant text-on-surface py-3 rounded-lg hover:bg-outline-variant transition-colors">
+              <span class="material-symbols-outlined mr-2">content_copy</span> 复制
             </button>
           </div>
         </div>
       </div>
 
-      <div class="bg-surface-container rounded-xl border border-outline-variant p-6 card-glow transition-all duration-300">
+      <div class="p-6 transition-all duration-300">
         <div class="flex justify-between items-center mb-8">
           <h2 class="text-lg font-bold text-on-surface">高级样式定制</h2>
           <label class="flex items-center text-sm text-on-surface-variant cursor-pointer group">
-            <input type="checkbox" v-model="qrConfig.rounded" class="mr-2 w-4 h-4 rounded border-outline-variant bg-surface-container-high text-primary focus:ring-primary">
+            <input type="checkbox" v-model="qrConfig.rounded" class="mr-2 w-4 h-4 rounded border-outline-variant -high text-primary focus:ring-primary">
             <span class="group-hover:text-on-surface transition-colors">圆角样式</span>
           </label>
         </div>
@@ -89,35 +87,35 @@
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
           <div class="space-y-2">
             <label class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">纠错等级</label>
-            <select v-model="qrConfig.level" class="w-full bg-surface-container-high border border-outline-variant rounded-lg px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary">
+            <select v-model="qrConfig.level" class="w-full -high border border-outline-variant rounded-lg px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary">
               <option>M (适中)</option>
               <option>H (最高)</option>
             </select>
           </div>
           <div class="space-y-2">
             <label class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">尺寸</label>
-            <select v-model="qrConfig.size" class="w-full bg-surface-container-high border border-outline-variant rounded-lg px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary">
+            <select v-model="qrConfig.size" class="w-full -high border border-outline-variant rounded-lg px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary">
               <option>300 x 300</option>
               <option>500 x 500</option>
             </select>
           </div>
           <div class="space-y-2">
             <label class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">前景色</label>
-            <div class="flex items-center bg-surface-container-high border border-outline-variant rounded-lg px-3 py-2 space-x-2">
+            <div class="flex items-center -high border border-outline-variant rounded-lg px-3 py-2 space-x-2">
               <div class="w-4 h-4 rounded" :style="{ backgroundColor: qrConfig.foreground }"></div>
               <span class="text-sm text-on-surface uppercase">{{ qrConfig.foreground }}</span>
             </div>
           </div>
           <div class="space-y-2">
             <label class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">背景色</label>
-            <div class="flex items-center bg-surface-container-high border border-outline-variant rounded-lg px-3 py-2 space-x-2">
+            <div class="flex items-center -high border border-outline-variant rounded-lg px-3 py-2 space-x-2">
               <div class="w-4 h-4 rounded border border-outline-variant" :style="{ backgroundColor: qrConfig.background }"></div>
               <span class="text-sm text-on-surface uppercase">{{ qrConfig.background }}</span>
             </div>
           </div>
           <div class="space-y-2">
             <label class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">内边距</label>
-            <select v-model="qrConfig.margin" class="w-full bg-surface-container-high border border-outline-variant rounded-lg px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary">
+            <select v-model="qrConfig.margin" class="w-full -high border border-outline-variant rounded-lg px-3 py-2 text-sm text-on-surface focus:outline-none focus:border-primary">
               <option>中 (16px)</option>
               <option>小 (8px)</option>
             </select>
@@ -131,32 +129,7 @@
         </div>
       </div>
 
-      <div class="bg-surface-container rounded-xl border border-outline-variant p-6 card-glow transition-all duration-300">
-        <h2 class="text-lg font-bold text-on-surface mb-6">资源导出</h2>
-
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <button class="flex items-center justify-center bg-primary text-white py-3 rounded-lg font-semibold hover:brightness-110 transition-all active:scale-[0.98]">
-            <span class="material-symbols-outlined mr-2">download</span> 下载 PNG
-          </button>
-          <button class="flex items-center justify-center bg-surface-container-high border border-outline-variant text-on-surface py-3 rounded-lg hover:bg-outline-variant transition-colors">
-            <span class="material-symbols-outlined mr-2">image</span> 下载 JPG
-          </button>
-          <button class="flex items-center justify-center bg-surface-container-high border border-outline-variant text-on-surface py-3 rounded-lg hover:bg-outline-variant transition-colors">
-            <span class="material-symbols-outlined mr-2">terminal</span> 导出 SVG
-          </button>
-          <button @click="copyLink" class="flex items-center justify-center bg-surface-container-high border border-outline-variant text-on-surface py-3 rounded-lg hover:bg-outline-variant transition-colors">
-            <span class="material-symbols-outlined mr-2">share</span> 复制链接
-          </button>
-        </div>
-
-        <div class="mt-8 flex items-start gap-3 text-sm text-primary/80 bg-primary/5 p-4 rounded-lg border border-primary/10">
-          <span class="material-symbols-outlined text-primary flex-shrink-0">verified_user</span>
-          <p>隐私提示：所有二维码生成均在本地浏览器内完成，您的输入数据不会上传至任何服务器，确保隐私安全。</p>
-        </div>
-      </div>
-
     </div>
-  </div>
 </template>
 
 <script setup>
@@ -180,7 +153,7 @@ const clearContent = () => {
 }
 
 // 复制链接功能
-const copyLink = () => {
+const copyImage = () => {
   if (qrConfig.content) {
     navigator.clipboard.writeText(qrConfig.content)
     alert('内容已复制到剪贴板')
