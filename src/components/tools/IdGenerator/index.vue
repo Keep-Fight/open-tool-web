@@ -255,7 +255,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class=" mx-auto bg-white dark:bg-zinc-900 rounded-2xl border border-slate-100 dark:border-zinc-800 shadow-sm overflow-hidden transition-all">
+    <div class="mx-auto bg-card-window-body overflow-hidden transition-all">
       <div class="grid grid-cols-1 lg:grid-cols-3 ">
         <aside class="p-8 border-r border-slate-50 dark:border-zinc-800 bg-slate-50/30 dark:bg-zinc-900/50">
           <div class="space-y-6">
