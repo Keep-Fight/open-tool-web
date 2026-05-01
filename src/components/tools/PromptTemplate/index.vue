@@ -46,7 +46,6 @@
     <!-- 中间：模板编辑 -->
     <section class="lg:col-span-11 border-l border-r border-slate-200 dark:border-[#27272a] p-5 h-full">
       <div class="font-semibold text-[15px] mb-4">模板编辑</div>
-
       <div class="gap-4 mb-5">
         <div class="flex flex-col gap-2">
           <label class="text-[13px] text-slate-500 dark:text-[#a1a1aa] font-medium">模板名称</label>
@@ -66,7 +65,7 @@
         <div class="border border-slate-200 dark:border-[#3f3f46] rounded-md overflow-hidden flex  mt-1 ">
             <textarea
                 v-model="templateContent"
-                class="transition-colors flex-1 p-3  resize-y min-h-75 font-mono text-sm leading-relaxed bg-transparent outline-none focus:border-blue-500 dark:focus:border-[#0066ff] focus:ring-2 focus:ring-blue-100 dark:focus:ring-[#0066ff]/20 placeholder:text-slate-400 dark:placeholder:text-[#3f3f46]"
+                class="transition-colors flex-1 p-3  resize-y min-h-75 font-mono text-sm leading-relaxed bg-transparent outline-none placeholder:text-slate-400 dark:placeholder:text-[#3f3f46]"
                 placeholder="在此输入 Prompt 模板内容..."
             ></textarea>
         </div>
@@ -113,18 +112,18 @@
           删除模板
         </button>
       </div>
+      <Tips class="mt-3" text="数据存储在浏览器中，清除站点数据/缓存/所有浏览数据时，请先导出保存数据，以免丢失"/>
     </section>
 
     <!-- 右侧：提示词预览 -->
     <aside class="lg:col-span-6 p-5">
       <div class="font-semibold text-[15px] mb-4 flex justify-between items-center">
         <span>提示词预览</span>
-        <button class="bg-blue-500 dark:bg-[#0066ff] text-white text-xs px-2.5 py-1.5 rounded hover:bg-blue-600 dark:hover:brightness-110 transition-colors font-medium">
+        <button @click="copyPreview" class="bg-blue-500 dark:bg-[#0066ff] text-white text-xs px-2.5 py-1.5 rounded hover:bg-blue-600 dark:hover:brightness-110 transition-colors font-medium">
           复制
         </button>
       </div>
       <div class="mt-5">
-        <label class="text-xs text-slate-400 dark:text-[#a1a1aa]">生成结果预览</label>
         <div class="bg-[#fafafa] dark:bg-[#1c1c1f] border border-slate-200 dark:border-[#27272a] rounded-md p-4 min-h-[600px] text-slate-600 dark:text-[#a1a1aa] text-[13px] mt-2 leading-relaxed whitespace-pre-wrap">
           {{ previewResult || '预览结果将实时显示在这里...' }}
         </div>
@@ -154,6 +153,7 @@ import { ref, computed, watch } from 'vue'
 import PromptImportModal from './components/PromptImportModal.vue'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 import { useToast } from '@/composables/useToast'
+import Tips from "@/components/public/Tips.vue";
 
 const toast = useToast()
 
@@ -161,86 +161,7 @@ const toast = useToast()
 const STORAGE_KEY = 'prompt_templates'
 
 // 默认模板数据
-const defaultTemplates = [
-  {
-    id: '1',
-    name: '代码解释助手',
-    content: '请解释以下{{language}}代码的功能：\n\n{{code}}',
-    variables: [
-      { name: 'language', value: 'JavaScript' },
-      { name: 'code', value: 'console.log("Hello World")' }
-    ],
-    createdAt: Date.now()
-  },
-  {
-    id: '2',
-    name: '翻译助手',
-    content: '请将以下中文翻译成{{targetLang}}：\n\n{{text}}',
-    variables: [
-      { name: 'targetLang', value: 'English' },
-      { name: 'text', value: '' }
-    ],
-    createdAt: Date.now()
-  },
-  {
-    id: '3',
-    name: '周报生成器',
-    content: '请根据以下工作内容生成周报：\n\n{{workContent}}',
-    variables: [
-      { name: 'workContent', value: '' }
-    ],
-    createdAt: Date.now()
-  },
-  {
-    id: '4',
-    name: '小红书文案生成',
-    content: '请为以下产品生成一篇小红书风格的推广文案：\n\n产品：{{product}}\n卖点：{{sellingPoints}}',
-    variables: [
-      { name: 'product', value: '' },
-      { name: 'sellingPoints', value: '' }
-    ],
-    createdAt: Date.now()
-  },
-  {
-    id: '5',
-    name: 'SQL 优化助手',
-    content: '请优化以下SQL查询：\n\n{{sql}}',
-    variables: [
-      { name: 'sql', value: '' }
-    ],
-    createdAt: Date.now()
-  },
-  {
-    id: '6',
-    name: '面试题生成器',
-    content: '请生成{{count}}道关于{{topic}}的面试题及答案',
-    variables: [
-      { name: 'count', value: '5' },
-      { name: 'topic', value: '' }
-    ],
-    createdAt: Date.now()
-  },
-  {
-    id: '7',
-    name: '文章润色助手',
-    content: '请润色以下文章，使其更加{{style}}：\n\n{{article}}',
-    variables: [
-      { name: 'style', value: '流畅、专业' },
-      { name: 'article', value: '' }
-    ],
-    createdAt: Date.now()
-  },
-  {
-    id: '8',
-    name: '学习计划制定',
-    content: '请为{{goal}}制定一个{{duration}}的学习计划',
-    variables: [
-      { name: 'goal', value: '' },
-      { name: 'duration', value: '一个月' }
-    ],
-    createdAt: Date.now()
-  }
-]
+const defaultTemplates = []
 
 // 从 localStorage 加载模板
 const loadTemplates = () => {
@@ -437,5 +358,17 @@ const handleImport = (file) => {
 // 导入弹窗关闭
 const closeImportModal = () => {
   showImportModal.value = false
+}
+
+// 复制预览内容
+const copyPreview = async () => {
+  if (!previewResult.value) return
+  try {
+    await navigator.clipboard.writeText(previewResult.value)
+    toast.success('复制成功')
+  } catch (err) {
+    console.error('复制失败:', err)
+    toast.error('复制失败')
+  }
 }
 </script>
