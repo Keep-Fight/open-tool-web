@@ -1,4 +1,4 @@
-<script setup>
+  <script setup>
 import { ref, reactive, computed, onMounted, onUnmounted, watch } from 'vue';
 import {Copy} from 'lucide-vue-next'
 import { useToast } from '@/composables/useToast';

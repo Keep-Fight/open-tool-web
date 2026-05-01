@@ -1,5 +1,5 @@
 <template>
-    <main class="bg-surface-container-lowest border border-slate-100 shadow-sm p-8 relative">
+    <main class="bg-card-window-body p-8 relative">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 relative">
 
         <div class="space-y-8">
@@ -9,7 +9,7 @@
             <label class="text-xs font-bold text-slate-500">输入类型</label>
             <select
                 v-model="inputMode"
-                class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all appearance-none"
+                class="w-full bg-card-window-btn border border-card-window-border text-card-window-text rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all appearance-none"
             >
               <option value="current">当前时间 (实时)</option>
               <option value="ms">时间戳 (毫秒 ms)</option>
@@ -20,9 +20,9 @@
 
           <div class="space-y-2">
             <label class="text-xs font-bold text-slate-500">输入值</label>
-            <div v-if="inputMode === 'current'" class="bg-indigo-50/50 rounded-2xl p-6 flex justify-between items-center border border-indigo-50/50">
+            <div v-if="inputMode === 'current'" class="bg-card-window-btn border border-card-window-border text-card-window-text rounded-2xl p-6 flex justify-between items-center ">
               <div>
-                <div class="text-2xl font-bold text-slate-800 tracking-tight">{{ liveTimeFormatted }}</div>
+                <div class="text-2xl font-bold text-card-window-text tracking-tight">{{ liveTimeFormatted }}</div>
                 <div class="text-xs text-indigo-400 mt-1 uppercase tracking-wider">北京时间 (UTC+8)</div>
               </div>
               <div class="flex items-center gap-2">
@@ -39,13 +39,13 @@
                 v-model="manualInput"
                 type="text"
                 :placeholder="placeholderText"
-                class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-4 text-lg font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                class="w-full bg-card-window-btn border border-card-window-border rounded-xl px-4 py-4 text-lg font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
             />
           </div>
         </div>
 
         <div class="hidden lg:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
-          <div class="bg-white border border-blue-100 shadow-sm rounded-full p-2.5 text-blue-500">
+          <div class="bg-card-window-btn border border-card-window-border shadow-sm rounded-full p-2.5 text-blue-500">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
             </svg>
@@ -66,7 +66,7 @@
                     type="text"
                     :value="val"
                     readonly
-                    class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-2.5 text-sm text-slate-700 focus:outline-none font-mono"
+                    class="w-full bg-card-window-btn border border-card-window-border text-card-window-text rounded-xl px-4 py-2.5 text-s focus:outline-none font-mono"
                 >
                 <button
                     @click="copyToClipboard(val)"
