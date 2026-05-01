@@ -1,7 +1,7 @@
 <template>
   <div class="h-full flex flex-col font-sans text-on-surface dark:text-gray-100 overflow-hidden">
     <div
-        class="h-full p-6 mb-6 flex-grow flex flex-col justify-center bg-white dark:bg-[#121214] border border-gray-200 dark:border-[#27272a]">
+        class="h-full p-6  flex-grow flex flex-col justify-center bg-card-window-body ">
       <div class="flex flex-col md:flex-row items-stretch gap-4 h-full">
 
         <div class="flex-1 flex flex-col">
@@ -45,7 +45,7 @@
 
         <div class="flex-1 flex flex-col">
           <div class="flex items-center justify-between mb-2">
-            <label class="text-sm font-semibold text-on-surface italic">输出</label>
+            <label class="text-sm font-semibold text-on-surface ">输出</label>
             <div class="flex items-center gap-3">
               <button @click="expandAll"
                       class="text-xs text-blue-600 flex items-center gap-1 hover:underline cursor-pointer">
@@ -108,8 +108,8 @@ const inputFormat = ref('字符串');
 const outputEncoding = ref('UTF-8');
 const outputFormat = ref('十六进制');
 
-const encodings = ['UTF-8', 'GBK', 'ASCII', 'ISO-8859-1'];
-const formats = ['字符串', '十六进制', 'Base64', '十进制', '二进制'];
+const encodings = ['UTF-8', 'GBK',  'GK2312', 'ASCII', 'ISO-8859-1'];
+const formats = ['字符串', 'Base64', 'URL编码', '十六进制','十进制', '二进制'];
 
 // 转换逻辑（此处保持原示例中的镜像逻辑，可根据需求扩展具体算法）
 const outputText = computed(() => {

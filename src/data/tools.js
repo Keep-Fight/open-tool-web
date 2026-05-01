@@ -74,7 +74,7 @@ const tools = [
     {
         id: 'id-generation',
         title: 'ID 生成',
-        description: '支持UUID、雪花ID、雪花UUID',
+        description: '支持 UUID(v4)、雪花ID、雪花UUID',
         component: defineAsyncComponent(() => import("../components/tools/IdGenerator/index.vue")),
         category: ['开发工具'],
         tags: ['ID', '生成器', 'UUID'],
@@ -124,7 +124,7 @@ const tools = [
     {
         id: 'string-converter',
         title: '字符串转换',
-        description: '字符串转换工具，支持字符串的转换',
+        description: '支持 字符串、十六进制、十进制、二进制、Base64、URL 编码 之间的相互转换',
         component: defineAsyncComponent(() => import('../components/tools/StringConverter/index.vue')),
         category: ['开发工具', '转换工具', '文本工具'],
         tags: ['字符串', '转换'],
@@ -134,7 +134,7 @@ const tools = [
     {
         id: 'qr-code',
         title: '二维码生成',
-        description: '二维码生成工具，支持二维码的生成',
+        description: '支持生成带有文本信息和logo的二维码，并能下载为图片',
         component: defineAsyncComponent(() => import('../components/tools/QrCode/index.vue')),
         category: ['图片工具'],
         tags: ['二维码', '生成'],
@@ -143,7 +143,7 @@ const tools = [
     }, {
         id: 'prompt-template',
         title: '提示词模板',
-        description: '提示词模板，支持提示词的生成',
+        description: '支持自定义提示词模板，并进行变量替换',
         component: defineAsyncComponent(() => import('../components/tools/PromptTemplate/index.vue')),
         category: ['开发工具'],
         tags: ['提示词', '模板'],
@@ -153,7 +153,7 @@ const tools = [
     {
         id: 'secret-key-generator',
         title: '密钥生成',
-        description: '密钥生成工具，支持密钥的生成',
+        description: '支持 AES、DES/3DES、RC4/RC5、IDEA、Blowfish、SM4、RSA、ECC、SM2等加密算法的密钥生成',
         component: defineAsyncComponent(() => import('../components/tools/SecretKeyGenerator/index.vue')),
         category: ['开发工具'],
         tags: ['密钥', '生成'],
