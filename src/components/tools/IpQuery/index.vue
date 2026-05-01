@@ -34,18 +34,24 @@ const commonIps = [
 const fetchMyIpInfo = async () => {
   myIpInfo.status = 'checking';
   let ip = '';
+  let useFallback = false;
+
+  // 1. 先获取 IP 地址（优先后端接口）
   try {
-    // 1. 先获取 IP 地址（优先后端接口）
     const res = await toolApi.getIpAddress();
     ip = res.data;
-    console.log('获取公网 IP:', res);
+    console.log('后端获取公网 IP:', ip);
   } catch (error) {
-    console.warn('后端接口获取 IP 失败，启用备用方案:', error);
-    // 2. 备用方案：使用 ipify 获取公网 IP
+    console.warn('后端接口获取 IP 失败:', error);
+  }
+
+  // 2. 如果后端没有获取到 IP，启用备用方案
+  if (!ip) {
     try {
       const fallbackRes = await fetch('https://api.ipify.org?format=json');
       const fallbackData = await fallbackRes.json();
       ip = fallbackData.ip;
+      useFallback = true;
       console.log('备用方案获取公网 IP:', ip);
     } catch (fallbackError) {
       console.error('备用方案也失败:', fallbackError);
@@ -57,27 +63,58 @@ const fetchMyIpInfo = async () => {
 
   myIpInfo.ip = ip;
 
-  // 3. 获取地理位置和运营商
+  // 3. 获取地理位置和运营商（优先用后端返回的 IP，失败后用备用 IP 重试）
+  const fetchLocation = async (targetIp) => {
+    const detailRes = await fetch(`http://ip-api.com/json/${targetIp}?lang=zh-CN`);
+    return await detailRes.json();
+  };
+
   try {
-    const detailRes = await fetch(`http://ip-api.com/json/${ip}?lang=zh-CN`);
-    const data = await detailRes.json();
+    const data = await fetchLocation(ip);
 
     if (data.status === 'success') {
       myIpInfo.location = `${data.country} · ${data.regionName} · ${data.city}`;
       myIpInfo.isp = data.isp;
       myIpInfo.status = 'normal';
+    } else if (!useFallback) {
+      // 后端 IP 解析失败，且还没用过备用方案，则用备用 IP 重试
+      console.warn('后端 IP 解析地理位置失败，尝试备用方案...');
+      try {
+        const fallbackRes = await fetch('https://api.ipify.org?format=json');
+        const fallbackData = await fallbackRes.json();
+        const fallbackIp = fallbackData.ip;
+        useFallback = true;
+
+        const fallbackLocData = await fetchLocation(fallbackIp);
+        if (fallbackLocData.status === 'success') {
+          myIpInfo.ip = fallbackIp;
+          myIpInfo.location = `${fallbackLocData.country} · ${fallbackLocData.regionName} · ${fallbackLocData.city}`;
+          myIpInfo.isp = fallbackLocData.isp;
+          myIpInfo.status = 'normal';
+        } else {
+          myIpInfo.location = '定位失败';
+          myIpInfo.isp = '未知';
+          myIpInfo.status = 'error';
+        }
+      } catch (fallbackError) {
+        console.error('备用方案也失败:', fallbackError);
+        myIpInfo.location = '定位失败';
+        myIpInfo.isp = '未知';
+        myIpInfo.status = 'error';
+      }
     } else {
       myIpInfo.location = '定位失败';
       myIpInfo.isp = '未知';
       myIpInfo.status = 'error';
     }
-    myIpInfo.lastUpdate = new Date().toLocaleString();
   } catch (error) {
     console.error('获取地理位置失败:', error);
     myIpInfo.location = '定位失败';
     myIpInfo.isp = '未知';
     myIpInfo.status = 'error';
   }
+
+  myIpInfo.lastUpdate = new Date().toLocaleString();
 };
 
 // 根据 IP 执行查询
@@ -173,7 +210,7 @@ onMounted(() => {
                   v-model="searchDomainName"
                   @keyup.enter="handleDomainSearch()"
                   type="text"
-                  placeholder="请输入域名，例如：google.com"
+                  placeholder="请输入 IP 地址，例如：8.8.8.8"
                   class="flex-1 px-4 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-zinc-800 dark:text-zinc-100 transition-all"
               >
               <button
@@ -193,7 +230,7 @@ onMounted(() => {
                   v-model="searchIp"
                   @keyup.enter="handleIpSearch()"
                   type="text"
-                  placeholder="请输入 IP 地址，例如：8.8.8.8"
+                  placeholder="请输入域名，例如：opentoolbox.cn"
                   class="flex-1 px-4 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-zinc-800 dark:text-zinc-100 transition-all"
               >
               <button
