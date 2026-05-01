@@ -13,7 +13,7 @@ const myIpInfo = reactive({
 
 // --- 输入数据---
 const searchDomainName = ref('');
-const searchIp = ref([]);
+const searchIp = ref('');
 
 const result = ref({});
 const isLoading = ref(false);
@@ -33,38 +33,58 @@ const commonIps = [
 // 获取我的公网 IP 详情
 const fetchMyIpInfo = async () => {
   myIpInfo.status = 'checking';
+  let ip = '';
   try {
-    // 1. 先获取 IP 地址
+    // 1. 先获取 IP 地址（优先后端接口）
     const res = await toolApi.getIpAddress();
-    myIpInfo.ip = res.data;
-    console.log( '获取公网 IP:', res)
+    ip = res.data;
+    console.log('获取公网 IP:', res);
+  } catch (error) {
+    console.warn('后端接口获取 IP 失败，启用备用方案:', error);
+    // 2. 备用方案：使用 ipify 获取公网 IP
+    try {
+      const fallbackRes = await fetch('https://api.ipify.org?format=json');
+      const fallbackData = await fallbackRes.json();
+      ip = fallbackData.ip;
+      console.log('备用方案获取公网 IP:', ip);
+    } catch (fallbackError) {
+      console.error('备用方案也失败:', fallbackError);
+      myIpInfo.status = 'error';
+      myIpInfo.ip = '获取失败';
+      return;
+    }
+  }
 
-    // TODO 档后端返回接口获取不到信息是，通过下面注释掉的方法获取
-    // const res = await fetch('https://api.ipify.org?format=json');
-    // const { ip } = await res.json();
-    // myIpInfo.ip = ip;
+  myIpInfo.ip = ip;
 
-
-    // 2. 获取地理位置和运营商
+  // 3. 获取地理位置和运营商
+  try {
     const detailRes = await fetch(`http://ip-api.com/json/${ip}?lang=zh-CN`);
     const data = await detailRes.json();
 
-    myIpInfo.location = `${data.country} · ${data.regionName} · ${data.city}`;
-    myIpInfo.isp = data.isp;
-    myIpInfo.status = 'normal';
+    if (data.status === 'success') {
+      myIpInfo.location = `${data.country} · ${data.regionName} · ${data.city}`;
+      myIpInfo.isp = data.isp;
+      myIpInfo.status = 'normal';
+    } else {
+      myIpInfo.location = '定位失败';
+      myIpInfo.isp = '未知';
+      myIpInfo.status = 'error';
+    }
     myIpInfo.lastUpdate = new Date().toLocaleString();
   } catch (error) {
+    console.error('获取地理位置失败:', error);
+    myIpInfo.location = '定位失败';
+    myIpInfo.isp = '未知';
     myIpInfo.status = 'error';
-    myIpInfo.ip = '获取失败';
   }
 };
 
-// 根据 IP 或域名执行查询
-const handleSearch = async (target = searchDomainName.value) => {
+// 根据 IP 执行查询
+const handleIpSearch = async (target = searchIp.value) => {
   if (!target) return;
   isLoading.value = true;
   try {
-    // 使用 ip-api.com 接口支持 IP 和 域名查询
     const res = await fetch(`http://ip-api.com/json/${target}?lang=zh-CN&fields=status,message,country,regionName,city,isp,org,as,lat,lon,timezone,proxy,hosting,query`);
     const data = await res.json();
 
@@ -81,10 +101,42 @@ const handleSearch = async (target = searchDomainName.value) => {
         ipType: '原生 IP'
       };
     } else {
-      alert('查询失败，请输入正确的 IP 或域名');
+      alert('查询失败，请输入正确的 IP 地址');
     }
   } catch (error) {
-    console.error('查询出错:', error);
+    console.error('IP 查询出错:', error);
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+// 根据域名执行查询
+const handleDomainSearch = async (target = searchDomainName.value) => {
+  if (!target) return;
+  isLoading.value = true;
+  try {
+    // 使用 ip-api.com 接口查询域名对应的 IP
+    const res = await fetch(`http://ip-api.com/json/${target}?lang=zh-CN&fields=status,message,country,regionName,city,isp,org,as,lat,lon,timezone,proxy,hosting,query`);
+    const data = await res.json();
+
+    if (data.status === 'success') {
+      result.value = {
+        ip: data.query,
+        location: `${data.country} ${data.regionName} ${data.city}`,
+        isp: data.isp,
+        org: data.org || data.as,
+        latLon: `${data.lat.toFixed(4)}, ${data.lon.toFixed(4)}`,
+        timezone: data.timezone,
+        isProxy: data.proxy ? '是' : '否',
+        usageType: data.hosting ? '数据中心' : '宽带/移动网络',
+        ipType: '原生 IP',
+        domain: target // 保留查询的域名
+      };
+    } else {
+      alert('查询失败，请输入正确的域名');
+    }
+  } catch (error) {
+    console.error('域名查询出错:', error);
   } finally {
     isLoading.value = false;
   }
@@ -119,13 +171,13 @@ onMounted(() => {
             <div class="flex gap-2">
               <input
                   v-model="searchDomainName"
-                  @keyup.enter="handleSearch()"
+                  @keyup.enter="handleDomainSearch()"
                   type="text"
-                  placeholder="请输入 IP 地址或域名，例如：8.8.8.8 或 google.com"
+                  placeholder="请输入域名，例如：google.com"
                   class="flex-1 px-4 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-zinc-800 dark:text-zinc-100 transition-all"
               >
               <button
-                  @click="handleSearch()"
+                  @click="handleDomainSearch()"
                   :disabled="isLoading"
                   class="px-8 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
               >
@@ -139,13 +191,13 @@ onMounted(() => {
             <div class="flex gap-2">
               <input
                   v-model="searchIp"
-                  @keyup.enter="handleSearch()"
+                  @keyup.enter="handleIpSearch()"
                   type="text"
-                  placeholder="请输入 IP 地址或域名，例如：8.8.8.8 或 google.com"
+                  placeholder="请输入 IP 地址，例如：8.8.8.8"
                   class="flex-1 px-4 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-zinc-800 dark:text-zinc-100 transition-all"
               >
               <button
-                  @click="handleSearch()"
+                  @click="handleIpSearch()"
                   :disabled="isLoading"
                   class="px-8 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
               >
@@ -253,7 +305,7 @@ onMounted(() => {
           <div
               v-for="ip in commonIps"
               :key="ip.label"
-              @click="handleSearch(ip.label)"
+              @click="handleIpSearch(ip.label)"
               class="p-3 border border-slate-100 dark:border-zinc-800 rounded-xl hover:bg-slate-50 dark:hover:bg-zinc-800 transition-colors cursor-pointer group"
           >
             <div class="font-bold text-slate-800 dark:text-zinc-300 group-hover:text-blue-600 transition-colors">
