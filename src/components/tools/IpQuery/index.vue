@@ -10,8 +10,11 @@ const myIpInfo = reactive({
   lastUpdate: ''
 });
 
-const searchInput = ref('');
-const result = ref(null);
+// --- 输入数据---
+const searchDomainName = ref('');
+const searchIp = ref([]);
+
+const result = ref({});
 const isLoading = ref(false);
 
 // --- 常用 IP 预设 ---
@@ -50,7 +53,7 @@ const fetchMyIpInfo = async () => {
 };
 
 // 根据 IP 或域名执行查询
-const handleSearch = async (target = searchInput.value) => {
+const handleSearch = async (target = searchDomainName.value) => {
   if (!target) return;
   isLoading.value = true;
   try {
@@ -98,17 +101,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-50 dark:bg-zinc-950 p-4 md:p-8 transition-colors duration-300">
-    <div class="max-w-6xl mx-auto space-y-6">
+  <div class="bg-card-window-body transition-colors duration-300">
+    <div class=" mx-auto space-y-6">
 
-      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div class="grid grid-cols-1 lg:grid-cols-5">
 
-        <div class="lg:col-span-3 space-y-6">
-          <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-zinc-800 transition-all">
-            <label class="block text-sm font-bold text-slate-700 dark:text-zinc-300 mb-3">IP 地址 / 域名查询</label>
+        <div class="lg:col-span-3 space-y-6 shadow-sm">
+          <div class="p-6 transition-all">
+            <label class="block text-sm font-bold text-slate-700 dark:text-zinc-300 mb-3">IP 地址查询</label>
             <div class="flex gap-2">
               <input
-                  v-model="searchInput"
+                  v-model="searchDomainName"
                   @keyup.enter="handleSearch()"
                   type="text"
                   placeholder="请输入 IP 地址或域名，例如：8.8.8.8 或 google.com"
@@ -122,12 +125,32 @@ onMounted(() => {
                 {{ isLoading ? '查询中...' : '查询' }}
               </button>
             </div>
-            <p class="mt-3 text-xs text-slate-400 dark:text-zinc-500 font-mono">支持 IPv4、IPv6 地址及全球域名查询</p>
+            <p class="mt-3 text-xs text-slate-400 dark:text-zinc-500 font-mono">支持 IPv4、IPv6 地址</p>
+          </div>
+          <div class="p-6 transition-all">
+            <label class="block text-sm font-bold text-slate-700 dark:text-zinc-300 mb-3">域名查询</label>
+            <div class="flex gap-2">
+              <input
+                  v-model="searchIp"
+                  @keyup.enter="handleSearch()"
+                  type="text"
+                  placeholder="请输入 IP 地址或域名，例如：8.8.8.8 或 google.com"
+                  class="flex-1 px-4 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white dark:focus:bg-zinc-800 dark:text-zinc-100 transition-all"
+              >
+              <button
+                  @click="handleSearch()"
+                  :disabled="isLoading"
+                  class="px-8 py-2.5 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+              >
+                {{ isLoading ? '查询中...' : '查询' }}
+              </button>
+            </div>
+            <p class="mt-3 text-xs text-slate-400 dark:text-zinc-500 font-mono">全球域名查询</p>
           </div>
         </div>
 
-        <div class="lg:col-span-1">
-          <div class="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-zinc-800 h-full">
+        <div class="lg:col-span-2">
+          <div class=" p-6 shadow-sm border-l border-slate-100 dark:border-zinc-800 h-full">
             <div class="flex justify-between items-center mb-6">
               <h2 class="font-bold text-slate-800 dark:text-zinc-200">我的公网 IP</h2>
               <button @click="fetchMyIpInfo" class="text-blue-500 text-xs flex items-center gap-1 hover:text-blue-600">
@@ -162,7 +185,7 @@ onMounted(() => {
       </div>
 
       <transition name="fade">
-        <div v-if="result" class="bg-white dark:bg-zinc-900 p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100 dark:border-zinc-800 relative">
+        <div  class=" p-6 md:p-8  relative">
           <div class="absolute top-6 right-6">
             <button @click="exportResult" class="text-blue-600 dark:text-blue-400 text-sm flex items-center gap-1 hover:underline">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
@@ -203,11 +226,8 @@ onMounted(() => {
         </div>
       </transition>
 
-      <section class="bg-white dark:bg-zinc-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-zinc-800 transition-all">
-        <div class="flex justify-between items-center mb-6">
-          <h3 class="font-bold text-slate-800 dark:text-zinc-200">常用 IP</h3>
-          <button class="text-blue-500 text-sm flex items-center gap-1 hover:text-blue-600">更多 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg></button>
-        </div>
+      <section class=" p-6   transition-all">
+          <h2 class="text-sm font-bold text-slate-500 dark:text-zinc-400 mb-6 uppercase tracking-wider">常用IP</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 text-center">
           <div
               v-for="ip in commonIps"
