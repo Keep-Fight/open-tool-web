@@ -56,7 +56,7 @@ const tools = [
         title: 'JSON 格式化/校验',
         description: '格式化 JSON 字符串，验证其格式是否正确，支持折叠和展开。',
         component: defineAsyncComponent(() => import('../components/tools/JsonFormatter/index.vue')),
-        category: ['格式化工具'],
+        category: ['开发工具','格式化工具'],
         tags: ['json', '格式化'],
         icon: Braces,
         iconName: ''
@@ -83,10 +83,10 @@ const tools = [
     },
     {
         id: 'base64-converter',
-        title: 'Base64 转换',
-        description: 'Base64转换工具，支持文本和图片的转换',
+        title: 'Base64 图片转换',
+        description: '支持Base64字符串和图片的相互转换',
         component: defineAsyncComponent(() => import('../components/tools/Base64Converter/index.vue')),
-        category: ['文本工具'],
+        category: ['文本工具','图片工具','转换工具'],
         tags: ['base64', '转换'],
         icon: GoogleIcon,
         iconName: 'code_xml'

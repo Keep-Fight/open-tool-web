@@ -1,5 +1,8 @@
 <script setup>
 import { ref, computed } from 'vue';
+import { useToast } from '@/composables/useToast';
+
+const toast = useToast();
 
 // 模式切换：'base64ToImg' (解码) 或 'imgToBase64' (编码)
 const activeMode = ref('base64ToImg');
@@ -59,9 +62,9 @@ const copyToClipboard = async (text) => {
         ? text.split(',')[1]
         : text;
     await navigator.clipboard.writeText(content);
-    alert('已复制到剪贴板');
+    toast.success('已复制到剪贴板');
   } catch (err) {
-    alert('复制失败');
+    toast.error('复制失败');
   }
 };
 
