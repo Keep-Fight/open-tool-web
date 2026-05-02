@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64转换工具</title>
+    <!-- 引入 Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { primary: '#1677ff' }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 自定义滚动条样式 */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        .dark ::-webkit-scrollbar-thumb { background: #4b5563; }
+    </style>
+</head>
+<body class="bg-[#f2f5f8] dark:bg-gray-900 min-h-screen text-gray-800 dark:text-gray-200 font-sans p-4 md:p-6">
+<div id="app" class="max-w-[1200px] mx-auto space-y-4">
+
+    <!-- 头部区域 -->
+    <header class="bg-white dark:bg-gray-800 rounded-xl p-4 flex items-center justify-between shadow-sm">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 bg-indigo-100 text-indigo-500 rounded-lg flex items-center justify-center text-xl font-bold">A₆₄</div>
+            <div>
+                <h1 class="text-xl font-bold">Base64转换工具 <span class="text-xs bg-blue-100 text-primary px-2 py-0.5 rounded ml-2 font-normal">实用工具</span></h1>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">支持文本和图片的 Base64 编码与解码，在线转换，快速高效。</p>
+            </div>
+        </div>
+        <div class="flex gap-3">
+            <button class="px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                收藏
+            </button>
+            <button class="px-4 py-2 border border-blue-200 text-primary rounded-lg text-sm hover:bg-blue-50 dark:hover:bg-gray-800 flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+                分享
+            </button>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+
+        <!-- 导航 Tabs -->
+        <div class="flex border-b border-gray-100 dark:border-gray-700 mb-6">
+
+            <!-- Base64 => 图片 -->
+            <div @click="activeMode = 'base64ToImg'"
+                 :class="['flex items-center gap-2 px-6 py-3 cursor-pointer border-b-2 transition-colors', activeMode === 'base64ToImg' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-800 dark:hover:text-gray-200']">
+                <div :class="['w-8 h-8 rounded flex items-center justify-center font-bold', activeMode === 'base64ToImg' ? 'bg-blue-50 dark:bg-gray-700' : 'bg-gray-100 dark:bg-gray-700']">
+                    T
+                </div>
+                <div>
+                    <div class="font-medium">Base64 => 图片</div>
+                    <div class="text-xs">Base64字符串转换为图片</div>
+                </div>
+            </div>
+
+            <!-- 图片 => Base64 -->
+            <div @click="activeMode = 'imgToBase64'"
+                 :class="['flex items-center gap-2 px-6 py-3 cursor-pointer border-b-2 transition-colors', activeMode === 'imgToBase64' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-800 dark:hover:text-gray-200']">
+                <div :class="['w-8 h-8 rounded flex items-center justify-center', activeMode === 'imgToBase64' ? 'bg-blue-50 dark:bg-gray-700' : 'bg-gray-100 dark:bg-gray-700']">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <div>
+                    <div class="font-medium">图片 => Base64</div>
+                    <div class="text-xs">将图片转换为Base64字符串</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- 核心交互区域 -->
+        <div class="flex flex-col lg:flex-row items-stretch gap-6">
+
+            <!-- 左侧区域 -->
+            <div class="flex-1 border border-gray-200 dark:border-gray-700 rounded-lg p-5 flex flex-col">
+                <h3 class="font-medium mb-4 text-gray-800 dark:text-gray-200">
+                    {{ activeMode === 'base64ToImg' ? 'Base64 输入' : '图片上传' }}
+                </h3>
+
+                <!-- 模式1: Base64转图片 (输入框) -->
+                <div v-show="activeMode === 'base64ToImg'" class="flex-1 flex flex-col">
+                    <div class="relative flex-1">
+                            <textarea
+                                    v-model="base64Input"
+                                    class="w-full h-full min-h-[300px] p-4 border border-blue-100 dark:border-gray-600 bg-blue-50/30 dark:bg-gray-800 rounded-lg resize-none focus:outline-none focus:ring-1 focus:ring-primary text-sm break-all"
+                                    placeholder="请输入或粘贴 Base64 字符串 (Data URL 或 Base64 数据)"
+                            ></textarea>
+                        <button @click="base64Input = ''" class="absolute top-3 right-3 text-primary text-sm hover:underline">清空</button>
+                    </div>
+                    <div class="flex justify-between items-center mt-2 text-xs text-gray-400">
+                        <span>字符数: {{ base64Input.length }}</span>
+                        <a href="#" class="text-primary hover:underline">格式说明</a>
+                    </div>
+                </div>
+
+                <!-- 模式2: 图片转Base64 (上传区) -->
+                <div v-show="activeMode === 'imgToBase64'" class="flex-1 flex flex-col">
+                    <label class="flex-1 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex flex-col items-center justify-center p-6 cursor-pointer hover:border-primary transition-colors bg-gray-50 dark:bg-gray-800">
+                        <div class="bg-blue-50 text-primary p-3 rounded-full mb-3">
+                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                        </div>
+                        <p class="text-gray-700 dark:text-gray-200 font-medium mb-1">点击或拖拽图片到此处上传</p>
+                        <p class="text-xs text-gray-400 mb-4">支持 JPG、PNG、GIF、WebP 等格式，最大 10MB</p>
+                        <div class="px-4 py-1.5 border border-gray-300 dark:border-gray-600 rounded text-sm bg-white dark:bg-gray-700">选择图片</div>
+                        <input type="file" class="hidden" accept="image/*" @change="handleFileUpload">
+                    </label>
+
+                    <!-- 预览小图 (如果有) -->
+                    <div v-if="previewImage" class="mt-4 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+                        <p class="text-xs text-gray-500 mb-2">图片预览</p>
+                        <div class="flex items-center gap-4">
+                            <img :src="previewImage" class="w-16 h-16 object-cover rounded">
+                            <div class="flex-1 text-sm text-gray-600 dark:text-gray-300">
+                                <p class="font-medium truncate">{{ fileInfo.name }}</p>
+                                <p class="text-xs text-gray-400 mt-1">{{ fileInfo.size }} • {{ fileInfo.width }}x{{ fileInfo.height }}</p>
+                            </div>
+                            <button @click="clearImage" class="text-gray-400 hover:text-red-500">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 中间互换图标 -->
+            <div class="hidden lg:flex items-center justify-center -mx-4 z-10">
+                <div class="bg-blue-50 dark:bg-gray-700 text-primary p-2 rounded-full shadow-sm cursor-pointer hover:bg-blue-100 transition-colors" @click="toggleMode">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg>
+                </div>
+            </div>
+
+            <!-- 右侧区域 -->
+            <div class="flex-1 border border-gray-200 dark:border-gray-700 rounded-lg p-5 flex flex-col">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-medium text-gray-800 dark:text-gray-200">转换结果 ({{ activeMode === 'base64ToImg' ? '图片' : 'Base64' }})</h3>
+                    <div class="flex gap-2">
+                        <button v-if="activeMode === 'imgToBase64'" class="text-sm px-3 py-1 border border-gray-200 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700">清空</button>
+                        <button v-if="activeMode === 'imgToBase64'" class="text-sm px-3 py-1 border border-gray-200 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            复制
+                        </button>
+                        <button v-if="activeMode === 'base64ToImg'" class="text-sm px-3 py-1 border border-gray-200 dark:border-gray-600 rounded hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-1">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            下载
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 模式1: Base64转图片 (图片展示区) -->
+                <div v-show="activeMode === 'base64ToImg'" class="flex-1 flex flex-col">
+                    <div class="flex-1 border border-gray-200 dark:border-gray-600 rounded-lg p-2 bg-gray-50 dark:bg-gray-900 flex items-center justify-center min-h-[300px] overflow-hidden">
+                        <img v-if="formattedImgSrc" :src="formattedImgSrc" class="max-w-full max-h-full object-contain rounded">
+                        <span v-else class="text-gray-400 text-sm">暂无图片预览</span>
+                    </div>
+                    <div class="mt-4 flex gap-3">
+                        <button class="flex-1 bg-primary text-white py-2 rounded-lg text-sm hover:bg-blue-600 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            下载图片
+                        </button>
+                        <button class="flex-1 border border-gray-200 dark:border-gray-600 py-2 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-700">复制图片</button>
+                        <button class="flex-1 border border-gray-200 dark:border-gray-600 py-2 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-700">复制 Data URL</button>
+                    </div>
+                </div>
+
+                <!-- 模式2: 图片转Base64 (输出框) -->
+                <div v-show="activeMode === 'imgToBase64'" class="flex-1 flex flex-col">
+                    <div class="flex gap-4 mb-3 text-sm">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="format" class="text-primary focus:ring-primary" checked> Base64 字符串
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer text-gray-500">
+                            <input type="radio" name="format" class="text-primary focus:ring-primary"> Data URL (推荐)
+                        </label>
+                    </div>
+                    <div class="relative flex-1">
+                            <textarea
+                                    readonly
+                                    v-model="generatedBase64"
+                                    class="w-full h-full min-h-[260px] p-4 border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 rounded-lg resize-none focus:outline-none text-sm break-all text-gray-600 dark:text-gray-300"
+                                    placeholder="上传图片后将在此生成 Base64 编码"
+                            ></textarea>
+                    </div>
+                    <div class="mt-4 flex gap-3">
+                        <button class="bg-primary text-white px-6 py-2 rounded-lg text-sm hover:bg-blue-600 flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            复制结果
+                        </button>
+                        <button class="border border-gray-200 dark:border-gray-600 px-4 py-2 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            下载 Base64 文本
+                        </button>
+                        <button class="border border-gray-200 dark:border-gray-600 px-4 py-2 rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-gray-700 flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            导出为文件
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 底部说明与支持格式 -->
+        <div class="mt-8 pt-6 border-t border-gray-100 dark:border-gray-700 flex flex-col md:flex-row gap-8">
+            <div class="flex-1">
+                <h4 class="font-medium mb-3 text-gray-800 dark:text-gray-200">使用说明</h4>
+                <ul class="text-sm text-gray-500 dark:text-gray-400 space-y-2">
+                    <li>1. <strong>图片转 Base64：</strong> 上传图片后，工具会将图片转换为 Base64 字符串或 Data URL，可用于网页、接口等场景。</li>
+                    <li>2. <strong>Base64 转图片：</strong> 将 Base64 字符串粘贴到输入框，工具会自动还原为图片并预览，支持下载保存。</li>
+                    <li>3. <strong>格式说明：</strong> Data URL 包含图片的格式信息 (如: <code>data:image/png;base64,...</code>) ，可直接用于 HTML 的 <code>&lt;img&gt;</code> 标签。</li>
+                </ul>
+            </div>
+            <div class="flex-1">
+                <h4 class="font-medium mb-3 text-gray-800 dark:text-gray-200">支持的图片格式</h4>
+                <div class="flex flex-wrap gap-2 mb-3">
+                    <span class="px-3 py-1 border border-gray-200 dark:border-gray-600 rounded text-xs text-gray-600 dark:text-gray-300 flex items-center gap-1"><svg class="w-3 h-3 text-blue-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path></svg> JPG / JPEG</span>
+                    <span class="px-3 py-1 border border-gray-200 dark:border-gray-600 rounded text-xs text-gray-600 dark:text-gray-300 flex items-center gap-1"><svg class="w-3 h-3 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path></svg> PNG</span>
+                    <span class="px-3 py-1 border border-gray-200 dark:border-gray-600 rounded text-xs text-gray-600 dark:text-gray-300 flex items-center gap-1"><svg class="w-3 h-3 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path></svg> GIF</span>
+                    <span class="px-3 py-1 border border-gray-200 dark:border-gray-600 rounded text-xs text-gray-600 dark:text-gray-300 flex items-center gap-1"><svg class="w-3 h-3 text-indigo-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path></svg> WebP</span>
+                    <span class="px-3 py-1 border border-gray-200 dark:border-gray-600 rounded text-xs text-gray-600 dark:text-gray-300 flex items-center gap-1"><svg class="w-3 h-3 text-red-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path></svg> BMP</span>
+                    <span class="px-3 py-1 border border-gray-200 dark:border-gray-600 rounded text-xs text-gray-600 dark:text-gray-300 flex items-center gap-1"><svg class="w-3 h-3 text-purple-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path></svg> SVG</span>
+                </div>
+                <p class="text-xs text-gray-400">最大支持 10MB 的图片文件</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    const { createApp, ref, computed } = Vue;
+
+    createApp({
+        setup() {
+            // 当前激活的模式：'base64ToImg' 或 'imgToBase64'
+            const activeMode = ref('base64ToImg');
+
+            // === Base64转图片 状态 ===
+            const base64Input = ref('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='); // 默认给个透明像素占位
+
+            // 处理缺失头部的 Base64 字符串以便展示
+            const formattedImgSrc = computed(() => {
+                if (!base64Input.value) return '';
+                let val = base64Input.value.trim();
+                if (!val.startsWith('data:image')) {
+                    // 简单推断，默认加上 png 头部
+                    return `data:image/png;base64,${val}`;
+                }
+                return val;
+            });
+
+            // === 图片转Base64 状态 ===
+            const generatedBase64 = ref('');
+            const previewImage = ref('');
+            const fileInfo = ref({ name: '', size: '', width: 0, height: 0 });
+
+            // 处理文件上传
+            const handleFileUpload = (event) => {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                // 记录文件基础信息
+                fileInfo.value.name = file.name;
+                fileInfo.value.size = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const result = e.target.result;
+                    previewImage.value = result;
+                    generatedBase64.value = result;
+
+                    // 获取图片宽高
+                    const img = new Image();
+                    img.onload = () => {
+                        fileInfo.value.width = img.width;
+                        fileInfo.value.height = img.height;
+                    };
+                    img.src = result;
+                };
+                reader.readAsDataURL(file);
+            };
+
+            const clearImage = () => {
+                previewImage.value = '';
+                generatedBase64.value = '';
+                fileInfo.value = { name: '', size: '', width: 0, height: 0 };
+            };
+
+            // 中间箭头切换模式
+            const toggleMode = () => {
+                activeMode.value = activeMode.value === 'base64ToImg' ? 'imgToBase64' : 'base64ToImg';
+            };
+
+            return {
+                activeMode,
+                base64Input,
+                formattedImgSrc,
+                generatedBase64,
+                previewImage,
+                fileInfo,
+                handleFileUpload,
+                clearImage,
+                toggleMode
+            };
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>
