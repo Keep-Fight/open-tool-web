@@ -95,10 +95,6 @@
         /* 增加全局色彩过渡，让暗/亮切换更平滑 */
         @apply transition-colors duration-300 ease-in-out;
     }
-
-    .material-symbols-outlined {
-        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-    }
 }
 
 /* 玻璃拟态导航栏 */

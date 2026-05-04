@@ -2,6 +2,7 @@
 import {ref, onMounted, defineEmits, onUnmounted, computed, provide} from 'vue'
 import mdApi from '@/api/mdApi.js'
 import NotesSidebarItem from './NotesSidebarItem.vue'
+import SvgIcon from '@/components/public/SvgIcon.vue'
 
 const menuGroups = ref([])
 const searchQuery = ref('')
@@ -36,7 +37,7 @@ const formatTreeToMenu = (tree, parent = null) => {
       }
     } else {
       // 文件默认图标为description
-      node.icon = node.icon || 'description';
+      node.icon = node.icon || 'md-file';
       node.title = node.title.replace(/\.md$/, '');
     }
 
@@ -151,10 +152,7 @@ onUnmounted(() => stopResizing())
 
         <div class="px-3 mb-6">
           <div class="relative group">
-            <span
-                class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[18px] text-slate-400 group-focus-within:text-primary transition-colors">
-              search
-            </span>
+            <SvgIcon name="search" className="w-[18px] h-[18px] absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" />
             <input
                 v-model="searchQuery"
                 type="text"
@@ -187,10 +185,8 @@ onUnmounted(() => stopResizing())
         @click="toggleCollapse"
         class="absolute top-1/2 -right-3 transform -translate-y-1/2 w-6 h-12 bg-white dark:bg-[#1c1c1f] border border-slate-200 dark:border-[#27272a] rounded-full flex items-center justify-center shadow-md z-[60] hover:text-primary transition-all group"
     >
-      <span class="material-symbols-outlined text-[18px] transition-transform duration-300"
-            :class="isCollapsed ? 'rotate-180' : 'rotate-0'">
-        chevron_left
-      </span>
+      <SvgIcon name="chevron-left" className="w-[18px] h-[18px] transition-transform duration-300"
+              :class="isCollapsed ? 'rotate-180' : 'rotate-0'" />
     </button>
   </aside>
 </template>
@@ -217,9 +213,5 @@ aside:hover .overflow-y-auto::-webkit-scrollbar-thumb {
 
 .dark aside:hover .overflow-y-auto::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.05);
-}
-
-.material-symbols-outlined {
-  font-variation-settings: 'wght' 300;
 }
 </style>

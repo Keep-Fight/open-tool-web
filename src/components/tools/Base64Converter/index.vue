@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useToast } from '@/composables/useToast';
+import SvgIcon from '@/components/public/SvgIcon.vue';
 
 const toast = useToast();
 
@@ -98,7 +99,7 @@ const downloadText = () => {
             @click="activeMode = 'base64ToImg'"
             :class="['flex items-center gap-2 px-6 py-3 cursor-pointer border-b-2 transition-all', activeMode === 'base64ToImg' ? 'border-primary text-primary' : 'border-transparent text-gray-500 dark:text-on-surface-variant hover:text-primary']"
         >
-          <span class="material-symbols-outlined text-xl">image</span>
+          <SvgIcon name="base64-converter" className="text-xl w-7 h-7" />
           <div class="text-left">
             <div class="font-medium leading-none">Base64转图片</div>
             <div class="text-[10px] mt-1 opacity-70">解码还原</div>
@@ -109,7 +110,7 @@ const downloadText = () => {
             @click="activeMode = 'imgToBase64'"
             :class="['flex items-center gap-2 px-6 py-3 cursor-pointer border-b-2 transition-all', activeMode === 'imgToBase64' ? 'border-primary text-primary' : 'border-transparent text-gray-500 dark:text-on-surface-variant hover:text-primary']"
         >
-          <span class="material-symbols-outlined text-xl">photo_camera</span>
+          <SvgIcon name="image" className="text-xl w-7 h-7"/>
           <div class="text-left">
             <div class="font-medium leading-none">图片转Base64</div>
             <div class="text-[10px] mt-1 opacity-70">编码转换</div>
@@ -143,7 +144,7 @@ const downloadText = () => {
           <div v-show="activeMode === 'imgToBase64'" class="flex-1 flex flex-col">
             <label class="flex-1 border-2 border-dashed border-gray-300 dark:border-outline-variant rounded-xl flex flex-col items-center justify-center p-8 cursor-pointer hover:border-primary hover:bg-primary/5 transition-all group">
               <div class="bg-primary/10 text-primary p-4 rounded-full mb-4 group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-4xl">cloud_upload</span>
+                <SvgIcon name="cloud-upload" className="text-4xl" />
               </div>
               <p class="font-medium mb-1">点击或拖拽图片</p>
               <p class="text-xs text-gray-400">支持主流格式，最大 10MB</p>
@@ -157,7 +158,7 @@ const downloadText = () => {
                 <p class="font-medium truncate">{{ fileInfo.name }}</p>
                 <p class="text-xs text-gray-400 mt-1">{{ fileInfo.size }} • {{ fileInfo.width }}x{{ fileInfo.height }}</p>
               </div>
-              <button @click="clearImage" class="text-gray-400 hover:text-red-500 p-2"><span class="material-symbols-outlined">delete</span></button>
+              <button @click="clearImage" class="text-gray-400 hover:text-red-500 p-2"><SvgIcon name="delete" className="w-5 h-5" /></button>
             </div>
           </div>
         </div>
@@ -176,16 +177,16 @@ const downloadText = () => {
             <div class="flex-1 border border-gray-200 dark:border-outline bg-white dark:bg-background rounded-lg p-2 flex items-center justify-center min-h-[300px] overflow-hidden relative group">
               <img v-if="formattedImgSrc" :src="formattedImgSrc" class="max-w-full max-h-full object-contain">
               <div v-else class="text-gray-400 text-sm flex flex-col items-center gap-2">
-                <span class="material-symbols-outlined text-4xl opacity-20">image_not_supported</span>
+                <SvgIcon name="image-not-supported" className="text-4xl opacity-20" />
                 等待输入...
               </div>
             </div>
             <div class="mt-4 grid grid-cols-2 gap-3">
               <button @click="downloadImage" class="bg-primary text-white py-2.5 rounded-lg text-sm font-semibold hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined text-sm">download</span>下载图片
+                <SvgIcon name="download" className="text-sm" />下载图片
               </button>
               <button @click="copyToClipboard(base64Input)" class="border border-gray-200 dark:border-outline-variant py-2.5 rounded-lg text-sm hover:bg-white dark:hover:bg-surface-container-high transition-all flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined text-sm">content_copy</span>复制源码
+                <SvgIcon name="content-copy" className="text-sm" />复制源码
               </button>
             </div>
           </div>
@@ -210,10 +211,10 @@ const downloadText = () => {
             </div>
             <div class="mt-4 flex gap-3">
               <button @click="copyToClipboard(generatedBase64)" class="flex-1 bg-primary text-white py-2.5 rounded-lg text-sm font-semibold hover:brightness-110 transition-all flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined text-sm">content_copy</span>复制结果
+                <SvgIcon name="content-copy" className="text-sm" />复制结果
               </button>
-              <button @click="downloadText" class="border border-gray-200 dark:border-outline-variant px-4 py-2.5 rounded-lg text-sm hover:bg-white dark:hover:bg-surface-container-high transition-all">
-                <span class="material-symbols-outlined text-sm">file_download</span>
+              <button @click="downloadText" class="border border-card-window-border px-4 py-2.5 rounded-lg text-sm bg-card-window-btn hover:bg-primary/30 transition-all">
+                <SvgIcon name="file-download" className="text-sm" />
               </button>
             </div>
           </div>

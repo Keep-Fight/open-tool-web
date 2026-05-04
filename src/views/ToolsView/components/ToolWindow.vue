@@ -4,6 +4,7 @@ import {useRoute, useRouter} from 'vue-router'
 import {useFavoriteStore} from '@/stores/favoriteStore'
 import {Star} from 'lucide-vue-next'
 import {useTools} from "@/composables/useTools"
+import SvgIcon from '@/components/public/SvgIcon.vue'
 
 const {
   tools
@@ -92,7 +93,7 @@ const goBack = () => {
                 class="inline-flex items-center text-sm font-medium transition-all py-2 px-3 -ml-3
                  text-on-surface-variant hover:text-primary  cursor-pointer group border-l-2 border-outline-variant/50"
             >
-              <span class="material-symbols-outlined text-[20px] mr-1 group-hover:-translate-x-1 transition-transform">arrow_back</span>
+              <SvgIcon name="arrow-back" className="w-5 h-5 mr-1 group-hover:-translate-x-1 transition-transform" />
               <span>返回工具箱</span>
             </div>
           </div>
@@ -103,7 +104,7 @@ const goBack = () => {
           <component :is="activeTool" v-if="activeTool" class="min-h-175"/>
 
           <div v-else class="flex flex-col items-center justify-center text-outline">
-            <span class="material-symbols-outlined text-4xl mb-2 animate-pulse">construction</span>
+            <SvgIcon name="construction" className="w-10 h-10 mb-2 animate-pulse" />
             <p class="font-headline font-bold">工具正在维护或开发中...</p>
           </div>
         </div>

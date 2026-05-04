@@ -1,7 +1,6 @@
 import {defineAsyncComponent} from 'vue'
 import SvgIcon from "@/components/public/SvgIcon.vue";
 import {Braces, CheckSquare, Code2, LayoutGrid, Palette, Repeat, Type, Image, QrCode} from "lucide-vue-next";
-import GoogleIcon from "@/components/public/GoogleIcon.vue";
 
 // 工具分类的定义
 const categories = [
@@ -88,8 +87,8 @@ const tools = [
         component: defineAsyncComponent(() => import('../components/tools/Base64Converter/index.vue')),
         category: ['文本工具','图片工具','转换工具'],
         tags: ['base64', '转换'],
-        icon: GoogleIcon,
-        iconName: 'code_xml'
+        icon: SvgIcon,
+        iconName: 'base64-converter'
     },
     {
         id: 'ip-query',

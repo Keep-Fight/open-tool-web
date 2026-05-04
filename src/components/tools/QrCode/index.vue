@@ -6,8 +6,7 @@
 
         <div class="p-6 transition-all duration-300">
           <h2 class="text-lg font-bold text-on-surface mb-6 flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary">edit_square</span>
-            输入内容
+            <SvgIcon name="edit-square" className="w-5 h-5" /> 输入内容
           </h2>
 
           <div class="space-y-4">
@@ -22,7 +21,7 @@
                   <option value="wifi">WiFi</option>
                   <option value="vcard">名片 (vCard)</option>
                 </select>
-                <span class="material-symbols-outlined absolute right-3 top-2.5 text-on-surface-variant pointer-events-none">expand_more</span>
+                <SvgIcon name="expand-more" className="w-5 h-5" />
               </div>
             </div>
             <div v-if="qrConfig.logoPreview">
@@ -30,7 +29,7 @@
               <div class="relative w-full h-32 border border-outline-variant rounded-lg overflow-hidden bg-gray-50 dark:bg-[#27272a]">
                 <img :src="qrConfig.logoPreview" alt="Logo Preview" class="w-full h-full object-contain">
                 <button @click="removeLogo" class="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors">
-                  <span class="material-symbols-outlined text-sm">close</span>
+                  <SvgIcon name="close" className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -38,7 +37,7 @@
               <label class="block text-sm font-medium text-on-surface-variant mb-2">LOGO (可选)</label>
               <label class="w-full border border-dashed border-outline-variant rounded-lg py-4 flex items-center justify-center text-sm text-on-surface-variant cursor-pointer hover:border-primary hover:bg-primary/5 transition-all">
                 <input type="file" accept="image/*" @change="handleLogoUpload" class="hidden">
-                <span class="material-symbols-outlined text-sm mr-2">add_photo_alternate</span> 添加 LOGO
+                <SvgIcon name="add-photo-alternate" className="w-4 h-4" /> 添加 LOGO
               </label>
             </div>
 
@@ -104,7 +103,7 @@
           <div class="flex justify-between items-center mb-6">
             <h2 class="text-lg font-bold text-on-surface">预览中心</h2>
             <button @click="clearContent" class="flex items-center text-sm text-on-surface-variant hover:text-primary transition-colors">
-              <span class="material-symbols-outlined text-sm mr-1">delete</span> 清空
+              <SvgIcon name="delete" className="w-4 h-4" /> 清空
             </button>
           </div>
 
@@ -116,10 +115,10 @@
 
           <div class="grid grid-cols-2 gap-4 mt-4">
             <button @click="downloadQR" class="flex items-center justify-center bg-[#0066ff] text-white py-3 rounded-lg font-semibold hover:brightness-110 transition-all active:scale-[0.98]">
-              <span class="material-symbols-outlined mr-2">download</span> 下载
+              <SvgIcon name="download" className="w-4 h-4" /> 下载
             </button>
             <button @click="copyImage" class="flex items-center justify-center border border-outline-variant text-on-surface py-3 rounded-lg hover:bg-outline-variant/30 transition-colors">
-              <span class="material-symbols-outlined mr-2">content_copy</span> 复制
+              <SvgIcon name="content-copy" className="w-4 h-4" /> 复制
             </button>
           </div>
         </div>
@@ -185,6 +184,7 @@
 <script setup>
 import {ref, reactive, watch, onMounted, nextTick} from 'vue'
 import QRCode from 'qrcode'
+import SvgIcon from '@/components/public/SvgIcon.vue'
 
 const qrCanvas = ref(null)
 const qrConfig = reactive({

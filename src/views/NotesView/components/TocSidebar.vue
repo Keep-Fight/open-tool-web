@@ -1,5 +1,6 @@
 <script setup>
 import {ref, onMounted, onUnmounted, watch, nextTick} from 'vue'
+import SvgIcon from '@/components/public/SvgIcon.vue'
 
 const props = defineProps({
   tocList: {
@@ -168,8 +169,8 @@ const stopResizing = () => {
 
     <button @click="toggleCollapse"
             class="absolute top-1/2 -left-3 -translate-y-1/2 w-6 h-12 bg-white dark:bg-[#1c1c1f] border border-slate-200 dark:border-[#27272a] rounded-full flex items-center justify-center shadow-md z-[60] hover:text-primary transition-all active:scale-95">
-      <span class="material-symbols-outlined text-[18px] transition-transform duration-300"
-            :class="isCollapsed ? 'rotate-180' : 'rotate-0'">chevron_left</span>
+      <SvgIcon name="chevron-left" className="w-[18px] h-[18px] transition-transform duration-300"
+            :class="isCollapsed ? 'rotate-180' : 'rotate-0'" />
     </button>
   </aside>
 </template>
@@ -188,9 +189,5 @@ const stopResizing = () => {
 
 aside:hover .custom-scrollbar::-webkit-scrollbar-thumb {
   @apply bg-slate-200 dark:bg-zinc-800;
-}
-
-.material-symbols-outlined {
-  font-variation-settings: 'wght' 300;
 }
 </style>

@@ -25,7 +25,8 @@
       <!-- 右侧内容-->
       <div class="flex items-center gap-4">
         <button @click="$emit('toggle-theme')" class="flex items-center justify-center p-2 text-on-surface-variant hover:text-primary dark:hover:text-on-surface rounded-full hover:bg-surface-container-low transition-all">
-          <span class="material-symbols-outlined">{{ isDark ? 'light_mode' : 'dark_mode' }}</span>
+          <SvgIcon  v-show="isDark"  name="light-mode" className="w-6 h-6" />
+          <SvgIcon v-show="!isDark" name="dark-mode" className="w-6 h-6" />
         </button>
         <a href="https://github.com/Keep-Fight" target="_blank" class="hidden md:block px-4 py-2 text-on-surface-variant font-medium hover:bg-surface-container-low dark:hover:bg-surface-container rounded-lg transition-all active:scale-[0.98]">Github</a>
       </div>
@@ -35,6 +36,8 @@
 
 <script setup>
 import { useRoute } from 'vue-router'
+import SvgIcon from '@/components/public/SvgIcon.vue'
+
 const route = useRoute()
 
 // 统一样式函数

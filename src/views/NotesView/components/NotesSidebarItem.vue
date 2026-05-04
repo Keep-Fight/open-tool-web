@@ -1,5 +1,6 @@
 <script setup>
 import {inject, computed} from 'vue' // 引入 inject
+import SvgIcon from '@/components/public/SvgIcon.vue'
 
 const props = defineProps({
   item: {type: Object, required: true},
@@ -45,19 +46,14 @@ const handleClick = () => {
       ]"
     >
 
-      <span class="material-symbols-outlined text-[18px] flex-shrink-0 mr-2"
-            :class="depth === 0 ? 'text-primary' : 'opacity-60'">
-        {{ item.icon }}
-      </span>
+      <SvgIcon :name="item.icon" className="w-6 h-6 flex-shrink-0 mr-2"
+            :class="depth === 0 ? 'text-primary' : 'opacity-60'" />
 
       <span class="grow text-left truncate">{{ item.title }}</span>
 
       <div class="w-4 flex-shrink-0 flex items-center justify-start">
-        <span v-if="item.children"
-              class="material-symbols-outlined text-[16px] transition-transform opacity-40"
-              :class="item.isOpen ? 'rotate-0' : '-rotate-90'">
-          keyboard_arrow_down
-        </span>
+        <SvgIcon v-show="item.directory" name="keyboard-arrow-down" className="w-6 h-6 transition-transform opacity-40"
+              :class="item.isOpen ? 'rotate-0' : '-rotate-90'" />
       </div>
     </component>
 

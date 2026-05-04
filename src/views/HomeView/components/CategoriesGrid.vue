@@ -23,7 +23,7 @@
             <li v-for="tool in item.tools" :key="tool.id">
               <router-link class="nav-link" :to="`/tools/${tool.id}`">
                 {{ tool.title }}
-                <span class="material-symbols-outlined text-xs">arrow_forward</span>
+                <SvgIcon name="arrow-forward" className="w-5 h-5" />
               </router-link>
             </li>
           </ul>
@@ -38,6 +38,7 @@
 import { computed } from 'vue'
 import { categories, tools as allTools } from '@/data/tools.js'
 import { colorMap } from '@/data/colorMap.js'
+import SvgIcon from '@/components/public/SvgIcon.vue'
 
 // 颜色列表，用于给分类分配颜色
 const colorKeys = Object.keys(colorMap)
