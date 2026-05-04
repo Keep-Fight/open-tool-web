@@ -19,8 +19,8 @@ const handleClick = () => {
     // 如果是目录，切换展开/收起状态
     props.item.isOpen = !props.item.isOpen;
     // 根据展开状态更新文件夹图标
-    if (props.item.icon === 'folder' || props.item.icon === 'folder_open') {
-      props.item.icon = props.item.isOpen ? 'folder_open' : 'folder';
+    if (props.item.icon === 'folder' || props.item.icon === 'folder-open') {
+      props.item.icon = props.item.isOpen ? 'folder-open' : 'folder';
     }
 
   } else {
@@ -46,8 +46,12 @@ const handleClick = () => {
       ]"
     >
 
-      <SvgIcon :name="item.icon" className="w-6 h-6 flex-shrink-0 mr-2"
-            :class="depth === 0 ? 'text-primary' : 'opacity-60'" />
+      <SvgIcon v-show="item.icon==='folder-open'" name="folder-open" className="w-6 h-6 flex-shrink-0 mr-2"
+            :class="(depth === 0 || item.isOpen || isActive ) ? 'text-primary' : 'opacity-60'" />
+      <SvgIcon v-show="item.icon==='folder'" name="folder" className="w-6 h-6 flex-shrink-0 mr-2"
+               :class="(depth === 0 || item.isOpen || isActive  ) ? 'text-primary' : 'opacity-60'" />
+      <SvgIcon v-show="item.icon!=='folder'&& item.icon!=='folder-open'" :name="item.icon" className="w-6 h-6 flex-shrink-0 mr-2"
+               :class="(depth === 0 || item.isOpen || isActive ) ? 'text-primary' : 'opacity-60'" />
 
       <span class="grow text-left truncate">{{ item.title }}</span>
 

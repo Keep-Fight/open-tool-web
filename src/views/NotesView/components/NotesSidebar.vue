@@ -33,7 +33,7 @@ const formatTreeToMenu = (tree, parent = null) => {
       // 目录默认图标为folder（未展开）
       node.icon = node.icon || 'folder';
       if (node.isOpen && node.icon === 'folder') {
-        node.icon = 'folder_open';
+        node.icon = 'folder-open';
       }
     } else {
       // 文件默认图标为description
