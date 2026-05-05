@@ -15,7 +15,7 @@ export default ({ mode }) => {
             tailwindcss(),
             svgLoader()
         ],
-
+        base: '/',
         server: isDev
             ? {
                 proxy: {
