@@ -24,16 +24,31 @@ md.use(container, 'tip', {
 });
 // 3. 异步代码高亮处理
 let highlighter;
+let highlighterPromise;
 const SUPPORTED_LANDS = ['java', 'javascript', 'typescript', 'scss', 'css', 'json', 'yaml', 'yml','sql', 'xml', 'html',
     'bash', 'python', 'markdown', 'go', 'c', 'c++', 'c#', 'shell', 'lua', 'php', 'ruby', 'swift', 'objective-c',
     'kotlin', 'scala', 'rust','properties'];
 
-export async function renderMarkdown(content) {
-    if (!highlighter) {
-        highlighter = await createHighlighter({
+export function warmupMarkdownHighlighter() {
+    if (!highlighterPromise) {
+        highlighterPromise = createHighlighter({
             themes: ['github-light','github-dark'],
             langs: SUPPORTED_LANDS
+        }).then(instance => {
+            highlighter = instance;
+            return instance;
+        }).catch(error => {
+            highlighterPromise = null;
+            throw error;
         });
+    }
+
+    return highlighterPromise;
+}
+
+export async function renderMarkdown(content) {
+    if (!highlighter) {
+        highlighter = await warmupMarkdownHighlighter();
     }
 
     // 自定义代码块渲染逻辑：未找到对应语言时使用通用text
