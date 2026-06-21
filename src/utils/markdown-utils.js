@@ -25,9 +25,7 @@ md.use(container, 'tip', {
 // 3. 异步代码高亮处理
 let highlighter;
 let highlighterPromise;
-const SUPPORTED_LANDS = ['java', 'javascript', 'typescript', 'scss', 'css', 'json', 'yaml', 'yml','sql', 'xml', 'html',
-    'bash', 'python', 'markdown', 'go', 'c', 'c++', 'c#', 'shell', 'lua', 'php', 'ruby', 'swift', 'objective-c',
-    'kotlin', 'scala', 'rust','properties'];
+const SUPPORTED_LANDS = ['java', 'javascript', 'json', 'yaml', 'yml','sql', 'xml', 'html', 'bash', 'python', 'markdown', 'shell','properties'];
 
 export function warmupMarkdownHighlighter() {
     if (!highlighterPromise) {

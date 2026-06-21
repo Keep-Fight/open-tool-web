@@ -11,7 +11,7 @@ import HeroSection from "./components/HeroSection.vue";
 import CategoriesGrid from "./components/CategoriesGrid.vue";
 import {warmupMarkdownHighlighter} from "@/utils/markdown-utils.js";
 
-onMounted(async () => {
-  await warmupMarkdownHighlighter().catch(console.error)
+onMounted(() => {
+  warmupMarkdownHighlighter().catch(console.error)
 })
 </script>
